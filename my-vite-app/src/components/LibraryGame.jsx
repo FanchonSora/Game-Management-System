@@ -1,6 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 
 const LibraryPage = () => {
+  const [isDropdownOpen, setDropdownOpen] = useState(false);
+
+  const toggleDropdown = () => {
+    setDropdownOpen(!isDropdownOpen);
+  };
+
   const recentGames = [
     { id: 1, title: "Counter-Strike 2", image: "cs2.jpg", timePlayed: "77 min", lastPlayed: "1 week ago" },
     { id: 2, title: "Cube Racer", image: "cube.jpg", timePlayed: "15 min", lastPlayed: "2 weeks ago" },
@@ -25,7 +31,27 @@ const LibraryPage = () => {
           <a href="/library-code" style={styles.navLink}>Library Code</a>
           <a href="/library-game" style={styles.navLink}>Library Game</a>
           <a href="/community" style={styles.navLink}>Community</a>
-          <a href="/profile" style={styles.navLink}>Profile</a>
+
+          {/* Profile Dropdown */}
+          <div
+            style={styles.profileDropdown}
+            onMouseEnter={toggleDropdown}
+            onMouseLeave={toggleDropdown}
+          >
+            <a href="/profile" style={styles.navLink}>Personal Profile</a>
+            {isDropdownOpen && (
+              <div style={styles.dropdownMenu}>
+                <a href="/activity" style={styles.dropdownItem}>Activity</a>
+                <a href="/profile" style={styles.dropdownItem}>Profile</a>
+                <a href="/friends" style={styles.dropdownItem}>Friends</a>
+                <a href="/groups" style={styles.dropdownItem}>Groups</a>
+                <a href="/content" style={styles.dropdownItem}>Content</a>
+                <a href="/badges" style={styles.dropdownItem}>Badges</a>
+                <a href="/inventory" style={styles.dropdownItem}>Inventory</a>
+                <a href="/year-in-review" style={styles.dropdownItem}>Year In Review</a>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
@@ -50,7 +76,6 @@ const LibraryPage = () => {
 
         {/* Main Content */}
         <div style={styles.mainContent}>
-          {/* Recent Games Section */}
           <section>
             <h2 style={styles.sectionTitle}>Recent Games</h2>
             <div style={styles.gameGrid}>
@@ -69,7 +94,6 @@ const LibraryPage = () => {
             </div>
           </section>
 
-          {/* Play Next Section */}
           <section>
             <h2 style={styles.sectionTitle}>Play Next</h2>
             <div style={styles.gameGrid}>
@@ -89,8 +113,6 @@ const LibraryPage = () => {
     </div>
   );
 };
-
-export default LibraryPage;
 
 // Styles
 const styles = {
@@ -119,6 +141,24 @@ const styles = {
     color: "#c7d5e0",
     textDecoration: "none",
     fontSize: "16px",
+  },
+  profileDropdown: {
+    position: "relative",
+  },
+  dropdownMenu: {
+    position: "absolute",
+    top: "30px",
+    backgroundColor: "#2a475e",
+    borderRadius: "8px",
+    padding: "10px",
+    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+    zIndex: 100,
+  },
+  dropdownItem: {
+    color: "#c7d5e0",
+    textDecoration: "none",
+    display: "block",
+    padding: "5px 10px",
   },
   body: {
     display: "flex",
@@ -183,3 +223,5 @@ const styles = {
     color: "#a9a9a9",
   },
 };
+
+export default LibraryPage;

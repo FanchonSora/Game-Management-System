@@ -6,6 +6,7 @@ import LibraryPageGame from "./components/LibraryGame";
 import LibraryPageCode from "./components/LibraryCode";
 import ProfilePage from "./components/ProfilePage";
 import CommunityPage from "./components/CommunityPage"
+import GamePage from "./components/GamePage";
 function App() {
   return (
     <BrowserRouter>
@@ -16,6 +17,7 @@ function App() {
         <Route path="/community" element={<CommunityPage />} />
         <Route path="/library-game" element={<LibraryPageGame />} />
         <Route path="/library-code" element={<LibraryPageCode />} />
+        <Route path="/game/:id" element={<GamePage />} />
       </Routes>
     </BrowserRouter>
   );
