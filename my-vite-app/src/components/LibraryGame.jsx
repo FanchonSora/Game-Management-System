@@ -30,6 +30,7 @@ const LibraryPage = () => {
           <a href="/home" style={styles.navLink}>Home</a>
           <a href="/library-code" style={styles.navLink}>Library Code</a>
           <a href="/library-game" style={styles.navLink}>Library Game</a>
+          <a href="/market" style={styles.navLink}>Market</a>
           <a href="/community" style={styles.navLink}>Community</a>
 
           {/* Profile Dropdown */}

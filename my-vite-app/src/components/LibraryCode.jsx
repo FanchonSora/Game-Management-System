@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const GameLibrary = () => {
   const games = [
@@ -53,8 +54,11 @@ const GameLibrary = () => {
                 {game.language} <span style={styles.updated}>Updated {game.updated}</span>
               </p>
             </div>
-            <div>
+            <div style={styles.actions}>
               <button style={styles.starButton}>★ Star</button>
+              <Link to={`/repository/${game.id}`} style={styles.viewButton}>
+                View
+              </Link>
             </div>
           </div>
         ))}
@@ -154,11 +158,32 @@ const styles = {
     fontSize: "12px",
     color: "#57606a",
   },
+  actions: {
+    display: "flex",
+    alignItems: "center",
+    gap: "10px",
+  },
   starButton: {
     padding: "5px 10px",
-    backgroundColor: "#f6f8fa",
+    backgroundColor: "#ffffff", 
     border: "1px solid #d0d7de",
+    color: "#000000",
     borderRadius: "6px",
+    fontSize: "14px",
+    fontWeight: "bold",
     cursor: "pointer",
+  },
+  viewButton: {
+    textDecoration: "none",
+    padding: "5px 10px",
+    backgroundColor: "#ffffff", // White background
+    color: "#000000", // Black text
+    borderRadius: "6px",
+    fontSize: "14px",
+    fontWeight: "bold",
+    border: "1px solid #d0d7de", // Optional: Add a border for better visibility
+    cursor: "pointer", // Add a pointer cursor for better UX
+    transition: "background-color 0.2s, color 0.2s", // Smooth hover transition
+    display: "inline-block", // Ensures proper alignment
   },
 };
