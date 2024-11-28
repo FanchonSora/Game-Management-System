@@ -9,6 +9,8 @@ import CommunityPage from "./components/CommunityPage"
 import GamePage from "./components/GamePage";
 import MarketPage from "./components/Market";
 import CodePage from "./components/CodePage";
+import FriendsPage from "./components/FriendPage";
+import BadgesPage from "./components/BadgesPage";
 function App() {
   return (
     <BrowserRouter>
@@ -21,6 +23,8 @@ function App() {
         <Route path="/library-game" element={<LibraryPageGame />} />
         <Route path="/library-code" element={<LibraryPageCode />} />
         <Route path="/repository/:id" element={<CodePage />} />
+        <Route path="/friends" element={<FriendsPage />} />
+        <Route path="/badges" element={<BadgesPage />} />
         <Route path="/game/:id" element={<GamePage />} />
       </Routes>
     </BrowserRouter>

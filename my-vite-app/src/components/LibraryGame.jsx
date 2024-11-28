@@ -1,46 +1,83 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 const LibraryPage = () => {
-  const [isDropdownOpen, setDropdownOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState(""); // State để theo dõi từ khóa tìm kiếm
+  const [isLibraryDropdownOpen, setLibraryDropdownOpen] = useState(false);
+  const [isProfileDropdownOpen, setProfileDropdownOpen] = useState(false);
 
-  const toggleDropdown = () => {
-    setDropdownOpen(!isDropdownOpen);
+  const libraryRef = useRef(null);
+  const profileRef = useRef(null);
+
+  const handleClickOutside = (event) => {
+    if (libraryRef.current && !libraryRef.current.contains(event.target)) {
+      setLibraryDropdownOpen(false);
+    }
+    if (profileRef.current && !profileRef.current.contains(event.target)) {
+      setProfileDropdownOpen(false);
+    }
   };
 
-  const recentGames = [
-    { id: 1, title: "Counter-Strike 2", image: "cs2.jpg", timePlayed: "77 min", lastPlayed: "1 week ago" },
-    { id: 2, title: "Cube Racer", image: "cube.jpg", timePlayed: "15 min", lastPlayed: "2 weeks ago" },
-    { id: 3, title: "TOXIKK", image: "toxikk.jpg", timePlayed: "5 min", lastPlayed: "3 weeks ago" },
-    { id: 4, title: "One-armed Cook", image: "cook.jpg", timePlayed: "2 min", lastPlayed: "October 2023" },
-    { id: 5, title: "Goose Goose Duck", image: "goose.jpg", timePlayed: "0 min", lastPlayed: "September 2023" },
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const gamesList = [
+    "Bro Falls: Ultimate Showdown",
+    "Business Tour",
+    "Counter-Strike 2",
+    "Cube Racer",
+    "Goose Goose Duck",
+    "One-armed Cook",
+    "Poppy Playtime",
+    "TOXIKK",
   ];
 
-  const playNext = [
-    { id: 1, title: "TOXIKK", image: "toxikk.jpg", description: "Free Edition Available Now" },
-    { id: 2, title: "Poppy Playtime", image: "poppy.jpg", description: "Most Popular" },
-    { id: 3, title: "Helltaker", image: "helltaker.jpg", description: "Among Players Like You" },
-  ];
+  // Lọc danh sách game theo từ khóa
+  const filteredGames = gamesList.filter((game) =>
+    game.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div style={styles.container}>
-      {/* Top Navigation Bar */}
+      {/* Thanh điều hướng trên cùng */}
       <div style={styles.navbar}>
-        <h1 style={styles.logo}>Game Library</h1>
         <div style={styles.navLinks}>
-          <a href="/home" style={styles.navLink}>Home</a>
-          <a href="/library-code" style={styles.navLink}>Library Code</a>
-          <a href="/library-game" style={styles.navLink}>Library Game</a>
           <a href="/market" style={styles.navLink}>Market</a>
           <a href="/community" style={styles.navLink}>Community</a>
 
+          {/* Library Dropdown */}
+          <div style={styles.dropdown} ref={libraryRef}>
+            <button
+              onClick={() => setLibraryDropdownOpen(!isLibraryDropdownOpen)}
+              style={styles.navButton}
+            >
+              Library
+            </button>
+            {isLibraryDropdownOpen && (
+              <div style={styles.dropdownMenu}>
+                <a href="/home" style={styles.dropdownItem}>Home</a>
+                <a href="/library-code" style={styles.dropdownItem}>
+                  Library Code
+                </a>
+                <a href="/library-game" style={styles.dropdownItem}>
+                  Library Game
+                </a>
+              </div>
+            )}
+          </div>
+
           {/* Profile Dropdown */}
-          <div
-            style={styles.profileDropdown}
-            onMouseEnter={toggleDropdown}
-            onMouseLeave={toggleDropdown}
-          >
-            <a href="/profile" style={styles.navLink}>Personal Profile</a>
-            {isDropdownOpen && (
+          <div style={styles.dropdown} ref={profileRef}>
+            <button
+              onClick={() => setProfileDropdownOpen(!isProfileDropdownOpen)}
+              style={styles.navButton}
+            >
+              Personal Profile
+            </button>
+            {isProfileDropdownOpen && (
               <div style={styles.dropdownMenu}>
                 <a href="/activity" style={styles.dropdownItem}>Activity</a>
                 <a href="/profile" style={styles.dropdownItem}>Profile</a>
@@ -48,62 +85,50 @@ const LibraryPage = () => {
                 <a href="/groups" style={styles.dropdownItem}>Groups</a>
                 <a href="/content" style={styles.dropdownItem}>Content</a>
                 <a href="/badges" style={styles.dropdownItem}>Badges</a>
-                <a href="/inventory" style={styles.dropdownItem}>Inventory</a>
-                <a href="/year-in-review" style={styles.dropdownItem}>Year In Review</a>
+                <a href="/inventory" style={styles.dropdownItem}>
+                  Inventory
+                </a>
+                <a href="/year-in-review" style={styles.dropdownItem}>
+                  Year In Review
+                </a>
               </div>
             )}
           </div>
         </div>
       </div>
 
+      {/* Nội dung */}
       <div style={styles.body}>
         {/* Sidebar */}
         <div style={styles.sidebar}>
           <h2>Library</h2>
-          <div>
-            <p style={styles.sidebarSectionTitle}>Games</p>
-            <ul style={styles.sidebarList}>
-              <li style={styles.sidebarItem}>Bro Falls: Ultimate Showdown</li>
-              <li style={styles.sidebarItem}>Business Tour</li>
-              <li style={styles.sidebarItem}>Counter-Strike 2</li>
-              <li style={styles.sidebarItem}>Cube Racer</li>
-              <li style={styles.sidebarItem}>Goose Goose Duck</li>
-              <li style={styles.sidebarItem}>One-armed Cook</li>
-              <li style={styles.sidebarItem}>Poppy Playtime</li>
-              <li style={styles.sidebarItem}>TOXIKK</li>
-            </ul>
-          </div>
+          {/* Thanh tìm kiếm */}
+          <input
+            type="text"
+            placeholder="Search games..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            style={styles.searchInput}
+          />
+          {/* Danh sách game */}
+          <ul style={styles.sidebarList}>
+            {filteredGames.map((game, index) => (
+              <li key={index} style={styles.sidebarItem}>
+                {game}
+              </li>
+            ))}
+          </ul>
         </div>
 
-        {/* Main Content */}
+        {/* Nội dung chính */}
         <div style={styles.mainContent}>
           <section>
             <h2 style={styles.sectionTitle}>Recent Games</h2>
             <div style={styles.gameGrid}>
-              {recentGames.map((game) => (
-                <div key={game.id} style={styles.gameCard}>
-                  <img src={game.image} alt={game.title} style={styles.gameImage} />
+              {gamesList.map((game, index) => (
+                <div key={index} style={styles.gameCard}>
                   <div style={styles.gameInfo}>
-                    <p style={styles.gameTitle}>{game.title}</p>
-                    <p style={styles.gameDetails}>
-                      Time Played: {game.timePlayed} <br />
-                      Last Played: {game.lastPlayed}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          <section>
-            <h2 style={styles.sectionTitle}>Play Next</h2>
-            <div style={styles.gameGrid}>
-              {playNext.map((game) => (
-                <div key={game.id} style={styles.gameCard}>
-                  <img src={game.image} alt={game.title} style={styles.gameImage} />
-                  <div style={styles.gameInfo}>
-                    <p style={styles.gameTitle}>{game.title}</p>
-                    <p style={styles.gameDescription}>{game.description}</p>
+                    <p style={styles.gameTitle}>{game}</p>
                   </div>
                 </div>
               ))}
@@ -121,7 +146,7 @@ const styles = {
     fontFamily: "Arial, sans-serif",
     backgroundColor: "#1b2838",
     color: "#c7d5e0",
-    height: "100vh",
+    minHeight: "100vh",
   },
   navbar: {
     display: "flex",
@@ -130,20 +155,25 @@ const styles = {
     padding: "10px 20px",
     backgroundColor: "#2a475e",
   },
-  logo: {
-    color: "#c7d5e0",
-    fontSize: "24px",
-  },
   navLinks: {
     display: "flex",
     gap: "20px",
+    alignItems: "center",
   },
   navLink: {
     color: "#c7d5e0",
     textDecoration: "none",
     fontSize: "16px",
   },
-  profileDropdown: {
+  navButton: {
+    backgroundColor: "transparent",
+    border: "none",
+    color: "#c7d5e0",
+    fontSize: "16px",
+    cursor: "pointer",
+    padding: 0,
+  },
+  dropdown: {
     position: "relative",
   },
   dropdownMenu: {
@@ -169,10 +199,14 @@ const styles = {
     backgroundColor: "#2a475e",
     padding: "20px",
   },
-  sidebarSectionTitle: {
-    fontSize: "18px",
-    marginBottom: "10px",
-    color: "#66c0f4",
+  searchInput: {
+    width: "90%",
+    padding: "10px",
+    marginBottom: "20px",
+    borderRadius: "4px",
+    border: "1px solid #66c0f4",
+    backgroundColor: "#1b2838",
+    color: "#c7d5e0",
   },
   sidebarList: {
     listStyle: "none",
@@ -181,6 +215,8 @@ const styles = {
   sidebarItem: {
     marginBottom: "10px",
     cursor: "pointer",
+    color: "#c7d5e0",
+    fontSize: "14px",
   },
   mainContent: {
     width: "80%",
@@ -202,26 +238,12 @@ const styles = {
     textAlign: "center",
     padding: "10px",
   },
-  gameImage: {
-    width: "100%",
-    height: "100px",
-    objectFit: "cover",
-    borderRadius: "10px",
-  },
   gameInfo: {
     marginTop: "10px",
   },
   gameTitle: {
     fontSize: "16px",
     fontWeight: "bold",
-  },
-  gameDetails: {
-    fontSize: "12px",
-    color: "#a9a9a9",
-  },
-  gameDescription: {
-    fontSize: "14px",
-    color: "#a9a9a9",
   },
 };
 
