@@ -7,10 +7,13 @@ import LibraryPageCode from "./components/LibraryCode";
 import ProfilePage from "./components/ProfilePage";
 import CommunityPage from "./components/CommunityPage"
 import GamePage from "./components/GamePage";
-import MarketPage from "./components/Market";
+import MarketGamePage from "./components/MarketGame";
 import CodePage from "./components/CodePage";
 import FriendsPage from "./components/FriendPage";
 import BadgesPage from "./components/BadgesPage";
+import InventoryPage from "./components/InventoryPage";
+import GameModePage from "./components/GameModePage";
+import MarketCodePage from "./components/MarketCode";
 function App() {
   return (
     <BrowserRouter>
@@ -19,13 +22,16 @@ function App() {
         <Route path="/sign-in" element={<SignInPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/community" element={<CommunityPage />} />
-        <Route path="/market" element={<MarketPage />} />
+        <Route path="/market-game" element={<MarketGamePage />} />
+        <Route path="/market-code" element={<MarketCodePage />} />
         <Route path="/library-game" element={<LibraryPageGame />} />
         <Route path="/library-code" element={<LibraryPageCode />} />
         <Route path="/repository/:id" element={<CodePage />} />
         <Route path="/friends" element={<FriendsPage />} />
         <Route path="/badges" element={<BadgesPage />} />
+        <Route path="/inventory" element={<InventoryPage />} />
         <Route path="/game/:id" element={<GamePage />} />
+        <Route path="/library-game/:id" element={<GameModePage />} />
       </Routes>
     </BrowserRouter>
   );
