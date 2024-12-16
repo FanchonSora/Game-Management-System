@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import styled, { keyframes } from 'styled-components';
 
-// HeartIcon Component (for future use if needed)
+// HeartIcon Component
 const HeartIcon = ({ filled }) => (
   <svg
     width="24"
@@ -16,9 +17,290 @@ const HeartIcon = ({ filled }) => (
   </svg>
 );
 
-const MarketGamePage = () => {
+// Keyframes for Animations
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+
+const slideIn = keyframes`
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+`;
+
+// Styled Components
+
+// Container with Background Image and Overlay
+const Container = styled.div`
+  font-family: 'Roboto', sans-serif;
+  background-image: url('/images/img2.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  padding: 20px;
+  color: #c7d5e0;
+  position: relative;
+  overflow: hidden;
+
+  &:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6); /* Overlay */
+    z-index: 0;
+  }
+
+  > * {
+    position: relative;
+    z-index: 1;
+  }
+`;
+
+const ContentWrapper = styled.div`
+  max-width: 1200px;
+  margin: 0 auto;
+`;
+
+// Categories Section
+const CategorySection = styled.div`
+  margin-bottom: 60px;
+`;
+
+// Section Title
+const SectionTitle = styled.h2`
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: #ffffff;
+  text-shadow: 0 1px 1px rgba(0,0,0,0.5);
+  text-align: center;
+  animation: ${fadeIn} 1s ease-out;
+`;
+
+// Subtitle
+const Subtitle = styled.p`
+  font-size: 14px;
+  color: #aaa;
+  margin-bottom: 20px;
+  text-align: center;
+  animation: ${fadeIn} 1s ease-out;
+`;
+
+// Grid for Games
+const Grid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  animation: ${fadeIn} 1s ease-out;
+`;
+
+// Featured Games Carousel Container
+const CarouselContainer = styled.div`
+  margin-bottom: 60px;
+`;
+
+// Carousel Title
+const CarouselTitle = styled.h2`
+  font-size: 28px;
+  margin-bottom: 10px;
+  color: #ffffff;
+  text-shadow: 0 1px 1px rgba(0,0,0,0.5);
+  text-align: center;
+  animation: ${fadeIn} 1s ease-out;
+`;
+
+// Carousel Subtitle
+const CarouselSubtitle = styled.p`
+  font-size: 14px;
+  color: #aaa;
+  margin-bottom: 30px;
+  text-align: center;
+  animation: ${fadeIn} 1s ease-out;
+`;
+
+// Carousel Wrapper
+const CarouselWrapper = styled.div`
+  position: relative;
+  overflow: hidden;
+  width: 90%;
+  margin: 0 auto;
+`;
+
+// Slides Container
+const SlidesContainer = styled.div`
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+`;
+
+// Individual Slide
+const Slide = styled.div`
+  min-width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  animation: ${slideIn} 0.5s ease-in-out;
+`;
+
+// Featured Game Card
+const FeaturedCard = styled.div`
+  background-color: rgba(42, 71, 94, 0.8);
+  border-radius: 10px;
+  overflow: hidden;
+  text-align: center;
+  padding: 15px;
+  position: relative;
+  border: 1px solid #0f2b44;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  flex: 1;
+  max-width: 250px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  }
+`;
+
+// Discount Badge
+const DiscountBadge = styled.div`
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: #2ecc71;
+  color: #fff;
+  padding: 5px 8px;
+  border-radius: 3px;
+  font-size: 12px;
+  font-weight: bold;
+`;
+
+// Game Image
+const GameImage = styled.img`
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+`;
+
+// Game Title
+const GameTitle = styled.p`
+  font-size: 18px;
+  font-weight: bold;
+  margin: 5px 0;
+  color: #ffffff;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.6);
+`;
+
+// Game Price
+const GamePrice = styled.p`
+  font-size: 16px;
+  color: #ff4d6d;
+  margin-bottom: 10px;
+  font-weight: bold;
+`;
+
+// Button Group
+const ButtonGroup = styled.div`
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+`;
+
+// Styled Buttons
+const FreeButton = styled.button`
+  background-color: #66c0f4;
+  border: none;
+  border-radius: 5px;
+  color: #000;
+  padding: 8px 15px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  box-shadow: 0 2px 5px rgba(102, 192, 244, 0.5);
+
+  &:hover {
+    background-color: #5aa8e6;
+  }
+`;
+
+const ViewButton = styled.button`
+  background-color: #2ecc71;
+  border: none;
+  border-radius: 5px;
+  color: #000;
+  padding: 8px 15px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  box-shadow: 0 2px 5px rgba(46, 204, 113, 0.5);
+
+  &:hover {
+    background-color: #28b54a;
+  }
+`;
+
+// Styled Game Card
+const GameCard = styled.div`
+  background-color: rgba(42,71,94,0.8);
+  border-radius: 10px;
+  overflow: hidden;
+  text-align: center;
+  padding: 15px;
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid #0f2b44;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+  }
+`;
+
+const FeaturedGameImage = styled(GameImage)`
+  height: 180px;
+`;
+
+const FeaturedMarketGamePage = () => {
   const navigate = useNavigate();
 
+  // State for Carousel
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  // Featured Games Data
+  const featuredGames = [
+    { id: 9, title: 'Lord of the Rings: Return to Moria', price: '321.000đ', image: '/game/Lord of the Rings.jpg' },
+    { id: 10, title: 'Ready or Not', price: '399.000đ', image: '/game/Ready or Not.jpg' },
+    { id: 11, title: 'Dead by Daylight', price: '340.000đ', image: '/game/Dead by Daylight.jpg' },
+    { id: 12, title: 'WWE 2K24', price: '1.000.000đ', image: '/game/WWE 2K24.jpg' },
+    { id: 13, title: 'Stellaris', price: '664.000đ', image: '/game/Stellaris.jpg', isLive: true },
+    { id: 18, title: 'Crab Game', price: 'Free', image: '/game/Crab Game.jpg' },
+  ];
+
+  // Categorized Games Data
   const massivelyMultiplayerGames = [
     { id: 1, title: 'Foxhole', price: '155.000đ', discount: '-38%', image: '/game/Foxhole.jpg' },
     { id: 2, title: 'Hell Let Loose', price: '591.500đ', discount: '-50%', image: '/game/Hell Let Loose.jpg' },
@@ -37,15 +319,7 @@ const MarketGamePage = () => {
     { id: 17, title: 'Among Us', price: 'Free', discount: '-100%', image: '/game/Among Us.jpg' },
   ];
 
-  const featuredGames = [
-    { id: 9, title: 'Lord of the Rings: Return to Moria', price: '321.000đ', image: '/game/Lord of the Rings.jpg' },
-    { id: 10, title: 'Ready or Not', price: '399.000đ', image: '/game/Ready or Not.jpg' },
-    { id: 11, title: 'Dead by Daylight', price: '340.000đ', image: '/game/Dead by Daylight.jpg' },
-    { id: 12, title: 'WWE 2K24', price: '1.000.000đ', image: '/game/WWE 2K24.jpg' },
-    { id: 13, title: 'Stellaris', price: '664.000đ', image: '/game/Stellaris.jpg', isLive: true },
-    { id: 18, title: 'Crab Game', price: 'Free', image: '/game/Crab Game.jpg' },
-  ];
-
+  // Function to handle adding free games to library
   const handleFree = (game) => {
     if (game.price === 'Free') {
       const storedGames = JSON.parse(localStorage.getItem('libraryGames')) || [];
@@ -62,190 +336,113 @@ const MarketGamePage = () => {
     }
   };
 
+  // Function to handle viewing game details
   const handleView = (game) => {
     navigate(`/game/${game.id}`);
   };
 
+  // Function to chunk array into smaller arrays
+  const chunkArray = (arr, size) => {
+    const result = [];
+    for (let i = 0; i < arr.length; i += size) {
+      result.push(arr.slice(i, i + size));
+    }
+    return result;
+  };
+  
+  // Prepare slides for carousel (3 games per slide)
+  const slides = chunkArray(featuredGames, 3);
+  const totalSlides = slides.length;
+
+  // useEffect to handle auto-slide every 10 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % totalSlides);
+    }, 10000); // 10 seconds
+
+    return () => clearInterval(interval);
+  }, [totalSlides]);
+
+  // Function to render game cards for categories
   const renderGameCards = (games) => {
     return games.map((game) => (
-      <div key={game.id} style={styles.card}>
-        {game.discount && <div style={styles.discountBadge}>{game.discount}</div>}
-        <img src={game.image} alt={game.title} style={styles.image} />
-        <div style={styles.cardContent}>
-          <p style={styles.title}>{game.title}</p>
-          <p style={styles.price}>{game.price === 'Free' ? 'Free' : game.price}</p>
-          <div style={styles.buttonGroup}>
-            {game.price === 'Free' && (
-              <button style={styles.freeButton} onClick={() => handleFree(game)}>ADD</button>
-            )}
-            <button style={styles.viewButton} onClick={() => handleView(game)}>VIEW</button>
-          </div>
-        </div>
-      </div>
+      <GameCard key={game.id}>
+        {game.discount && <DiscountBadge>{game.discount}</DiscountBadge>}
+        <GameImage src={game.image} alt={game.title} />
+        <GameTitle>{game.title}</GameTitle>
+        <GamePrice>{game.price === 'Free' ? 'Free' : game.price}</GamePrice>
+        <ButtonGroup>
+          {game.price === 'Free' && (
+            <FreeButton onClick={() => handleFree(game)}>ADD</FreeButton>
+          )}
+          <ViewButton onClick={() => handleView(game)}>VIEW</ViewButton>
+        </ButtonGroup>
+      </GameCard>
     ));
   };
 
-  return (
-    <div style={styles.container}>
-      {/* Categories Section */}
-      <div style={styles.categorySection}>
-        <h2 style={styles.sectionTitle}>Massively Multiplayer</h2>
-        <p style={styles.subtitle}>Recommended tag based on what you play</p>
-        <div style={styles.grid}>
-          {renderGameCards(massivelyMultiplayerGames)}
-        </div>
-
-        <h2 style={styles.sectionTitle}>Casual</h2>
-        <p style={styles.subtitle}>Recommended tag based on what you play</p>
-        <div style={styles.grid}>
-          {renderGameCards(casualGames)}
-        </div>
-      </div>
-
-      {/* Featured Games Section */}
-      <div style={styles.featuredSection}>
-        <h2 style={styles.sectionTitle}>Featured Games</h2>
-        <div style={styles.horizontalScroll}>
-          {featuredGames.map((game) => (
-            <div key={game.id} style={styles.featuredCard}>
-              <img src={game.image} alt={game.title} style={styles.featuredImage} />
-              <p style={styles.title}>{game.title}</p>
-              <p style={styles.price}>{game.price === 'Free' ? 'Free' : game.price}</p>
-              <div style={styles.buttonGroup}>
-                {game.price === 'Free' && (
-                  <button style={styles.freeButton} onClick={() => handleFree(game)}>ADD</button>
-                )}
-                <button style={styles.viewButton} onClick={() => handleView(game)}>VIEW</button>
-              </div>
-            </div>
+  // Function to render featured games carousel
+  const renderFeaturedGamesCarousel = () => {
+    return (
+      <CarouselWrapper>
+        <SlidesContainer
+          style={{
+            width: `${totalSlides * 100}%`,
+            transform: `translateX(-${currentSlide * (100 / totalSlides)}%)`,
+          }}
+        >
+          {slides.map((slide, index) => (
+            <Slide key={index}>
+              {slide.map((game) => (
+                <FeaturedCard key={game.id}>
+                  {game.discount && <DiscountBadge>{game.discount}</DiscountBadge>}
+                  <FeaturedGameImage src={game.image} alt={game.title} />
+                  <GameTitle>{game.title}</GameTitle>
+                  <GamePrice>{game.price === 'Free' ? 'Free' : game.price}</GamePrice>
+                  <ButtonGroup>
+                    {game.price === 'Free' && (
+                      <FreeButton onClick={() => handleFree(game)}>ADD</FreeButton>
+                    )}
+                    <ViewButton onClick={() => handleView(game)}>VIEW</ViewButton>
+                  </ButtonGroup>
+                </FeaturedCard>
+              ))}
+            </Slide>
           ))}
-        </div>
-      </div>
-    </div>
+        </SlidesContainer>
+      </CarouselWrapper>
+    );
+  };
+
+  return (
+    <Container>
+      {/* Featured Games Carousel */}
+      <CarouselContainer>
+        <CarouselTitle>Featured Games</CarouselTitle>
+        <CarouselSubtitle>Don't miss out on our top picks!</CarouselSubtitle>
+        {renderFeaturedGamesCarousel()}
+      </CarouselContainer>
+
+      {/* Massively Multiplayer Games Section */}
+      <CategorySection>
+        <SectionTitle>Massively Multiplayer</SectionTitle>
+        <Subtitle>Recommended tag based on what you play</Subtitle>
+        <Grid>
+          {renderGameCards(massivelyMultiplayerGames)}
+        </Grid>
+      </CategorySection>
+
+      {/* Casual Games Section */}
+      <CategorySection>
+        <SectionTitle>Casual</SectionTitle>
+        <Subtitle>Recommended tag based on what you play</Subtitle>
+        <Grid>
+          {renderGameCards(casualGames)}
+        </Grid>
+      </CategorySection>
+    </Container>
   );
 };
 
-// Enhanced Styles
-const styles = {
-  container: {
-    fontFamily: "'Roboto', sans-serif",
-    background: "linear-gradient(135deg, #182b3a 0%, #0d1c2e 100%)",
-    color: "#c7d5e0",
-    padding: "20px",
-    minHeight: "100vh",
-  },
-  categorySection: {
-    marginBottom: "40px",
-  },
-  sectionTitle: {
-    fontSize: "24px",
-    marginBottom: "10px",
-    color: "#ffffff",
-    textShadow: "0 1px 1px rgba(0,0,0,0.5)",
-    textAlign: "center",
-  },
-  subtitle: {
-    fontSize: "14px",
-    color: "#aaa",
-    marginBottom: "20px",
-    textAlign: "center",
-  },
-  grid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-    gap: "20px",
-  },
-  featuredSection: {
-    marginTop: "40px",
-  },
-  horizontalScroll: {
-    display: "flex",
-    gap: "20px",
-    overflowX: "auto",
-    paddingBottom: "10px",
-  },
-  card: {
-    backgroundColor: "rgba(42,71,94,0.8)",
-    borderRadius: "10px",
-    overflow: "hidden",
-    textAlign: "center",
-    padding: "15px",
-    position: "relative",
-    transition: "transform 0.3s ease, box-shadow 0.3s ease",
-    border: "1px solid #0f2b44",
-    cursor: "pointer",
-    boxShadow: "0 4px 10px rgba(0,0,0,0.3)",
-  },
-  discountBadge: {
-    position: "absolute",
-    top: "10px",
-    left: "10px",
-    backgroundColor: "#2ecc71",
-    color: "#fff",
-    padding: "5px 8px",
-    borderRadius: "3px",
-    fontSize: "12px",
-    fontWeight: "bold",
-  },
-  image: {
-    width: "100%",
-    height: "200px",
-    objectFit: "cover",
-    borderRadius: "5px",
-    marginBottom: "10px",
-    boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
-  },
-  featuredImage: {
-    width: "100%",
-    height: "200px",
-    objectFit: "cover",
-    borderRadius: "10px",
-    marginBottom: "10px",
-    boxShadow: "0 4px 12px rgba(0,0,0,0.4)",
-  },
-  cardContent: {
-    textAlign: "left",
-    marginTop: "10px",
-  },
-  title: {
-    fontSize: "18px",
-    fontWeight: "bold",
-    margin: "5px 0",
-    color: "#ffffff",
-    textShadow: "1px 1px 2px rgba(0,0,0,0.6)",
-  },
-  price: {
-    fontSize: "16px",
-    color: "#ff4d6d",
-    marginBottom: "10px",
-    fontWeight: "bold",
-  },
-  buttonGroup: {
-    display: "flex",
-    gap: "10px",
-  },
-  freeButton: {
-    backgroundColor: "#66c0f4",
-    border: "none",
-    borderRadius: "5px",
-    color: "#000",
-    padding: "8px 15px",
-    fontWeight: "bold",
-    cursor: "pointer",
-    transition: "background 0.3s ease",
-    boxShadow: "0 2px 5px rgba(102, 192, 244, 0.5)",
-  },
-  viewButton: {
-    backgroundColor: "#2ecc71",
-    border: "none",
-    borderRadius: "5px",
-    color: "#000",
-    padding: "8px 15px",
-    fontWeight: "bold",
-    cursor: "pointer",
-    transition: "background 0.3s ease",
-    boxShadow: "0 2px 5px rgba(46, 204, 113, 0.5)",
-  },
-};
-
-export default MarketGamePage;
+// Export the component
+export default FeaturedMarketGamePage;
