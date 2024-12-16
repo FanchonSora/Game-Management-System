@@ -29,7 +29,7 @@ const LogInPage = () => {
       <div className="mypw">
         <div>
           <input type="checkbox" id="remember" />
-          <label htmlFor="remember">Remember me</label>
+          <label htmlFor="remember">  Remember me </label>
         </div>
         <a href="#">Forgot Password?</a>
       </div>
@@ -37,7 +37,7 @@ const LogInPage = () => {
       <button type="submit">Sign In</button>
 
       <p>
-        Need an account? <a href="#">Sign up</a>
+        Need an account? <a href="\sign-up">Sign up</a>
       </p>
     </form>
   );

@@ -14,12 +14,14 @@ import BadgesPage from "./components/BadgesPage";
 import InventoryPage from "./components/InventoryPage";
 import GameModePage from "./components/GameModePage";
 import MarketCodePage from "./components/MarketCode";
+import SignUpPage from "./components/SignUpPage";
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/home" element={<HomePage />} />
         <Route path="/sign-in" element={<LogInPage />} />
+        <Route path="/sign-up" element={<SignUpPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/community" element={<CommunityPage />} />
         <Route path="/market-game" element={<MarketGamePage />} />
