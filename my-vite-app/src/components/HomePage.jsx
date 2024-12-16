@@ -1,8 +1,257 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import styled from 'styled-components';
+import styled, { keyframes } from "styled-components";
 
-// HeartIcon Component
+// Keyframes for Animations
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+
+const pulse = keyframes`
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+`;
+
+// Styled Components
+
+// Container with Background Image
+const Container = styled.div`
+  font-family: "Roboto", sans-serif;
+  background-color: #1e1e2e; /* Replace with desired color */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  padding: 2rem;
+  color: #c7d5e0;
+  animation: ${fadeIn} 1s ease-out;
+
+  /* Overlay for better text readability */
+  position: relative;
+  &:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 0;
+  }
+
+  /* Ensure content is above the overlay */
+  > * {
+    position: relative;
+    z-index: 1;
+  }
+`;
+
+// Hero Section Styles
+const Hero = styled.section`
+  background: rgba(41, 46, 73, 0.8);
+  border-radius: 16px;
+  padding: 3rem;
+  margin-bottom: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  flex-wrap: wrap;
+  animation: ${fadeIn} 1s ease-out;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    text-align: center;
+  }
+`;
+
+const HeroContent = styled.div`
+  width: 50%;
+  min-width: 300px;
+  animation: ${fadeIn} 1s ease-out;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+`;
+
+const HeroTitle = styled.h1`
+  color: #ffffff;
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+  animation: ${fadeIn} 1s ease-out;
+`;
+
+const HeroSubtitle = styled.p`
+  color: #dddddd;
+  font-size: 1rem;
+  margin-bottom: 2rem;
+`;
+
+const ButtonGroup = styled.div`
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+`;
+
+// Styled Buttons with Animations
+const FreeButton = styled.button`
+  background-color: #66c0f4;
+  border: none;
+  border-radius: 5px;
+  color: #000;
+  padding: 10px 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s;
+  animation: ${fadeIn} 1s ease-out;
+
+  &:hover {
+    background-color: #5aa8e6;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(102, 192, 244, 0.5);
+  }
+`;
+
+const ViewButton = styled.button`
+  background-color: #2ecc71;
+  border: none;
+  border-radius: 5px;
+  color: #000;
+  padding: 10px 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s;
+  animation: ${fadeIn} 1s ease-out;
+
+  &:hover {
+    background-color: #28b54a;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(46, 204, 113, 0.5);
+  }
+`;
+
+// Featured Image in Hero Section
+const HeroImage = styled.img`
+  width: 45%;
+  max-width: 400px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  animation: ${fadeIn} 1s ease-out;
+
+  @media (max-width: 768px) {
+    width: 80%;
+    margin-top: 2rem;
+  }
+`;
+
+// Products Section Styles
+const ProductsSectionContainer = styled.section`
+  margin-bottom: 3rem;
+`;
+
+const SectionTitle = styled.h2`
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  color: #fff;
+  text-align: center;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+  animation: ${fadeIn} 1s ease-out;
+`;
+
+// Grid Layout for Products
+const Grid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+`;
+
+// Product Card Styles with Hover Animation
+const Card = styled.div`
+  background: #292e49;
+  padding: 1.5rem;
+  border-radius: 12px;
+  color: #c7d5e0;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  animation: ${fadeIn} 1s ease-out;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  }
+`;
+
+const FavoriteButton = styled.button`
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  animation: ${pulse} 2s infinite;
+
+  &:hover svg {
+    fill: #ff4d6d;
+    stroke: #ff4d6d;
+  }
+`;
+
+const CardImage = styled.img`
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+`;
+
+const CardTitle = styled.h3`
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 5px 0;
+  color: #ffffff;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+`;
+
+const CardCategory = styled.p`
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+  color: #aaaaaa;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+`;
+
+const CardPrice = styled.p`
+  font-size: 1rem;
+  color: #ff4d6d;
+  margin-bottom: 1rem;
+  font-weight: bold;
+`;
+
+// HeartIcon Component (SVG)
 const HeartIcon = ({ filled }) => (
   <svg
     width="24"
@@ -17,90 +266,21 @@ const HeartIcon = ({ filled }) => (
   </svg>
 );
 
-// Styled Components for Buttons
-const FreeButton = styled.button`
-  background-color: #66c0f4;
-  border: none;
-  border-radius: 5px;
-  color: #000;
-  padding: 8px 15px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s;
-
-  &:hover {
-    background-color: #5aa8e6;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(102, 192, 244, 0.5);
-  }
-`;
-
-const ViewButton = styled.button`
-  background-color: #2ecc71;
-  border: none;
-  border-radius: 5px;
-  color: #000;
-  padding: 8px 15px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s;
-
-  &:hover {
-    background-color: #28b54a;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(46, 204, 113, 0.5);
-  }
-`;
-
-// HeroSection Component
-const HeroSection = ({ navigate }) => {
-  return (
-    <div style={styles.hero}>
-      <div style={styles.heroContent}>
-        <h1 style={styles.heroTitle}>Welcome to Your Game Store</h1>
-        <p style={styles.heroSubtitle}>
-          Discover the latest releases and your next favorite game.
-        </p>
-        <div style={styles.buttonGroup}>
-          <FreeButton onClick={() => navigate("/market-game")}>
-            Shop Market Game
-          </FreeButton>
-          <FreeButton onClick={() => navigate("/market-code")}>
-            Shop Market Code
-          </FreeButton>
-        </div>
-      </div>
-      <img
-        src="/images/hero-game.jpg"
-        alt="Featured Game"
-        style={styles.heroImage}
-      />
-    </div>
-  );
-};
-
 // ProductCard Component
 const ProductCard = ({ product, toggleFavorite, viewDetails, isFavorite }) => {
   return (
-    <div style={styles.card}>
-      <button
-        style={styles.favoriteButton}
-        onClick={() => toggleFavorite(product.id)}
-      >
+    <Card>
+      <FavoriteButton onClick={() => toggleFavorite(product.id)}>
         <HeartIcon filled={isFavorite} />
-      </button>
-      <img
-        src={product.image}
-        alt={product.title}
-        style={styles.cardImage}
-      />
-      <h3 style={styles.cardTitle}>{product.title}</h3>
-      <p style={styles.cardCategory}>{product.category}</p>
-      <p style={styles.cardPrice}>
-        {product.price === "Free" ? "Free" : `$${product.price.toFixed(2)}`}
-      </p>
-      <div style={styles.buttonGroup}>
-        {product.price === "Free" && (
+      </FavoriteButton>
+      <CardImage src={product.image} alt={product.title} />
+      <CardTitle>{product.title}</CardTitle>
+      <CardCategory>{product.category}</CardCategory>
+      <CardPrice>
+        {product.price === 0 ? "Free" : `$${product.price.toFixed(2)}`}
+      </CardPrice>
+      <ButtonGroup>
+        {product.price === 0 && (
           <FreeButton onClick={() => toggleFavorite(product.id)}>
             Free
           </FreeButton>
@@ -108,17 +288,23 @@ const ProductCard = ({ product, toggleFavorite, viewDetails, isFavorite }) => {
         <ViewButton onClick={() => viewDetails(product.id)}>
           View
         </ViewButton>
-      </div>
-    </div>
+      </ButtonGroup>
+    </Card>
   );
 };
 
 // ProductsSection Component
-const ProductsSection = ({ title, products, toggleFavorite, viewDetails, favorites }) => {
+const ProductsSection = ({
+  title,
+  products,
+  toggleFavorite,
+  viewDetails,
+  favorites,
+}) => {
   return (
-    <div style={styles.productsSection}>
-      <h2 style={styles.sectionTitle}>{title}</h2>
-      <div style={styles.grid}>
+    <ProductsSectionContainer>
+      <SectionTitle>{title}</SectionTitle>
+      <Grid>
         {products.map((product) => (
           <ProductCard
             key={product.id}
@@ -128,8 +314,35 @@ const ProductsSection = ({ title, products, toggleFavorite, viewDetails, favorit
             isFavorite={favorites.has(product.id)}
           />
         ))}
-      </div>
-    </div>
+      </Grid>
+    </ProductsSectionContainer>
+  );
+};
+
+// HeroSection Component
+const HeroSection = ({ navigate }) => {
+  return (
+    <Hero>
+      <HeroContent>
+        <HeroTitle>Welcome to Your Game Store</HeroTitle>
+        <HeroSubtitle>
+          Discover the latest releases and your next favorite game.
+        </HeroSubtitle>
+        <ButtonGroup>
+          <FreeButton onClick={() => navigate("/market-game")}>
+            Shop Market Game
+          </FreeButton>
+          <FreeButton onClick={() => navigate("/market-code")}>
+            Shop Market Code
+          </FreeButton>
+        </ButtonGroup>
+      </HeroContent>
+      <HeroImage
+        src="img3.jpg"
+        alt="Featured Game"
+        loading="lazy"
+      />
+    </Hero>
   );
 };
 
@@ -154,23 +367,23 @@ const HomePage = () => {
     {
       id: 1,
       title: "Asterigos: Curse of the Stars",
-      category: "Action RPG",
+      category: "Featured",
       price: 39.99,
-      image: "/images/game1.jpg",
+      image: "/game/Asterigos.jpg",
     },
     {
       id: 2,
       title: "Elden Ring",
-      category: "Open World RPG",
+      category: "Featured",
       price: 59.99,
-      image: "/images/game2.jpg",
+      image: "/game/Elden Ring.jpg",
     },
     {
       id: 3,
       title: "Cyberpunk 2077",
-      category: "Sci-Fi RPG",
+      category: "Featured",
       price: 49.99,
-      image: "/images/game3.jpg",
+      image: "/game/Cyberpunk 2077.jpg",
     },
     // Massively Multiplayer Games
     {
@@ -178,21 +391,21 @@ const HomePage = () => {
       title: "Foxhole",
       category: "Massively Multiplayer",
       price: 0.0,
-      image: "/images/foxhole.jpg",
+      image: "/game/Foxhole.jpg",
     },
     {
       id: 5,
       title: "Hell Let Loose",
       category: "Massively Multiplayer",
       price: 59.99,
-      image: "/images/hellletloose.jpg",
+      image: "/game/Hell Let Loose.jpg",
     },
     {
       id: 6,
       title: "SCUM",
       category: "Massively Multiplayer",
       price: 29.99,
-      image: "/images/scum.jpg",
+      image: "/game/SCUM.jpg",
     },
     // Casual Games
     {
@@ -200,28 +413,28 @@ const HomePage = () => {
       title: "Goat Simulator 3",
       category: "Casual",
       price: 19.99,
-      image: "/images/goatsimulator.jpg",
+      image: "/game/Goat Simulator 3.jpg",
     },
     {
       id: 8,
       title: "Luma Island",
       category: "Casual",
       price: 9.99,
-      image: "/images/lumaisland.jpg",
+      image: "/game/Luma Island.jpg",
     },
     {
       id: 9,
       title: "F1 24",
       category: "Casual",
       price: 49.99,
-      image: "/images/f1.jpg",
+      image: "/game/F1 24.jpg",
     },
     {
       id: 10,
       title: "Dreamlight Valley",
       category: "Casual",
       price: 29.99,
-      image: "/images/dreamlight.jpg",
+      image: "/game/Dreamlight Valley.jpg",
     },
     // Additional Games
     {
@@ -229,35 +442,35 @@ const HomePage = () => {
       title: "War Thunder",
       category: "Massively Multiplayer",
       price: 0.0,
-      image: "/images/warthunder.jpg",
+      image: "/game/War Thunder.jpg",
     },
     {
       id: 12,
       title: "Albion Online",
       category: "Massively Multiplayer",
       price: 0.0,
-      image: "/images/albiononline.jpg",
+      image: "/game/Albion Online.jpg",
     },
     {
       id: 13,
       title: "Candy Crush Saga",
       category: "Casual",
       price: 0.0,
-      image: "/images/candycrush.jpg",
+      image: "/game/Candy Crush Saga.jpg",
     },
     {
       id: 14,
       title: "Among Us",
       category: "Casual",
       price: 0.0,
-      image: "/images/amongus.jpg",
+      image: "/game/Among Us.jpg",
     },
     {
       id: 15,
       title: "Crab Game",
       category: "Featured",
       price: 0.0,
-      image: "/images/crabgame.jpg",
+      image: "/game/Crab Game.jpg",
     },
     // Add more games as needed
   ];
@@ -281,7 +494,7 @@ const HomePage = () => {
   };
 
   return (
-    <div style={styles.container}>
+    <Container>
       {/* Hero Section */}
       <HeroSection navigate={navigate} />
 
@@ -311,132 +524,8 @@ const HomePage = () => {
         viewDetails={viewDetails}
         favorites={favorites}
       />
-    </div>
+    </Container>
   );
-};
-
-// Enhanced Styles
-const styles = {
-  container: {
-    fontFamily: "'Roboto', sans-serif",
-    backgroundColor: "#1b2838",
-    color: "#c7d5e0",
-    padding: "2rem",
-    minHeight: "100vh",
-  },
-  // Hero Section Styles
-  hero: {
-    background: "linear-gradient(135deg, #536976 0%, #292E49 100%)",
-    borderRadius: "16px",
-    padding: "3rem",
-    marginBottom: "3rem",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    overflow: "hidden",
-    position: "relative",
-    boxShadow: "0 20px 40px rgba(0, 0, 0, 0.5)",
-    flexWrap: "wrap",
-  },
-  heroContent: {
-    width: "50%",
-    minWidth: "300px",
-  },
-  heroTitle: {
-    color: "#ffffff",
-    fontSize: "2.5rem",
-    fontWeight: "bold",
-    marginBottom: "1rem",
-    textShadow: "2px 2px 4px rgba(0,0,0,0.6)",
-  },
-  heroSubtitle: {
-    color: "#dddddd",
-    fontSize: "1rem",
-    marginBottom: "2rem",
-  },
-  buttonGroup: {
-    display: "flex",
-    gap: "1rem",
-    flexWrap: "wrap",
-  },
-  // Products Section Styles
-  productsSection: {
-    marginBottom: "3rem",
-  },
-  sectionTitle: {
-    fontSize: "1.8rem",
-    fontWeight: "700",
-    marginBottom: "2rem",
-    color: "#fff",
-    textAlign: "center",
-    textShadow: "1px 1px 3px rgba(0,0,0,0.5)",
-  },
-  grid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-    gap: "1.5rem",
-  },
-  // Product Card Styles
-  card: {
-    background: "#292E49",
-    padding: "1.5rem",
-    borderRadius: "12px",
-    color: "#c7d5e0",
-    boxShadow: "0 4px 15px rgba(0, 0, 0, 0.2)",
-    transition: "transform 0.3s ease, box-shadow 0.3s ease",
-    cursor: "pointer",
-    position: "relative",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-between",
-  },
-  favoriteButton: {
-    position: "absolute",
-    right: "1rem",
-    top: "1rem",
-    background: "none",
-    border: "none",
-    cursor: "pointer",
-  },
-  cardImage: {
-    width: "100%",
-    height: "200px",
-    objectFit: "cover",
-    borderRadius: "8px",
-    marginBottom: "1rem",
-    boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
-  },
-  featuredImage: {
-    width: "100%",
-    height: "200px",
-    objectFit: "cover",
-    borderRadius: "10px",
-    marginBottom: "10px",
-    boxShadow: "0 4px 12px rgba(0,0,0,0.4)",
-  },
-  cardTitle: {
-    fontSize: "1.2rem",
-    fontWeight: "600",
-    margin: "5px 0",
-    color: "#ffffff",
-    textShadow: "1px 1px 2px rgba(0,0,0,0.6)",
-  },
-  cardCategory: {
-    fontSize: "0.875rem",
-    marginBottom: "0.5rem",
-    color: "#aaaaaa",
-    textShadow: "1px 1px 2px rgba(0,0,0,0.4)",
-  },
-  cardPrice: {
-    fontSize: "1rem",
-    color: "#ff4d6d",
-    marginBottom: "1rem",
-    fontWeight: "bold",
-  },
-  buttonGroup: {
-    display: "flex",
-    gap: "10px",
-  },
 };
 
 export default HomePage;

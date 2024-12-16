@@ -20,30 +20,30 @@ const MarketGamePage = () => {
   const navigate = useNavigate();
 
   const massivelyMultiplayerGames = [
-    { id: 1, title: 'Foxhole', price: '155.000đ', discount: '-38%', image: '/images/foxhole.jpg' },
-    { id: 2, title: 'Hell Let Loose', price: '591.500đ', discount: '-50%', image: '/images/hellletloose.jpg' },
-    { id: 3, title: 'SCUM', price: '282.500đ', discount: '-50%', image: '/images/scum.jpg' },
-    { id: 4, title: 'Test Drive Unlimited', price: '469.000đ', discount: '-30%', image: '/images/testdrive.jpg' },
-    { id: 14, title: 'War Thunder', price: 'Free', discount: '-100%', image: '/images/warthunder.jpg' },
-    { id: 15, title: 'Albion Online', price: 'Free', discount: '-100%', image: '/images/albiononline.jpg' },
+    { id: 1, title: 'Foxhole', price: '155.000đ', discount: '-38%', image: '/game/Foxhole.jpg' },
+    { id: 2, title: 'Hell Let Loose', price: '591.500đ', discount: '-50%', image: '/game/Hell Let Loose.jpg' },
+    { id: 3, title: 'SCUM', price: '282.500đ', discount: '-50%', image: '/game/SCUM.jpg' },
+    { id: 4, title: 'Test Drive Unlimited', price: '469.000đ', discount: '-30%', image: '/game/Test Drive Unlimited.jpg' },
+    { id: 14, title: 'War Thunder', price: 'Free', discount: '-100%', image: '/game/War Thunder.jpg' },
+    { id: 15, title: 'Albion Online', price: 'Free', discount: '-100%', image: '/game/Albion Online.jpg' },
   ];
 
   const casualGames = [
-    { id: 5, title: 'Goat Simulator 3', price: '127.000đ', discount: '-67%', image: '/images/goatsimulator.jpg' },
-    { id: 6, title: 'Luma Island', price: '160.000đ', discount: '-20%', image: '/images/lumaisland.jpg' },
-    { id: 7, title: 'F1 24', price: '436.000đ', discount: '-60%', image: '/images/f1.jpg' },
-    { id: 8, title: 'Dreamlight Valley', price: '667.500đ', discount: '-25%', image: '/images/dreamlight.jpg' },
-    { id: 16, title: 'Candy Crush Saga', price: 'Free', discount: '-100%', image: '/images/candycrush.jpg' },
-    { id: 17, title: 'Among Us', price: 'Free', discount: '-100%', image: '/images/amongus.jpg' },
+    { id: 5, title: 'Goat Simulator 3', price: '127.000đ', discount: '-67%', image: '/game/Goat Simulator 3.jpg' },
+    { id: 6, title: 'Luma Island', price: '160.000đ', discount: '-20%', image: '/game/Luma Island.jpg' },
+    { id: 7, title: 'F1 24', price: '436.000đ', discount: '-60%', image: '/game/F1 24.jpg' },
+    { id: 8, title: 'Dreamlight Valley', price: '667.500đ', discount: '-25%', image: '/game/Dreamlight Valley.jpg' },
+    { id: 16, title: 'Candy Crush Saga', price: 'Free', discount: '-100%', image: '/game/Candy Crush Saga.jpg' },
+    { id: 17, title: 'Among Us', price: 'Free', discount: '-100%', image: '/game/Among Us.jpg' },
   ];
 
   const featuredGames = [
-    { id: 9, title: 'Lord of the Rings: Return to Moria', price: '321.000đ', image: '/images/moria.jpg' },
-    { id: 10, title: 'Ready or Not', price: '399.000đ', image: '/images/readyornot.jpg' },
-    { id: 11, title: 'Dead by Daylight', price: '340.000đ', image: '/images/deadbydaylight.jpg' },
-    { id: 12, title: 'WWE 2K24', price: '1.000.000đ', image: '/images/wwe2k24.jpg' },
-    { id: 13, title: 'Stellaris', price: '664.000đ', image: '/images/stellaris.jpg', isLive: true },
-    { id: 18, title: 'Crab Game', price: 'Free', image: '/images/crabgame.jpg' },
+    { id: 9, title: 'Lord of the Rings: Return to Moria', price: '321.000đ', image: '/game/Lord of the Rings.jpg' },
+    { id: 10, title: 'Ready or Not', price: '399.000đ', image: '/game/Ready or Not.jpg' },
+    { id: 11, title: 'Dead by Daylight', price: '340.000đ', image: '/game/Dead by Daylight.jpg' },
+    { id: 12, title: 'WWE 2K24', price: '1.000.000đ', image: '/game/WWE 2K24.jpg' },
+    { id: 13, title: 'Stellaris', price: '664.000đ', image: '/game/Stellaris.jpg', isLive: true },
+    { id: 18, title: 'Crab Game', price: 'Free', image: '/game/Crab Game.jpg' },
   ];
 
   const handleFree = (game) => {

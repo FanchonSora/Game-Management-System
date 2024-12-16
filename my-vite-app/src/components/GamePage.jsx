@@ -45,7 +45,7 @@ const GamePage = () => {
       title: "Foxhole",
       description:
         "Foxhole is a persistent, massively multiplayer game of war. It is a top-down MMO where every player matters. Participate in strategic battles and contribute to the war effort.",
-      image: "/images/foxhole.jpg",
+      image: "/game/Foxhole.jpg",
       genre: "Massively Multiplayer",
       developer: "Clashstar",
       releaseDate: "2018-02-28",
@@ -55,7 +55,7 @@ const GamePage = () => {
       title: "Hell Let Loose",
       description:
         "Hell Let Loose is a realistic World War II first-person shooter that emphasizes teamwork and strategy. Engage in large-scale battles with up to 100 players.",
-      image: "/images/hellletloose.jpg",
+      image: "/game/Hell Let Loose.jpg",
       genre: "Massively Multiplayer",
       developer: "Black Matter",
       releaseDate: "2019-06-23",
@@ -65,7 +65,7 @@ const GamePage = () => {
       title: "SCUM",
       description:
         "SCUM is an open-world survival game that combines realistic character customization with in-depth metabolism and crafting systems. Strive to survive against other players and the environment.",
-      image: "/images/scum.jpg",
+      image: "/game/SCUM.jpg",
       genre: "Massively Multiplayer",
       developer: "Gamepires",
       releaseDate: "2020-08-29",
@@ -75,7 +75,7 @@ const GamePage = () => {
       title: "Test Drive Unlimited",
       description:
         "Test Drive Unlimited is a racing game that blends open-world exploration with high-speed racing. Drive across stunning landscapes and compete in various events.",
-      image: "/images/testdrive.jpg",
+      image: "/game/Test Drive Unlimited.jpg",
       genre: "Racing",
       developer: "Eden Games",
       releaseDate: "2011-05-18",
@@ -86,7 +86,7 @@ const GamePage = () => {
       title: "War Thunder",
       description:
         "War Thunder is a comprehensive free-to-play vehicle combat MMO that includes aviation, armored vehicles, and naval craft from World War II and beyond.",
-      image: "/images/warthunder.jpg",
+      image: "/game/War Thunder.jpg",
       genre: "Massively Multiplayer",
       developer: "Gaijin Entertainment",
       releaseDate: "2013-11-18",
@@ -96,7 +96,7 @@ const GamePage = () => {
       title: "Albion Online",
       description:
         "Albion Online is a sandbox MMORPG set in a medieval fantasy world. It features player-driven economy, classless combat, and a strong emphasis on player interaction.",
-      image: "/images/albiononline.jpg",
+      image: "/game/Albion Online.jpg",
       genre: "Massively Multiplayer",
       developer: "Sandbox Interactive",
       releaseDate: "2017-07-17",
@@ -106,7 +106,7 @@ const GamePage = () => {
       title: "Candy Crush Saga",
       description:
         "Candy Crush Saga is a free-to-play match-three puzzle game that offers thousands of levels of addictive gameplay. Swap candies to make matches and complete objectives.",
-      image: "/images/candycrush.jpg",
+      image: "/game/Candy Crush Saga.jpg",
       genre: "Casual",
       developer: "King",
       releaseDate: "2012-04-12",
@@ -116,7 +116,7 @@ const GamePage = () => {
       title: "Among Us",
       description:
         "Among Us is a multiplayer game where players work together to complete tasks on a spaceship, but some are impostors trying to sabotage and eliminate the crew.",
-      image: "/images/amongus.jpg",
+      image: "/game/Among Us.jpg",
       genre: "Casual",
       developer: "InnerSloth",
       releaseDate: "2018-06-15",
@@ -126,7 +126,7 @@ const GamePage = () => {
       title: "Crab Game",
       description:
         "Crab Game is a fun multiplayer party game inspired by the TV show Squid Game. Compete in various mini-games to survive and win the prize.",
-      image: "/images/crabgame.jpg",
+      image: "/game/Crab Game.jpg",
       genre: "Party",
       developer: "Chucklefish",
       releaseDate: "2021-09-10",
