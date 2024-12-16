@@ -1,7 +1,7 @@
 import React from "react";
 import { Routes, Route, BrowserRouter } from "react-router-dom"; // Import from react-router-dom
 import HomePage from "./components/HomePage";
-import SignInPage from "./components/SignInPage";
+import LogInPage from "./components/LogIn";
 import LibraryPageGame from "./components/LibraryGame";
 import LibraryPageCode from "./components/LibraryCode";
 import ProfilePage from "./components/ProfilePage";
@@ -19,7 +19,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/home" element={<HomePage />} />
-        <Route path="/sign-in" element={<SignInPage />} />
+        <Route path="/sign-in" element={<LogInPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/community" element={<CommunityPage />} />
         <Route path="/market-game" element={<MarketGamePage />} />

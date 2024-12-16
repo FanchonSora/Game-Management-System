@@ -76,7 +76,7 @@ const MarketGamePage = () => {
           <p style={styles.price}>{game.price === 'Free' ? 'Free' : game.price}</p>
           <div style={styles.buttonGroup}>
             {game.price === 'Free' && (
-              <button style={styles.freeButton} onClick={() => handleFree(game)}>FREE</button>
+              <button style={styles.freeButton} onClick={() => handleFree(game)}>ADD</button>
             )}
             <button style={styles.viewButton} onClick={() => handleView(game)}>VIEW</button>
           </div>
