@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 
@@ -60,6 +60,86 @@ const Container = styled.div`
   }
 `;
 
+// Navbar Styles
+const Navbar = styled.nav`
+  width: 100%;
+  background-color: #2a2a3d;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+  z-index: 1000; /* Đảm bảo Navbar luôn ở trên cùng */
+  position: relative;
+`;
+
+const NavLinks = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+`;
+
+const Dropdown = styled.div`
+  position: relative;
+`;
+
+const NavButton = styled.button`
+  background: none;
+  border: none;
+  color: #c7d5e0;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  transition: background 0.3s ease;
+
+  &:hover {
+    background-color: #3a3a5e;
+  }
+
+  &:focus {
+    outline: none;
+    background-color: #3a3a5e;
+  }
+`;
+
+const DropdownMenu = styled.div`
+  position: absolute;
+  top: 110%;
+  left: 0;
+  background-color: #2a2a3d;
+  border: 1px solid #444;
+  border-radius: 4px;
+  min-width: 150px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+`;
+
+const DropdownItem = styled.a`
+  display: block;
+  padding: 0.75rem 1rem;
+  color: #c7d5e0;
+  text-decoration: none;
+  transition: background 0.3s ease;
+
+  &:hover {
+    background-color: #3a3a5e;
+  }
+`;
+
+const NavLink = styled.a`
+  color: #c7d5e0;
+  text-decoration: none;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  transition: background 0.3s ease;
+
+  &:hover {
+    background-color: #3a3a5e;
+  }
+`;
+
 // Hero Section Styles
 const Hero = styled.section`
   background: rgba(41, 46, 73, 0.8);
@@ -73,6 +153,8 @@ const Hero = styled.section`
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
   flex-wrap: wrap;
   animation: ${fadeIn} 1s ease-out;
+  z-index: 1;
+  position: relative;
 
   @media (max-width: 768px) {
     flex-direction: column;
@@ -350,16 +432,61 @@ const HeroSection = ({ navigate }) => {
 const HomePage = () => {
   const navigate = useNavigate();
 
+  // Refs for Dropdowns
+  const marketRef = useRef(null);
+  const libraryRef = useRef(null);
+  const profileRef = useRef(null);
+
+  // Dropdown States
+  const [isMarketDropdownOpen, setMarketDropdownOpen] = useState(false);
+  const [isLibraryDropdownOpen, setLibraryDropdownOpen] = useState(false);
+  const [isProfileDropdownOpen, setProfileDropdownOpen] = useState(false);
+
   // Initialize favorites from localStorage
   const [favorites, setFavorites] = useState(() => {
-    const storedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
-    return new Set(storedFavorites);
+    try {
+      const storedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
+      return new Set(storedFavorites);
+    } catch (error) {
+      console.error("Failed to parse favorites from localStorage:", error);
+      return new Set();
+    }
   });
 
   // Update localStorage whenever favorites change
   useEffect(() => {
-    localStorage.setItem("favorites", JSON.stringify(Array.from(favorites)));
+    try {
+      localStorage.setItem("favorites", JSON.stringify(Array.from(favorites)));
+    } catch (error) {
+      console.error("Failed to save favorites to localStorage:", error);
+    }
   }, [favorites]);
+
+  // Close dropdowns when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        marketRef.current && !marketRef.current.contains(event.target)
+      ) {
+        setMarketDropdownOpen(false);
+      }
+      if (
+        libraryRef.current && !libraryRef.current.contains(event.target)
+      ) {
+        setLibraryDropdownOpen(false);
+      }
+      if (
+        profileRef.current && !profileRef.current.contains(event.target)
+      ) {
+        setProfileDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   // Sample Products Data
   const products = [
@@ -495,6 +622,68 @@ const HomePage = () => {
 
   return (
     <Container>
+      {/* Top Navigation Bar */}
+      <Navbar>
+        <NavLinks>
+          {/* Market Dropdown */}
+          <Dropdown ref={marketRef}>
+            <NavButton
+              onClick={() => setMarketDropdownOpen(!isMarketDropdownOpen)}
+              aria-haspopup="true"
+              aria-expanded={isMarketDropdownOpen}
+            >
+              Market
+            </NavButton>
+            {isMarketDropdownOpen && (
+              <DropdownMenu>
+                <DropdownItem href="/market-game">Market Game</DropdownItem>
+                <DropdownItem href="/market-code">Market Code</DropdownItem>
+              </DropdownMenu>
+            )}
+          </Dropdown>
+
+          {/* Community Link */}
+          <NavLink href="/community">Community</NavLink>
+
+          {/* Library Dropdown */}
+          <Dropdown ref={libraryRef}>
+            <NavButton
+              onClick={() => setLibraryDropdownOpen(!isLibraryDropdownOpen)}
+              aria-haspopup="true"
+              aria-expanded={isLibraryDropdownOpen}
+            >
+              Library
+            </NavButton>
+            {isLibraryDropdownOpen && (
+              <DropdownMenu>
+                <DropdownItem href="/home">Home</DropdownItem>
+                <DropdownItem href="/library-code">Library Code</DropdownItem>
+                <DropdownItem href="/library-game">Library Game</DropdownItem>
+              </DropdownMenu>
+            )}
+          </Dropdown>
+
+          {/* Profile Dropdown */}
+          <Dropdown ref={profileRef}>
+            <NavButton
+              onClick={() => setProfileDropdownOpen(!isProfileDropdownOpen)}
+              aria-haspopup="true"
+              aria-expanded={isProfileDropdownOpen}
+            >
+              Personal Profile
+            </NavButton>
+            {isProfileDropdownOpen && (
+              <DropdownMenu>
+                <DropdownItem href="/activity">Activity</DropdownItem>
+                <DropdownItem href="/profile">Profile</DropdownItem>
+                <DropdownItem href="/friends">Friends</DropdownItem>
+                <DropdownItem href="/badges">Badges</DropdownItem>
+              </DropdownMenu>
+            )}
+          </Dropdown>
+        </NavLinks>
+      </Navbar>
+
       {/* Hero Section */}
       <HeroSection navigate={navigate} />
 

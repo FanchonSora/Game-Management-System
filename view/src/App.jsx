@@ -11,7 +11,6 @@ import MarketGamePage from "./components/MarketGame";
 import CodePage from "./components/CodePage";
 import FriendsPage from "./components/FriendPage";
 import BadgesPage from "./components/BadgesPage";
-import InventoryPage from "./components/InventoryPage";
 import GameModePage from "./components/GameModePage";
 import MarketCodePage from "./components/MarketCode";
 import SignUpPage from "./components/SignUpPage";
@@ -31,7 +30,6 @@ function App() {
         <Route path="/repository/:id" element={<CodePage />} />
         <Route path="/friends" element={<FriendsPage />} />
         <Route path="/badges" element={<BadgesPage />} />
-        <Route path="/inventory" element={<InventoryPage />} />
         <Route path="/game/:id" element={<GamePage />} />
         <Route path="/library-game/:id" element={<GameModePage />} />
       </Routes>

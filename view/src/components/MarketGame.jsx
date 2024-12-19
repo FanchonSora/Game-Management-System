@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 
-// HeartIcon Component
+// HeartIcon Component (Optional, not used in current code)
 const HeartIcon = ({ filled }) => (
   <svg
     width="24"
@@ -52,7 +52,7 @@ const Container = styled.div`
   color: #c7d5e0;
   position: relative;
   overflow: hidden;
-
+  
   &:before {
     content: "";
     position: absolute;
@@ -73,6 +73,83 @@ const Container = styled.div`
 const ContentWrapper = styled.div`
   max-width: 1200px;
   margin: 0 auto;
+`;
+
+// Navbar Styled Components
+const Navbar = styled.nav`
+  width: 100%;
+  background-color:  rgba(42, 71, 94, 0.8);
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  box-shadow:  0 2px 4px rgba(0,0,0,0.5);
+  margin-bottom: 2rem;
+  z-index: 1000; /* Đảm bảo Navbar luôn ở trên cùng */
+  position: relative;
+`;
+
+const NavLinks = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+`;
+
+// Dropdown Components
+const Dropdown = styled.div`
+  position: relative;
+`;
+
+const NavButton = styled.button`
+  background: none;
+  border: none;
+  color: #c7d5e0;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: background 0.3s ease;
+
+  &:hover, &:focus {
+    background-color: rgba(255, 255, 255, 0.1);
+    outline: none;
+  }
+`;
+
+const DropdownMenu = styled.div`
+  position: absolute;
+  top: 38px;
+  left: 0;
+  background-color: rgba(42, 71, 94, 0.95);
+  border-radius: 5px;
+  min-width: 150px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  z-index: 100;
+`;
+
+const DropdownItem = styled.a`
+  display: block;
+  padding: 10px 15px;
+  color: #c7d5e0;
+  text-decoration: none;
+  transition: background 0.2s ease;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+`;
+
+const NavLinkStyled = styled.a`
+  color: #c7d5e0;
+  text-decoration: none;
+  font-size: 16px;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: background 0.3s ease;
+
+  &:hover, &:focus {
+    background-color: rgba(255, 255, 255, 0.1);
+    outline: none;
+  }
 `;
 
 // Categories Section
@@ -164,7 +241,7 @@ const FeaturedCard = styled.div`
   position: relative;
   border: 1px solid #0f2b44;
   cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
   flex: 1;
   max-width: 250px;
   display: flex;
@@ -284,11 +361,22 @@ const FeaturedGameImage = styled(GameImage)`
   height: 180px;
 `;
 
+// Navbar Component (Integrated into FeaturedMarketGamePage)
 const FeaturedMarketGamePage = () => {
   const navigate = useNavigate();
 
   // State for Carousel
   const [currentSlide, setCurrentSlide] = useState(0);
+
+  // State for Dropdowns
+  const [isMarketDropdownOpen, setMarketDropdownOpen] = useState(false);
+  const [isLibraryDropdownOpen, setLibraryDropdownOpen] = useState(false);
+  const [isProfileDropdownOpen, setProfileDropdownOpen] = useState(false);
+
+  // Refs for Dropdowns
+  const marketRef = useRef(null);
+  const libraryRef = useRef(null);
+  const profileRef = useRef(null);
 
   // Featured Games Data
   const featuredGames = [
@@ -414,8 +502,90 @@ const FeaturedMarketGamePage = () => {
     );
   };
 
+  // Click outside handler to close dropdowns
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (marketRef.current && !marketRef.current.contains(event.target)) {
+        setMarketDropdownOpen(false);
+      }
+      if (libraryRef.current && !libraryRef.current.contains(event.target)) {
+        setLibraryDropdownOpen(false);
+      }
+      if (profileRef.current && !profileRef.current.contains(event.target)) {
+        setProfileDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   return (
     <Container>
+      {/* Top Navigation Bar */}
+      <Navbar>
+        <NavLinks>
+          {/* Market Dropdown */}
+          <Dropdown ref={marketRef}>
+            <NavButton
+              onClick={() => setMarketDropdownOpen(!isMarketDropdownOpen)}
+              aria-haspopup="true"
+              aria-expanded={isMarketDropdownOpen}
+            >
+              Market
+            </NavButton>
+            {isMarketDropdownOpen && (
+              <DropdownMenu>
+                <DropdownItem href="/market-game">Market Game</DropdownItem>
+                <DropdownItem href="/market-code">Market Code</DropdownItem>
+              </DropdownMenu>
+            )}
+          </Dropdown>
+
+          {/* Community Link */}
+          <NavLinkStyled href="/community">Community</NavLinkStyled>
+
+          {/* Library Dropdown */}
+          <Dropdown ref={libraryRef}>
+            <NavButton
+              onClick={() => setLibraryDropdownOpen(!isLibraryDropdownOpen)}
+              aria-haspopup="true"
+              aria-expanded={isLibraryDropdownOpen}
+            >
+              Library
+            </NavButton>
+            {isLibraryDropdownOpen && (
+              <DropdownMenu>
+                <DropdownItem href="/home">Home</DropdownItem>
+                <DropdownItem href="/library-code">Library Code</DropdownItem>
+                <DropdownItem href="/library-game">Library Game</DropdownItem>
+              </DropdownMenu>
+            )}
+          </Dropdown>
+
+          {/* Profile Dropdown */}
+          <Dropdown ref={profileRef}>
+            <NavButton
+              onClick={() => setProfileDropdownOpen(!isProfileDropdownOpen)}
+              aria-haspopup="true"
+              aria-expanded={isProfileDropdownOpen}
+            >
+              Personal Profile
+            </NavButton>
+            {isProfileDropdownOpen && (
+              <DropdownMenu>
+                <DropdownItem href="/activity">Activity</DropdownItem>
+                <DropdownItem href="/profile">Profile</DropdownItem>
+                <DropdownItem href="/friends">Friends</DropdownItem>
+                <DropdownItem href="/badges">Badges</DropdownItem>
+              </DropdownMenu>
+            )}
+          </Dropdown>
+        </NavLinks>
+      </Navbar>
+
       {/* Featured Games Carousel */}
       <CarouselContainer>
         <CarouselTitle>Featured Games</CarouselTitle>

@@ -141,12 +141,6 @@ const LibraryPage = () => {
                 <a href="/badges" style={styles.dropdownItem}>
                   Badges
                 </a>
-                <a href="/inventory" style={styles.dropdownItem}>
-                  Inventory
-                </a>
-                <a href="/year-in-review" style={styles.dropdownItem}>
-                  Year In Review
-                </a>
               </div>
             )}
           </div>
