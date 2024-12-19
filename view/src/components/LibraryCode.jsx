@@ -1,7 +1,335 @@
-import React from "react";
-import { Link } from "react-router-dom";
+// GameLibrary.jsx
+import React, { useState, useRef, useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import styled, { keyframes } from "styled-components";
 
+// Keyframes for Animations
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`;
+
+const slideDown = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+
+// Styled Components
+
+// Container
+const Container = styled.div`
+  font-family: "Roboto", sans-serif;
+  background-color: #f6f8fa;
+  color: #24292e;
+  min-height: 100vh;
+  padding: 20px;
+`;
+
+// Navbar
+const Navbar = styled.nav`
+  width: 100%;
+  background-color: #2d333b;
+  padding: 15px 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+`;
+
+// Nav Links
+const NavLinks = styled.div`
+  display: flex;
+  gap: 20px;
+  align-items: center;
+`;
+
+// Dropdown Components
+const Dropdown = styled.div`
+  position: relative;
+`;
+
+const NavButton = styled.button`
+  background: none;
+  border: none;
+  color: #c9d1d9;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: background 0.3s ease;
+
+  &:hover,
+  &:focus {
+    background-color: rgba(255, 255, 255, 0.1);
+    outline: none;
+  }
+`;
+
+const DropdownMenu = styled.div`
+  position: absolute;
+  top: 40px;
+  left: 0;
+  background-color: #24292e;
+  border-radius: 6px;
+  min-width: 160px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  z-index: 100;
+  animation: ${fadeIn} 0.3s ease-out;
+`;
+
+const DropdownItem = styled.a`
+  display: block;
+  padding: 10px 15px;
+  color: #c9d1d9;
+  text-decoration: none;
+  transition: background 0.2s ease;
+
+  &:hover {
+    background-color: #3a424a;
+  }
+`;
+
+// Simple NavLink
+const NavLinkStyled = styled(Link)`
+  color: #c9d1d9;
+  text-decoration: none;
+  font-size: 16px;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: background 0.3s ease;
+
+  &:hover,
+  &:focus {
+    background-color: rgba(255, 255, 255, 0.1);
+    outline: none;
+  }
+`;
+
+// Header Section
+const Header = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+`;
+
+const ProfilePicture = styled.img`
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin-right: 20px;
+`;
+
+const ProfileInfo = styled.div``;
+
+const ProfileName = styled.h2`
+  margin: 0;
+  font-size: 24px;
+  color: #0366d6;
+`;
+
+const ProfileUsername = styled.p`
+  margin: 5px 0 0 0;
+  color: #586069;
+`;
+
+// Tabs
+const Tabs = styled.div`
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+`;
+
+const TabButton = styled.button`
+  padding: 8px 16px;
+  background-color: #fff;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s ease;
+
+  &:hover {
+    background-color: #f6f8fa;
+  }
+
+  &.active {
+    background-color: #0366d6;
+    color: #fff;
+    border-color: #0366d6;
+  }
+`;
+
+// Search Bar
+const SearchBar = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+`;
+
+const SearchInput = styled.input`
+  width: 75%;
+  padding: 10px 15px;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  font-size: 14px;
+`;
+
+const NewButton = styled.button`
+  padding: 10px 20px;
+  background-color: #28a745;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s ease;
+
+  &:hover {
+    background-color: #218838;
+  }
+`;
+
+// Game List
+const GameList = styled.div``;
+
+// Game Card
+const GameCard = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  margin-bottom: 10px;
+  background-color: #fff;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+  }
+`;
+
+const GameDetails = styled.div``;
+
+const GameTitle = styled.h3`
+  margin: 0;
+  font-size: 18px;
+  color: #0366d6;
+`;
+
+const Language = styled.p`
+  margin: 5px 0 0 0;
+  color: #586069;
+  font-size: 14px;
+`;
+
+const Updated = styled.span`
+  margin-left: 10px;
+  color: #586069;
+  font-size: 12px;
+`;
+
+const Actions = styled.div`
+  display: flex;
+  gap: 10px;
+`;
+
+// Add Button
+const AddButton = styled.button`
+  padding: 6px 12px;
+  background-color: #28a745;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s ease;
+
+  &:hover {
+    background-color: #218838;
+  }
+
+  &.added {
+    background-color: #6c757d;
+    cursor: not-allowed;
+  }
+`;
+
+// View Link
+const ViewLink = styled(Link)`
+  padding: 6px 12px;
+  background-color: #0366d6;
+  color: #fff;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 14px;
+  transition: background 0.3s ease;
+
+  &:hover {
+    background-color: #0356b6;
+  }
+`;
+
+// Notification (Optional)
+const Notification = styled.div`
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #28a745;
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 6px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  animation: ${fadeIn} 0.3s ease-out, fadeIn 0.3s ease-out 2.5s forwards;
+  opacity: 0;
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+  }
+`;
+
+
+// GameLibrary Component
 const GameLibrary = () => {
+  const navigate = useNavigate();
+
+  // State for active tab (Optional)
+  const [activeTab, setActiveTab] = useState("Overview");
+
+  // State for added codes
+  const [addedCodes, setAddedCodes] = useState([]);
+
+  // State for notification
+  const [notification, setNotification] = useState("");
+
+  // Refs for Dropdowns in Navbar
+  const marketRef = useRef(null);
+  const libraryRef = useRef(null);
+  const profileRef = useRef(null);
+
+  // Games Data
   const games = [
     { id: 1, name: "Game-Management-System", language: "JavaScript", updated: "6 hours ago" },
     { id: 2, name: "Matrix-Calculator-Web", language: "HTML", updated: "yesterday" },
@@ -10,180 +338,173 @@ const GameLibrary = () => {
     { id: 5, name: "Event-Management", language: "TypeScript", updated: "Aug 30" },
   ];
 
+  // Load added codes from localStorage on mount
+  useEffect(() => {
+    const storedCodes = JSON.parse(localStorage.getItem("libraryCodes")) || [];
+    setAddedCodes(storedCodes);
+  }, []);
+
+  // Click outside handler to close dropdowns
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (marketRef.current && !marketRef.current.contains(event.target)) {
+        setMarketDropdownOpen(false);
+      }
+      if (libraryRef.current && !libraryRef.current.contains(event.target)) {
+        setLibraryDropdownOpen(false);
+      }
+      if (profileRef.current && !profileRef.current.contains(event.target)) {
+        setProfileDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  // State for Dropdowns
+  const [isMarketDropdownOpen, setMarketDropdownOpen] = useState(false);
+  const [isLibraryDropdownOpen, setLibraryDropdownOpen] = useState(false);
+  const [isProfileDropdownOpen, setProfileDropdownOpen] = useState(false);
+
+  // Function to handle adding code to library
+  const handleAddCode = (game) => {
+    if (!addedCodes.find((code) => code.id === game.id)) {
+      const updatedCodes = [...addedCodes, game];
+      setAddedCodes(updatedCodes);
+      localStorage.setItem("libraryCodes", JSON.stringify(updatedCodes));
+      setNotification(`${game.name} has been added to your library!`);
+      // Hide notification after 3 seconds
+      setTimeout(() => setNotification(""), 3000);
+    }
+  };
+
   return (
-    <div style={styles.container}>
+    <Container>
+      {/* Top Navigation Bar */}
+      <Navbar>
+        <NavLinks>
+          {/* Market Dropdown */}
+          <Dropdown ref={marketRef}>
+            <NavButton
+              onClick={() => setMarketDropdownOpen(!isMarketDropdownOpen)}
+              aria-haspopup="true"
+              aria-expanded={isMarketDropdownOpen}
+            >
+              Market
+            </NavButton>
+            {isMarketDropdownOpen && (
+              <DropdownMenu>
+                <DropdownItem href="/market-game">Market Game</DropdownItem>
+                <DropdownItem href="/market-code">Market Code</DropdownItem>
+              </DropdownMenu>
+            )}
+          </Dropdown>
+
+          {/* Community Link */}
+          <NavLinkStyled to="/community">Community</NavLinkStyled>
+
+          {/* Library Dropdown */}
+          <Dropdown ref={libraryRef}>
+            <NavButton
+              onClick={() => setLibraryDropdownOpen(!isLibraryDropdownOpen)}
+              aria-haspopup="true"
+              aria-expanded={isLibraryDropdownOpen}
+            >
+              Library
+            </NavButton>
+            {isLibraryDropdownOpen && (
+              <DropdownMenu>
+                <DropdownItem href="/library-code">Library Code</DropdownItem>
+                <DropdownItem href="/library-game">Library Game</DropdownItem>
+              </DropdownMenu>
+            )}
+          </Dropdown>
+
+          {/* Profile Dropdown */}
+          <Dropdown ref={profileRef}>
+            <NavButton
+              onClick={() => setProfileDropdownOpen(!isProfileDropdownOpen)}
+              aria-haspopup="true"
+              aria-expanded={isProfileDropdownOpen}
+            >
+              Personal Profile
+            </NavButton>
+            {isProfileDropdownOpen && (
+              <DropdownMenu>
+                <DropdownItem href="/activity">Activity</DropdownItem>
+                <DropdownItem href="/profile">Profile</DropdownItem>
+                <DropdownItem href="/friends">Friends</DropdownItem>
+                <DropdownItem href="/badges">Badges</DropdownItem>
+              </DropdownMenu>
+            )}
+          </Dropdown>
+        </NavLinks>
+      </Navbar>
+
       {/* Header Section */}
-      <div style={styles.header}>
-        <img
+      <Header>
+        <ProfilePicture
           src="https://via.placeholder.com/100"
           alt="Profile"
-          style={styles.profilePicture}
         />
-        <div>
-          <h2 style={styles.profileName}>Fanchon_Sora</h2>
-          <p style={styles.profileUsername}>FanchonSora</p>
-        </div>
-      </div>
+        <ProfileInfo>
+          <ProfileName>Fanchon_Sora</ProfileName>
+          <ProfileUsername>@FanchonSora</ProfileUsername>
+        </ProfileInfo>
+      </Header>
 
       {/* Tabs */}
-      <div style={styles.tabs}>
-        <button style={styles.tabButton}>Overview</button>
-        <button style={styles.tabButton}>Repositories</button>
-        <button style={styles.tabButton}>Projects</button>
-        <button style={styles.tabButton}>Packages</button>
-        <button style={styles.tabButton}>Stars</button>
-      </div>
+      <Tabs>
+        {["Overview", "Repositories", "Projects", "Packages", "Stars"].map((tab) => (
+          <TabButton
+            key={tab}
+            className={activeTab === tab ? "active" : ""}
+            onClick={() => setActiveTab(tab)}
+          >
+            {tab}
+          </TabButton>
+        ))}
+      </Tabs>
 
       {/* Search Bar */}
-      <div style={styles.searchBar}>
-        <input
-          type="text"
-          placeholder="Find a repository..."
-          style={styles.searchInput}
-        />
-        <button style={styles.newButton}>New</button>
-      </div>
+      <SearchBar>
+        <SearchInput type="text" placeholder="Find a repository..." />
+        <NewButton>New</NewButton>
+      </SearchBar>
 
-      {/* Game List */}
-      <div>
+      {/* Game/List */}
+      <GameList>
         {games.map((game) => (
-          <div key={game.id} style={styles.gameCard}>
-            <div style={styles.gameDetails}>
-              <h3 style={styles.gameTitle}>{game.name}</h3>
-              <p style={styles.language}>
-                {game.language} <span style={styles.updated}>Updated {game.updated}</span>
-              </p>
-            </div>
-            <div style={styles.actions}>
-              <button style={styles.starButton}>★ Star</button>
-              <Link to={`/repository/${game.id}`} style={styles.viewButton}>
-                View
-              </Link>
-            </div>
-          </div>
+          <GameCard key={game.id}>
+            <GameDetails>
+              <GameTitle>{game.name}</GameTitle>
+              <Language>
+                {game.language} <Updated>Updated {game.updated}</Updated>
+              </Language>
+            </GameDetails>
+            <Actions>
+              <AddButton
+                onClick={() => handleAddCode(game)}
+                disabled={addedCodes.some((code) => code.id === game.id)}
+                className={addedCodes.some((code) => code.id === game.id) ? "added" : ""}
+              >
+                {addedCodes.some((code) => code.id === game.id) ? "Added" : "Add Code"}
+              </AddButton>
+              <ViewLink to={`/repository/${game.id}`}>View</ViewLink>
+            </Actions>
+          </GameCard>
         ))}
-      </div>
-    </div>
+      </GameList>
+
+      {/* Notification */}
+      {notification && <Notification>{notification}</Notification>}
+    </Container>
   );
 };
 
 export default GameLibrary;
 
-// CSS styles in JS
-const styles = {
-  container: {
-    padding: "20px",
-    fontFamily: "Arial, sans-serif",
-    backgroundColor: "#f6f8fa",
-    color: "#24292e",
-  },
-  header: {
-    display: "flex",
-    alignItems: "center",
-    marginBottom: "20px",
-  },
-  profilePicture: {
-    width: "100px",
-    height: "100px",
-    borderRadius: "50%",
-    marginRight: "20px",
-  },
-  profileName: {
-    margin: 0,
-    fontSize: "24px",
-    fontWeight: "bold",
-  },
-  profileUsername: {
-    margin: 0,
-    color: "#57606a",
-  },
-  tabs: {
-    display: "flex",
-    gap: "10px",
-    marginBottom: "20px",
-  },
-  tabButton: {
-    padding: "10px 15px",
-    backgroundColor: "#fff",
-    border: "1px solid #d0d7de",
-    borderRadius: "6px",
-    cursor: "pointer",
-  },
-  searchBar: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: "20px",
-  },
-  searchInput: {
-    width: "80%",
-    padding: "10px",
-    borderRadius: "6px",
-    border: "1px solid #d0d7de",
-  },
-  newButton: {
-    padding: "10px 15px",
-    backgroundColor: "#2ea44f",
-    color: "#fff",
-    borderRadius: "6px",
-    border: "none",
-    cursor: "pointer",
-  },
-  gameCard: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: "10px 20px",
-    marginBottom: "10px",
-    backgroundColor: "#fff",
-    borderRadius: "6px",
-    boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
-  },
-  gameDetails: {
-    display: "flex",
-    flexDirection: "column",
-  },
-  gameTitle: {
-    margin: 0,
-    fontSize: "18px",
-    fontWeight: "bold",
-  },
-  language: {
-    margin: 0,
-    fontSize: "14px",
-    color: "#57606a",
-  },
-  updated: {
-    marginLeft: "10px",
-    fontSize: "12px",
-    color: "#57606a",
-  },
-  actions: {
-    display: "flex",
-    alignItems: "center",
-    gap: "10px",
-  },
-  starButton: {
-    padding: "5px 10px",
-    backgroundColor: "#ffffff", 
-    border: "1px solid #d0d7de",
-    color: "#000000",
-    borderRadius: "6px",
-    fontSize: "14px",
-    fontWeight: "bold",
-    cursor: "pointer",
-  },
-  viewButton: {
-    textDecoration: "none",
-    padding: "5px 10px",
-    backgroundColor: "#ffffff", // White background
-    color: "#000000", // Black text
-    borderRadius: "6px",
-    fontSize: "14px",
-    fontWeight: "bold",
-    border: "1px solid #d0d7de", // Optional: Add a border for better visibility
-    cursor: "pointer", // Add a pointer cursor for better UX
-    transition: "background-color 0.2s, color 0.2s", // Smooth hover transition
-    display: "inline-block", // Ensures proper alignment
-  },
-};
+

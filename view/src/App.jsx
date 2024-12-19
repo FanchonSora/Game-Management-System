@@ -31,6 +31,7 @@ function App() {
         <Route path="/friends" element={<FriendsPage />} />
         <Route path="/badges" element={<BadgesPage />} />
         <Route path="/game/:id" element={<GamePage />} />
+        <Route path="/market-code/:id" element={<CodePage />} />
         <Route path="/library-game/:id" element={<GameModePage />} />
       </Routes>
     </BrowserRouter>
