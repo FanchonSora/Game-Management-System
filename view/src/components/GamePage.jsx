@@ -4,7 +4,13 @@ import { useParams } from "react-router-dom";
 // GameHeader Component
 const GameHeader = ({ title, image }) => (
   <div style={styles.header}>
-    <img src={image} alt={title} style={styles.headerImage} />
+    <div style={styles.headerImageWrapper}>
+      <img
+        src={image}
+        alt={title}
+        style={styles.headerImage}
+      />
+    </div>
     <h1 style={styles.title}>{title}</h1>
   </div>
 );
@@ -12,16 +18,16 @@ const GameHeader = ({ title, image }) => (
 // GameDetails Component
 const GameDetails = ({ genre, developer, releaseDate, rating }) => (
   <div style={styles.infoBox}>
-    <p>
+    <p style={styles.infoText}>
       <strong>Genre:</strong> {genre}
     </p>
-    <p>
+    <p style={styles.infoText}>
       <strong>Developer:</strong> {developer}
     </p>
-    <p>
+    <p style={styles.infoText}>
       <strong>Release Date:</strong> {releaseDate}
     </p>
-    <p>
+    <p style={styles.infoText}>
       <strong>Rating:</strong> {rating}
     </p>
   </div>
@@ -35,11 +41,10 @@ const GameDescription = ({ description }) => (
   </div>
 );
 
-// GamePage Component
 const GamePage = () => {
   const { id } = useParams();
 
-  // Example game details: In a real app, you might fetch these from an API.
+  // Example game details
   const gameDetails = {
     1: {
       title: "Foxhole",
@@ -81,7 +86,6 @@ const GamePage = () => {
       releaseDate: "2011-05-18",
       rating: "7.5/10",
     },
-    // Add more game details as needed
     5: {
       title: "War Thunder",
       description:
@@ -132,7 +136,6 @@ const GamePage = () => {
       releaseDate: "2021-09-10",
       rating: "8.5/10",
     },
-    // ... other games
   };
 
   const game = gameDetails[id];
@@ -168,28 +171,36 @@ const styles = {
     margin: "2rem auto",
     padding: "2rem",
     fontFamily: "'Roboto', sans-serif",
-    backgroundColor: "#1b2838",
+    background: "linear-gradient(135deg, #0f1b2d 0%, #1b2838 100%)",
     color: "#c7d5e0",
-    borderRadius: "10px",
-    boxShadow: "0 4px 20px rgba(0,0,0,0.4)",
+    borderRadius: "12px",
+    boxShadow: "0 6px 30px rgba(0,0,0,0.5)",
   },
   header: {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    marginBottom: "2rem",
+    marginBottom: "2.5rem",
+  },
+  headerImageWrapper: {
+    width: "300px",
+    height: "auto",
+    overflow: "hidden",
+    borderRadius: "10px",
+    boxShadow: "0 4px 15px rgba(0,0,0,0.6)",
+    transition: "transform 0.3s ease",
   },
   headerImage: {
-    width: "300px",
-    borderRadius: "8px",
-    marginBottom: "1rem",
-    boxShadow: "0 2px 10px rgba(0,0,0,0.5)",
+    width: "100%",
+    borderRadius: "10px",
+    transition: "transform 0.3s ease",
   },
   title: {
-    fontSize: "2.5rem",
-    marginBottom: "1rem",
-    textShadow: "2px 2px 4px rgba(0,0,0,0.6)",
+    fontSize: "2.8rem",
+    marginTop: "1.5rem",
+    textShadow: "2px 2px 5px rgba(0,0,0,0.7)",
     textAlign: "center",
+    fontWeight: "600",
   },
   details: {
     display: "flex",
@@ -197,29 +208,42 @@ const styles = {
     gap: "2rem",
   },
   infoBox: {
-    backgroundColor: "rgba(15, 28, 44, 0.8)",
+    background: "rgba(27, 40, 56, 0.8)",
     padding: "1.5rem",
     borderRadius: "8px",
     border: "1px solid #0f2b44",
     boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
   },
+  infoText: {
+    marginBottom: "0.5rem",
+    fontSize: "1rem",
+  },
   sectionTitle: {
-    fontSize: "1.5rem",
+    fontSize: "1.8rem",
     marginBottom: "1rem",
     color: "#ffffff",
-    textShadow: "1px 1px 2px rgba(0,0,0,0.6)",
+    textShadow: "1px 1px 3px rgba(0,0,0,0.6)",
+    fontWeight: "500",
   },
   descriptionBox: {
-    backgroundColor: "rgba(15, 28, 44, 0.8)",
+    background: "rgba(27, 40, 56, 0.8)",
     padding: "1.5rem",
     borderRadius: "8px",
     border: "1px solid #0f2b44",
     boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
   },
   descriptionText: {
-    lineHeight: "1.6",
-    fontSize: "16px",
+    lineHeight: "1.7",
+    fontSize: "1rem",
   },
+};
+
+// Add hover effect for image wrapper
+styles.headerImageWrapper[':hover'] = {
+  transform: "scale(1.05)",
+};
+styles.headerImage[':hover'] = {
+  transform: "scale(1.05)",
 };
 
 export default GamePage;

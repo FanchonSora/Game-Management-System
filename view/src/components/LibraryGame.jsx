@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate for navigation
+import { useNavigate } from "react-router-dom";
 
 const LibraryPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -11,7 +11,7 @@ const LibraryPage = () => {
   const marketRef = useRef(null);
   const libraryRef = useRef(null);
   const profileRef = useRef(null);
-  const navigate = useNavigate(); // Initialize navigate
+  const navigate = useNavigate();
 
   const handleClickOutside = (event) => {
     if (marketRef.current && !marketRef.current.contains(event.target)) {
@@ -27,8 +27,9 @@ const LibraryPage = () => {
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
+
     // Load library games from local storage
-    const storedGames = JSON.parse(localStorage.getItem('libraryGames')) || [];
+    const storedGames = JSON.parse(localStorage.getItem("libraryGames")) || [];
 
     // Original games
     const originalGames = [
@@ -156,7 +157,7 @@ const LibraryPage = () => {
       <div style={styles.body}>
         {/* Sidebar */}
         <div style={styles.sidebar}>
-          <h2 style={styles.sidebarTitle}>Library</h2>
+          <h2 style={styles.sidebarTitle}>Your Library</h2>
           {/* Search Bar */}
           <input
             type="text"
@@ -203,24 +204,25 @@ const LibraryPage = () => {
   );
 };
 
-// Updated Styles
+// Enhanced Styles for a more beautiful look
 const styles = {
   container: {
     fontFamily: "'Roboto', sans-serif",
-    background: "linear-gradient(135deg, #182b3a 0%, #0d1c2e 100%)",
+    background: "linear-gradient(135deg, #1b2838 0%, #0f1c2c 100%)",
     color: "#c7d5e0",
     minHeight: "100vh",
     display: "flex",
     flexDirection: "column",
+    overflow: "hidden",
   },
   navbar: {
     display: "flex",
     justifyContent: "flex-start",
     padding: "15px 20px",
-    background: "rgba(0,0,0,0.4)",
-    backdropFilter: "blur(8px)",
+    background: "rgba(10, 25, 40, 0.8)",
+    backdropFilter: "blur(10px)",
     borderBottom: "1px solid #0f2b44",
-    boxShadow: "0 2px 5px rgba(0,0,0,0.4)",
+    boxShadow: "0 2px 8px rgba(0,0,0,0.5)",
     position: "sticky",
     top: 0,
     zIndex: 999,
@@ -234,8 +236,8 @@ const styles = {
     color: "#66c0f4",
     textDecoration: "none",
     fontSize: "16px",
-    position: "relative",
     transition: "color 0.3s ease",
+    cursor: "pointer",
   },
   navButton: {
     backgroundColor: "transparent",
@@ -244,7 +246,6 @@ const styles = {
     fontSize: "16px",
     cursor: "pointer",
     padding: 0,
-    position: "relative",
     transition: "color 0.3s ease",
   },
   dropdown: {
@@ -270,27 +271,30 @@ const styles = {
     borderRadius: "4px",
     fontSize: "14px",
     transition: "background 0.3s ease",
+    cursor: "pointer",
   },
   body: {
     display: "flex",
     flex: 1,
   },
   sidebar: {
-    width: "20%",
+    width: "250px",
     background: "rgba(0, 0, 0, 0.3)",
     backdropFilter: "blur(8px)",
     padding: "20px",
     borderRight: "1px solid #0f2b44",
-    boxShadow: "2px 0 5px rgba(0,0,0,0.3)",
+    boxShadow: "2px 0 8px rgba(0,0,0,0.5)",
+    overflowY: "auto",
   },
   sidebarTitle: {
-    fontSize: "20px",
-    marginBottom: "15px",
+    fontSize: "22px",
+    marginBottom: "20px",
     color: "#ffffff",
-    textShadow: "0 1px 1px rgba(0,0,0,0.5)",
+    textShadow: "0 2px 4px rgba(0,0,0,0.5)",
+    fontWeight: "500",
   },
   searchInput: {
-    width: "90%",
+    width: "95%",
     padding: "10px",
     marginBottom: "20px",
     borderRadius: "4px",
@@ -303,8 +307,7 @@ const styles = {
   sidebarList: {
     listStyle: "none",
     padding: 0,
-    maxHeight: "calc(100vh - 200px)",
-    overflowY: "auto",
+    margin: 0,
   },
   sidebarItem: {
     marginBottom: "10px",
@@ -314,20 +317,21 @@ const styles = {
     padding: "8px",
     borderRadius: "4px",
     transition: "background 0.3s ease",
-    whiteSpace: "nowrap",
     overflow: "hidden",
     textOverflow: "ellipsis",
-    lineHeight: "1.4",
+    whiteSpace: "nowrap",
   },
   mainContent: {
-    width: "80%",
+    flex: 1,
     padding: "20px",
+    overflowY: "auto",
   },
   sectionTitle: {
     fontSize: "24px",
     marginBottom: "20px",
     color: "#ffffff",
-    textShadow: "0 1px 1px rgba(0,0,0,0.5)",
+    textShadow: "0 2px 4px rgba(0,0,0,0.6)",
+    fontWeight: "500",
   },
   gameGrid: {
     display: "grid",
@@ -335,14 +339,14 @@ const styles = {
     gap: "20px",
   },
   gameCard: {
-    backgroundColor: "rgba(15, 28, 44, 0.8)",
+    backgroundColor: "rgba(15, 28, 44, 0.85)",
     borderRadius: "10px",
-    overflow: "hidden",
     textAlign: "center",
     padding: "20px",
     cursor: "pointer",
-    transition: "transform 0.3s ease, box-shadow 0.3s ease",
     border: "1px solid #0f2b44",
+    boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
+    transition: "transform 0.3s ease, box-shadow 0.3s ease",
   },
   gameInfo: {
     marginTop: "10px",
@@ -351,6 +355,7 @@ const styles = {
     fontSize: "16px",
     fontWeight: "bold",
     color: "#c7d5e0",
+    textShadow: "0 1px 2px rgba(0,0,0,0.5)",
   },
 };
 
