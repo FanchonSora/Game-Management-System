@@ -8,12 +8,13 @@ import ProfilePage from "./components/ProfilePage";
 import CommunityPage from "./components/CommunityPage"
 import GamePage from "./components/GamePage";
 import MarketGamePage from "./components/MarketGame";
-import CodePage from "./components/CodePage";
+import CodePage from "./components/CodeInforMarket";
 import FriendsPage from "./components/FriendPage";
 import BadgesPage from "./components/BadgesPage";
 import GameModePage from "./components/GameModePage";
 import MarketCodePage from "./components/MarketCode";
 import SignUpPage from "./components/SignUpPage";
+import CodeDetailPage from "./components/CodeDetailPage";
 function App() {
   return (
     <BrowserRouter>
@@ -27,7 +28,7 @@ function App() {
         <Route path="/market-code" element={<MarketCodePage />} />
         <Route path="/library-game" element={<LibraryPageGame />} />
         <Route path="/library-code" element={<LibraryPageCode />} />
-        <Route path="/repository/:id" element={<CodePage />} />
+        <Route path="/repository/:id" element={<CodeDetailPage />} />
         <Route path="/friends" element={<FriendsPage />} />
         <Route path="/badges" element={<BadgesPage />} />
         <Route path="/game/:id" element={<GamePage />} />

@@ -296,7 +296,7 @@ const Notification = styled.div`
   padding: 12px 20px;
   border-radius: 6px;
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  animation: ${fadeIn} 0.3s ease-out, fadeIn 0.3s ease-out 2.5s forwards;
+  animation: ${fadeIn} 0.3s ease-out, fadeOut 0.3s ease-out 2.5s forwards;
   opacity: 0;
 
   @keyframes fadeIn {
@@ -309,7 +309,6 @@ const Notification = styled.div`
     to { opacity: 0; }
   }
 `;
-
 
 // GameLibrary Component
 const GameLibrary = () => {
@@ -324,6 +323,10 @@ const GameLibrary = () => {
   // State for notification
   const [notification, setNotification] = useState("");
 
+  // State for search query
+  const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
+
   // Refs for Dropdowns in Navbar
   const marketRef = useRef(null);
   const libraryRef = useRef(null);
@@ -331,11 +334,11 @@ const GameLibrary = () => {
 
   // Games Data
   const games = [
-    { id: 1, name: "Game-Management-System", language: "JavaScript", updated: "6 hours ago" },
-    { id: 2, name: "Matrix-Calculator-Web", language: "HTML", updated: "yesterday" },
-    { id: 3, name: "Basic-Chat-Box", language: "Python", updated: "Sep 9" },
-    { id: 4, name: "Object-Detection-Game", language: "Python", updated: "Sep 9" },
-    { id: 5, name: "Event-Management", language: "TypeScript", updated: "Aug 30" },
+    { id: 1, name: "Random Number Generation", language: "Python", updated: "6 hours ago" },
+    { id: 2, name: "Collision Detection", language: "C++", updated: "yesterday" },
+    { id: 3, name: "Vector Mathematics (Movement)", language: "C++", updated: "Sep 9" },
+    { id: 4, name: "Game Timer (Frame Update)", language: "Python", updated: "Sep 9" },
+    // Add more games as needed
   ];
 
   // Load added codes from localStorage on mount
@@ -380,6 +383,27 @@ const GameLibrary = () => {
       setTimeout(() => setNotification(""), 3000);
     }
   };
+
+  // Debounce the search query input
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery);
+    }, 300); // 300ms delay
+
+    // Cleanup the timeout if searchQuery changes before 300ms
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchQuery]);
+
+  // Filtering games based on debounced search query
+  const filteredGames = games.filter((game) => {
+    const query = debouncedSearchQuery.toLowerCase();
+    return (
+      game.name.toLowerCase().includes(query) ||
+      game.language.toLowerCase().includes(query)
+    );
+  });
 
   return (
     <Container>
@@ -458,7 +482,7 @@ const GameLibrary = () => {
 
       {/* Tabs */}
       <Tabs>
-        {["Overview", "Repositories", "Projects", "Packages", "Stars"].map((tab) => (
+        {["Overview", "Projects", "Packages", "Function"].map((tab) => (
           <TabButton
             key={tab}
             className={activeTab === tab ? "active" : ""}
@@ -471,32 +495,43 @@ const GameLibrary = () => {
 
       {/* Search Bar */}
       <SearchBar>
-        <SearchInput type="text" placeholder="Find a repository..." />
+        <SearchInput
+          type="text"
+          placeholder="Find a repository..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          aria-label="Search Repositories"
+        />
         <NewButton>New</NewButton>
       </SearchBar>
 
       {/* Game/List */}
       <GameList>
-        {games.map((game) => (
-          <GameCard key={game.id}>
-            <GameDetails>
-              <GameTitle>{game.name}</GameTitle>
-              <Language>
-                {game.language} <Updated>Updated {game.updated}</Updated>
-              </Language>
-            </GameDetails>
-            <Actions>
-              <AddButton
-                onClick={() => handleAddCode(game)}
-                disabled={addedCodes.some((code) => code.id === game.id)}
-                className={addedCodes.some((code) => code.id === game.id) ? "added" : ""}
-              >
-                {addedCodes.some((code) => code.id === game.id) ? "Added" : "Add Code"}
-              </AddButton>
-              <ViewLink to={`/repository/${game.id}`}>View</ViewLink>
-            </Actions>
-          </GameCard>
-        ))}
+        {filteredGames.length > 0 ? (
+          filteredGames.map((game) => (
+            <GameCard key={game.id}>
+              <GameDetails>
+                <GameTitle>{game.name}</GameTitle>
+                <Language>
+                  {game.language} <Updated>Updated {game.updated}</Updated>
+                </Language>
+              </GameDetails>
+              <Actions>
+                <AddButton
+                  onClick={() => handleAddCode(game)}
+                  disabled={addedCodes.some((code) => code.id === game.id)}
+                  className={addedCodes.some((code) => code.id === game.id) ? "added" : ""}
+                  aria-label={addedCodes.some((code) => code.id === game.id) ? "Code Added" : "Add Code"}
+                >
+                  {addedCodes.some((code) => code.id === game.id) ? "Added" : "Add Code"}
+                </AddButton>
+                <ViewLink to={`/repository/${game.id}`}>View</ViewLink>
+              </Actions>
+            </GameCard>
+          ))
+        ) : (
+          <p>No repositories found matching your search.</p>
+        )}
       </GameList>
 
       {/* Notification */}
@@ -506,5 +541,4 @@ const GameLibrary = () => {
 };
 
 export default GameLibrary;
-
 
