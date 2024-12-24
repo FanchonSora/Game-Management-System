@@ -1,20 +1,21 @@
 import React from "react";
 import { Routes, Route, BrowserRouter } from "react-router-dom"; // Import from react-router-dom
-import HomePage from "./components/HomePage";
-import LogInPage from "./components/LogIn";
-import LibraryPageGame from "./components/LibraryGame";
-import LibraryPageCode from "./components/LibraryCode";
-import ProfilePage from "./components/ProfilePage";
-import CommunityPage from "./components/CommunityPage"
-import GamePage from "./components/GamePage";
-import MarketGamePage from "./components/MarketGame";
-import CodePage from "./components/CodeInforMarket";
-import FriendsPage from "./components/FriendPage";
-import BadgesPage from "./components/BadgesPage";
-import GameModePage from "./components/GameModePage";
-import MarketCodePage from "./components/MarketCode";
-import SignUpPage from "./components/SignUpPage";
-import CodeDetailPage from "./components/CodeDetailPage";
+import HomePage from "./pages/HomePage";
+import LogInPage from "./pages/LogIn";
+import LibraryPageGame from "./pages/LibraryGame";
+import LibraryPageCode from "./pages/LibraryCode";
+import ProfilePage from "./pages/ProfilePage";
+import CommunityPage from "./pages/CommunityPage"
+import GamePage from "./pages/GameDetailPage";
+import MarketGamePage from "./pages/MarketGame";
+import CodePage from "./pages/CodeInforMarket";
+import FriendsPage from "./pages/FriendPage";
+import BadgesPage from "./pages/BadgesPage";
+import GameModePage from "./pages/GameModePage";
+import MarketCodePage from "./pages/MarketCode";
+import SignUpPage from "./pages/SignUpPage";
+import CodeDetailPage from "./pages/CodeDetailPage";
+import SupportBot from "./pages/SupportBotPage";
 function App() {
   return (
     <BrowserRouter>
@@ -31,9 +32,10 @@ function App() {
         <Route path="/repository/:id" element={<CodeDetailPage />} />
         <Route path="/friends" element={<FriendsPage />} />
         <Route path="/badges" element={<BadgesPage />} />
-        <Route path="/game/:id" element={<GamePage />} />
+        <Route path="/market-game/:id" element={<GamePage />} />
         <Route path="/market-code/:id" element={<CodePage />} />
         <Route path="/library-game/:id" element={<GameModePage />} />
+        <Route path="/support-bot" element={<SupportBot />} />
       </Routes>
     </BrowserRouter>
   );

@@ -1,0 +1,30 @@
+{
+    "questions": [
+      {
+        "question": "Hello",
+        "answer": "What up guy"
+      },
+      {
+        "question": "What your name",
+        "answer": "I'm Fanchon Sora's chat box"
+      },
+      {
+        "question": "How are you",
+        "answer": "I'm good"
+      },
+      {
+        "question": "How to add a game",
+        "answer": "Navigate to the Library section and click on 'Add Game'. Fill in the details and submit."
+      },
+      {
+        "question": "How to download code",
+        "answer": "Go to the Code Library, select the code snippet you need, and click on the 'Download' button."
+      },
+      {
+        "question": "What games are featured",
+        "answer": "We have games like Lord of the Rings: Return to Moria, Ready or Not, Dead by Daylight, and more in our featured section."
+      }
+      
+    ]
+  }
+  
