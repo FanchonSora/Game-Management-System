@@ -36,7 +36,7 @@ const SignUpPage = () => {
 
       if (response.ok) {
         alert("Sign up successful!");
-        navigate("/login");
+        navigate("/sign-in");
       } else {
         const errorData = await response.json();
         alert(`Sign up failed: ${errorData.message}`);
@@ -108,7 +108,7 @@ const SignUpPage = () => {
             href="#"
             onClick={(e) => {
               e.preventDefault();
-              navigate("/login");
+              navigate("/sign-in");
             }}
           >
             Log In
