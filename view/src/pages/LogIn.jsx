@@ -18,20 +18,20 @@ const LogInPage = () => {
     }
 
     try {
-      const response = await fetch("/api/login", {
+      const response = await fetch("http://127.0.0.1:8000/api/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ username, password }),
       });
-
+  
       if (response.ok) {
         alert("Login successful!");
-        navigate("/dashboard"); // Replace with the route after login
+        navigate("/dashboard");
       } else {
         const errorData = await response.json();
-        alert(`Login failed: ${errorData.message}`);
+        alert(`Login failed: ${errorData.detail}`);
       }
     } catch (error) {
       console.error("Error during login:", error);

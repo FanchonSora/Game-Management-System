@@ -24,20 +24,20 @@ const SignUpPage = () => {
     }
 
     try {
-      const response = await fetch("/api/signup", {
+      const response = await fetch("http://127.0.0.1:8000/api/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ username, email, password }),
       });
-
+  
       if (response.ok) {
         alert("Sign up successful!");
         navigate("/sign-in");
       } else {
         const errorData = await response.json();
-        alert(`Sign up failed: ${errorData.message}`);
+        alert(`Sign up failed: ${errorData.detail}`);
       }
     } catch (error) {
       console.error("Error during sign up:", error);
