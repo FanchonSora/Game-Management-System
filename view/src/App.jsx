@@ -16,6 +16,8 @@ import MarketCodePage from "./pages/MarketCode";
 import SignUpPage from "./pages/SignUpPage";
 import CodeDetailPage from "./pages/CodeDetailPage";
 import SupportBot from "./pages/SupportBotPage";
+
+import axios from 'axios';
 function App() {
   return (
     <BrowserRouter>

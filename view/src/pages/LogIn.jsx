@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { Lock, User } from "lucide-react"; // Assuming you have lucide-react installed
 
 const LogInPage = () => {
   const navigate = useNavigate();
