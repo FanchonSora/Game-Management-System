@@ -1,7 +1,6 @@
 import React from "react";
-import { useNavigate } from "react-router-dom"; // Ensure react-router-dom is installed
-// If you're using Font Awesome via npm, ensure it's installed and imported
-// Otherwise, include the CDN link in your public/index.html as shown later.
+import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 const SignUpPage = () => {
   const navigate = useNavigate();
@@ -24,7 +23,6 @@ const SignUpPage = () => {
       return;
     }
 
-    // Example API call - replace with your actual endpoint
     try {
       const response = await fetch("/api/signup", {
         method: "POST",
@@ -48,212 +46,164 @@ const SignUpPage = () => {
   };
 
   return (
-    <>
-      <form onSubmit={handleSignUp}>
-        <h1>Sign Up</h1>
+    <Body>
+      <Form onSubmit={handleSignUp}>
+        <Heading>Sign Up</Heading>
 
-        <div className="user1">
-          <input
+        <InputContainer>
+          <Input
             type="text"
-            className="txt"
             placeholder="Enter your username"
             id="username"
             name="username"
             required
           />
-          <i className="fa fa-user"></i>
-        </div>
+          <Icon className="fa fa-user" />
+        </InputContainer>
 
-        <div className="user1">
-          <input
+        <InputContainer>
+          <Input
             type="email"
-            className="txt"
             placeholder="Enter your email"
             id="email"
             name="email"
             required
           />
-          <i className="fa fa-envelope"></i>
-        </div>
+          <Icon className="fa fa-envelope" />
+        </InputContainer>
 
-        <div className="user2">
-          <input
+        <InputContainer>
+          <Input
             type="password"
-            className="txt"
             placeholder="Enter your password"
             id="password"
             name="password"
             required
           />
-          <i className="fa fa-lock"></i>
-        </div>
+          <Icon className="fa fa-lock" />
+        </InputContainer>
 
-        <div className="user2">
-          <input
+        <InputContainer>
+          <Input
             type="password"
-            className="txt"
             placeholder="Confirm your password"
             id="confirmPassword"
             name="confirmPassword"
             required
           />
-          <i className="fa fa-lock"></i>
-        </div>
+          <Icon className="fa fa-lock" />
+        </InputContainer>
 
-        <button type="submit">Sign Up</button>
+        <Button type="submit">Sign Up</Button>
 
-        <p>
+        <Paragraph>
           Already have an account?{" "}
-          <a
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              navigate("/sign-in");
-            }}
-          >
-            Log In
-          </a>
-        </p>
-      </form>
-
-      {/* Embedded CSS */}
-      <style jsx="true">{`
-        /* Resetting margins and paddings */
-        * {
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
-        }
-
-        /* Body Styling */
-        body {
-          color: #fff;
-          font-family: "Roboto", sans-serif;
-          width: 100%;
-          height: 100vh;
-          background: url('img1.jpg') no-repeat center center fixed;
-          background-size: cover;
-
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-
-        /* Form Container */
-        form {
-          width: 330px;
-          /* Adjusted height to accommodate additional fields */
-          min-height: 500px;
-          background: linear-gradient(#ffffff34, #ffffff27);
-          backdrop-filter: blur(7px);
-          border: 1px solid #ffffff83;
-          box-shadow: 0 8px 32px #0000008a;
-
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          flex-direction: column;
-          padding: 20px;
-          border-radius: 10px;
-        }
-
-        /* Form Heading */
-        form h1 {
-          margin-bottom: 20px;
-          font-size: 1.8rem;
-        }
-
-        /* User Input Containers */
-        .user1,
-        .user2 {
-          position: relative;
-          width: 100%;
-        }
-
-        .user1 {
-          margin-bottom: 15px;
-        }
-
-        .user2 {
-          margin-bottom: 15px;
-        }
-
-        /* Input Fields */
-        .txt {
-          width: 100%;
-          height: 40px;
-          outline: none;
-          background-color: transparent;
-          border: 1px solid #ffffffac;
-          border-radius: 30px;
-          padding: 0 40px 0 15px; /* Adjusted padding for icons */
-          font-size: 0.9rem;
-          color: #fff;
-        }
-
-        /* Input Placeholder Styling */
-        .txt::placeholder {
-          color: #ffffffb9;
-          font-size: 0.8rem;
-          letter-spacing: 0.3px;
-        }
-
-        /* Icons for Input */
-        .fa-user,
-        .fa-envelope,
-        .fa-lock {
-          position: absolute;
-          top: 50%;
-          right: 15px;
-          transform: translateY(-50%);
-          color: #ffffffb9;
-          font-size: 1rem;
-        }
-
-        /* Link Styling */
-        a {
-          text-decoration: none;
-          color: #fff;
-          font-weight: bold;
-        }
-
-        a:hover {
-          color: #4a90e2;
-        }
-
-        /* Button Styling */
-        button {
-          outline: none;
-          border: none;
-          font-size: 0.9rem;
-          padding: 10px 0;
-          width: 100%;
-          border-radius: 30px;
-          margin: 20px 0;
-          cursor: pointer;
-          background: #4a90e2; /* You can adjust gradient if you'd like */
-          color: #fff;
-          transition: background 0.3s ease;
-        }
-
-        button:hover {
-          background: #357ab8;
-        }
-
-        /* Paragraph Styling */
-        p {
-          font-size: 0.8rem;
-        }
-
-        /* Responsive Design (Optional) */
-        @media (max-width: 400px) {
-          form {
-            width: 90%;
-          }
-        }
-      `}</style>
-    </>
+          <a onClick={() => navigate("/sign-in")}>Log In</a>
+        </Paragraph>
+      </Form>
+    </Body>
   );
 };
+
+// Styled Components
+const Body = styled.div`
+  color: #fff;
+  font-family: "Roboto", sans-serif;
+  width: 100%;
+  height: 100vh;
+  background: linear-gradient(to bottom, #1b2838, #0f171e);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Form = styled.form`
+  width: 100%;
+  max-width: 400px;
+  padding: 30px;
+  background: rgba(27, 40, 56, 0.9);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const Heading = styled.h1`
+  font-size: 24px;
+  color: #66c0f4;
+  margin-bottom: 20px;
+`;
+
+const InputContainer = styled.div`
+  position: relative;
+  width: 100%;
+  margin-bottom: 15px;
+`;
+
+const Input = styled.input`
+  width: 100%;
+  padding: 10px 15px;
+  margin: 5px 0;
+  border: 1px solid #66c0f4;
+  border-radius: 5px;
+  background-color: #1b2838;
+  color: #c7d5e0;
+  font-size: 14px;
+  box-sizing: border-box;
+
+  ::placeholder {
+    color: #a9a9a9;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: #4a90e2;
+  }
+`;
+
+const Icon = styled.i`
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+  color: rgba(255, 255, 255, 0.6);
+`;
+
+const Button = styled.button`
+  width: 100%;
+  padding: 12px;
+  margin-top: 20px;
+  border: none;
+  border-radius: 8px;
+  background-color: #4a90e2;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #357ab8;
+  }
+`;
+
+const Paragraph = styled.p`
+  margin-top: 20px;
+  font-size: 0.9rem;
+  color: #c7d5e0;
+
+  a {
+    color: #4a90e2;
+    text-decoration: none;
+    font-weight: bold;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+`;
 
 export default SignUpPage;

@@ -4,16 +4,16 @@ const ProfilePage = () => {
   const recentActivity = [
     {
       id: 1,
-      title: "Counter-Strike 2",
-      image: "cs2.jpg",
+      title: "Among Us",
+      image: "game/Among Us.jpg",
       playTime: "1.3 hrs on record",
       lastPlayed: "17 Nov",
       achievementProgress: "1 of 1",
     },
     {
       id: 2,
-      title: "Cube Racer",
-      image: "cube.jpg",
+      title: "F1 2024",
+      image: "game/F1 24.jpg",
       playTime: "41 hrs on record",
       lastPlayed: "10 Nov",
       achievementProgress: "0 of 24",
@@ -23,67 +23,82 @@ const ProfilePage = () => {
   return (
     <div style={styles.container}>
       {/* Profile Header */}
-      <div style={styles.header}>
-        <img
-          src="https://via.placeholder.com/100"
-          alt="Profile"
-          style={styles.profilePicture}
-        />
-        <div style={styles.profileDetails}>
-          <h2 style={styles.profileName}>khanhngan1491</h2>
-          <p style={styles.profileUsername}>khanhngan</p>
-          <p style={styles.profileInfo}>No information given.</p>
+      <header style={styles.header}>
+        <div style={styles.profileBanner}>
+          <img
+            src="profilebanner.jpg"
+            alt="Profile Banner"
+            style={styles.bannerImage}
+          />
         </div>
-        <div style={styles.levelSection}>
-          <p style={styles.levelText}>Level 0</p>
+        <div style={styles.profileInfoContainer}>
+          <img src="avatar.jpg" alt="Profile" style={styles.profilePicture} />
+          <div>
+            <h2 style={styles.profileName}>khanhngan1491</h2>
+            <p style={styles.profileUsername}>@khanhngan</p>
+            <p style={styles.profileInfo}>No information given.</p>
+          </div>
           <button style={styles.editButton}>Edit Profile</button>
         </div>
-      </div>
+      </header>
 
       {/* Main Content */}
-      <div style={styles.mainContent}>
-        {/* Recent Activity */}
-        <div style={styles.recentActivity}>
+      <main style={styles.mainContent}>
+        <section style={styles.recentActivitySection}>
           <h3 style={styles.sectionTitle}>Recent Activity</h3>
           <p style={styles.activityDuration}>0 hours past 2 weeks</p>
-          {recentActivity.map((activity) => (
-            <div key={activity.id} style={styles.activityCard}>
-              <img src={activity.image} alt={activity.title} style={styles.activityImage} />
-              <div style={styles.activityDetails}>
-                <h4 style={styles.activityTitle}>{activity.title}</h4>
-                <p style={styles.activityInfo}>
-                  {activity.playTime} <br /> Last played on {activity.lastPlayed}
-                </p>
-                <p style={styles.achievementProgress}>
-                  Achievement Progress: {activity.achievementProgress}
-                </p>
-                <div style={styles.progressBar}>
-                  <div
-                    style={{
-                      ...styles.progress,
-                      width: `${(parseInt(activity.achievementProgress.split(" ")[0]) / parseInt(activity.achievementProgress.split(" ")[2])) * 100}%`,
-                    }}
-                  ></div>
+          <div style={styles.activityGrid}>
+            {recentActivity.map((activity) => (
+              <div key={activity.id} style={styles.activityCard}>
+                <img
+                  src={activity.image}
+                  alt={activity.title}
+                  style={styles.activityImage}
+                />
+                <div style={styles.activityDetails}>
+                  <h4 style={styles.activityTitle}>{activity.title}</h4>
+                  <p style={styles.activityInfo}>
+                    {activity.playTime} <br /> Last played on{" "}
+                    {activity.lastPlayed}
+                  </p>
+                  <p style={styles.achievementProgress}>
+                    Achievement Progress: {activity.achievementProgress}
+                  </p>
+                  <div style={styles.progressBarContainer}>
+                    <div
+                      style={{
+                        ...styles.progressBar,
+                        width: `$${
+                          (parseInt(
+                            activity.achievementProgress.split(" ")[0]
+                          ) /
+                            parseInt(
+                              activity.achievementProgress.split(" ")[2]
+                            )) *
+                          100
+                        }%`,
+                      }}
+                    ></div>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        </section>
 
-        {/* Currently Online Section */}
-        <div style={styles.onlineSection}>
+        <section style={styles.onlineSection}>
           <h3 style={styles.sectionTitle}>Currently Online</h3>
           <p style={styles.badges}>
             Badges: <span style={styles.badgeCount}>1</span>
           </p>
           <ul style={styles.onlineList}>
-            <li>Games</li>
+            {/* <li>Games</li>
             <li>Inventory</li>
             <li>Screenshots</li>
-            <li>Videos</li>
+            <li>Videos</li> */}
           </ul>
-        </div>
-      </div>
+        </section>
+      </main>
     </div>
   );
 };
@@ -94,28 +109,41 @@ export default ProfilePage;
 const styles = {
   container: {
     fontFamily: "Arial, sans-serif",
-    backgroundColor: "#1b2838",
-    color: "#c7d5e0",
-    height: "100vh",
-    padding: "20px",
+    backgroundColor: "#121212",
+    color: "#e0e0e0",
+    minHeight: "100vh",
+    display: "flex",
+    flexDirection: "column",
   },
   header: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
+    background: "linear-gradient(to right,rgb(24, 40, 68),rgb(27, 63, 124))",
+    borderRadius: "10px",
+    overflow: "hidden",
     marginBottom: "20px",
   },
-  profilePicture: {
-    width: "100px",
-    height: "100px",
-    borderRadius: "50%",
+  profileBanner: {
+    position: "relative",
+    height: "200px",
   },
-  profileDetails: {
-    flex: 1,
-    marginLeft: "20px",
+  bannerImage: {
+    width: "100%",
+    height: "100%",
+    objectFit: "cover",
+  },
+  profileInfoContainer: {
+    display: "flex",
+    alignItems: "center",
+    padding: "20px",
+    gap: "20px",
+  },
+  profilePicture: {
+    width: "150px",
+    height: "150px",
+    borderRadius: "50%",
+    border: "4px solid #ffffff",
   },
   profileName: {
-    fontSize: "24px",
+    fontSize: "28px",
     margin: 0,
   },
   profileUsername: {
@@ -126,30 +154,32 @@ const styles = {
     fontSize: "14px",
     color: "#a9a9a9",
   },
-  levelSection: {
-    textAlign: "right",
-  },
-  levelText: {
-    fontSize: "16px",
-    marginBottom: "10px",
-  },
   editButton: {
-    backgroundColor: "#2a475e",
-    color: "#c7d5e0",
+    backgroundColor: "#1b8ebc",
+    color: "#fff",
     padding: "10px 20px",
     border: "none",
     borderRadius: "5px",
     cursor: "pointer",
+    transition: "0.3s",
+    position: "absolute",
+    right: "50px",
   },
   mainContent: {
     display: "flex",
-    justifyContent: "space-between",
+    flexWrap: "wrap",
+    gap: "20px",
+    padding: "20px",
   },
-  recentActivity: {
-    width: "70%",
+  recentActivitySection: {
+    flex: 3,
+    backgroundColor: "#1e3c72",
+    padding: "20px",
+    borderRadius: "10px",
+    background: "linear-gradient(to right,rgb(24, 40, 68),rgb(27, 63, 124))",
   },
   sectionTitle: {
-    fontSize: "20px",
+    fontSize: "22px",
     marginBottom: "10px",
   },
   activityDuration: {
@@ -157,66 +187,64 @@ const styles = {
     marginBottom: "20px",
     color: "#a9a9a9",
   },
+  activityGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
+    gap: "20px",
+  },
   activityCard: {
     display: "flex",
-    backgroundColor: "#171a21",
-    padding: "10px",
+    flexDirection: "column",
+    backgroundColor: "#273c75",
+    padding: "15px",
+    width: "90%",
     borderRadius: "10px",
-    marginBottom: "10px",
+    transition: "0.3s",
   },
   activityImage: {
-    width: "100px",
-    height: "100px",
+    width: "100%",
     borderRadius: "10px",
-    marginRight: "20px",
+    marginBottom: "10px",
   },
   activityDetails: {
     flex: 1,
   },
   activityTitle: {
     fontSize: "18px",
-    margin: 0,
+    marginBottom: "10px",
   },
   activityInfo: {
     fontSize: "14px",
     color: "#a9a9a9",
   },
-  achievementProgress: {
-    fontSize: "14px",
+  progressBarContainer: {
+    height: "8px",
+    backgroundColor: "#576574",
+    borderRadius: "4px",
+    overflow: "hidden",
     marginTop: "10px",
   },
   progressBar: {
-    height: "10px",
-    backgroundColor: "#2a475e",
-    borderRadius: "5px",
-    overflow: "hidden",
-    marginTop: "5px",
-  },
-  progress: {
     height: "100%",
-    backgroundColor: "#c7d5e0",
+    backgroundColor: "#1e90ff",
   },
   onlineSection: {
-    width: "25%",
-    backgroundColor: "#171a21",
+    flex: 1,
+    backgroundColor: "#1e3c72",
     padding: "20px",
     borderRadius: "10px",
+    background: "linear-gradient(to right,rgb(24, 40, 68),rgb(27, 63, 124))",
   },
   badges: {
     fontSize: "14px",
-    marginBottom: "20px",
+    color: "#e0e0e0",
   },
   badgeCount: {
-    color: "#66c0f4",
     fontWeight: "bold",
   },
   onlineList: {
     listStyle: "none",
     padding: 0,
     margin: 0,
-  },
-  onlineListItem: {
-    marginBottom: "10px",
-    fontSize: "14px",
   },
 };

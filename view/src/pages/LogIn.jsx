@@ -1,275 +1,198 @@
-import React, { useState } from "react";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Lock, User } from "lucide-react"; // Assuming you have lucide-react installed
 
-// Styled-components for Login Page
-const Body = styled.div`
-  color: #fff;
-  font-family: "Roboto", sans-serif;
-  width: 100%;
-  height: 100vh;
-  background: url("img1.jpg") no-repeat center center/cover;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const Form = styled.form`
-  width: 400px;
-  background: linear-gradient(#ffffff34, #ffffff27);
-  backdrop-filter: blur(7px);
-  border: 1px solid #ffffff83;
-  box-shadow: 0 8px 32px #0000008a;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  padding: 40px 20px;
-  border-radius: 15px;
-`;
-
-const Heading = styled.h1`
-  margin-bottom: 20px;
-  font-size: 2rem;
-  font-weight: bold;
-`;
-
-const InputContainer = styled.div`
-  position: relative;
-  width: 100%; /* Changed from 70% to 100% to utilize full form width */
-  margin: 0 auto 15px;
-  margin-bottom: ${(props) => (props.marginBottom ? "30px" : "15px")};
-`;
-
-const StyledInput = styled.input`
-  width: 100%; /* Changed from 120% to 100% for proper alignment */
-  padding: 15px 40px;
-  margin: 0;
-  height: 40px;
-  outline: none;
-  background-color: transparent;
-  border: 1px solid #ffffffac;
-  border-radius: 20px;
-  color: #fff;
-  font-size: 0.9rem;
-  box-sizing: border-box;
-
-  ::placeholder {
-    color: #ffffffb9;
-    font-size: 0.8rem;
-    letter-spacing: 0.3px;
-  }
-
-  &:focus {
-    border-color: #4a90e2;
-    box-shadow: 0 0 8px rgba(74, 144, 226, 0.5);
-  }
-`;
-
-const IconContainer = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 15px;
-  transform: translateY(-50%);
-  color: #ffffffb9;
-  pointer-events: none;
-`;
-
-const ErrorText = styled.p`
-  color: #ff6b6b;
-  font-size: 0.75rem;
-  margin-top: 5px;
-  margin-left: 10px;
-`;
-
-const CheckBoxContainer = styled.div`
-  width: 100%;
-  font-size: 0.8rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
-
-  input {
-    margin-right: 5px;
-  }
-
-  label {
-    cursor: pointer;
-    color:rgb(39, 115, 202); /* Added to match "Sign up" and "Forgot Password?" */
-  }
-`;
-
-const Button = styled.button`
-  width: 100%;
-  height: 45px;
-  outline: none;
-  border: none;
-  font-size: 0.9rem;
-  border-radius: 30px;
-  margin: 15px 0px;
-  cursor: pointer;
-  background: #4a90e2;
-  color: #fff;
-  transition: background 0.3s, transform 0.2s;
-
-  &:hover {
-    background: #357ab8;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-  }
-
-  &:active {
-    transform: translateY(0);
-    box-shadow: none;
-  }
-`;
-
-const Paragraph = styled.p`
-  font-size: 0.8rem;
-
-  a {
-    text-decoration: none;
-    color: #4a90e2;
-    font-weight: bold;
-    margin-left: 5px;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-`;
-
 const LogInPage = () => {
-  // State management for form data
-  const [formData, setFormData] = useState({
-    username: "",
-    password: "",
-    remember: false,
-  });
+  const navigate = useNavigate();
 
-  // State management for errors
-  const [errors, setErrors] = useState({
-    username: "",
-    password: "",
-  });
-
-  // Form validation function
-  const validateForm = () => {
-    let isValid = true;
-    const newErrors = { username: "", password: "" };
-
-    if (!formData.username.trim()) {
-      newErrors.username = "Username is required";
-      isValid = false;
-    }
-
-    if (!formData.password) {
-      newErrors.password = "Password is required";
-      isValid = false;
-    } else if (formData.password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters";
-      isValid = false;
-    }
-
-    setErrors(newErrors);
-    return isValid;
-  };
-
-  // Handle form submission
-  const handleSubmit = async (e) => {
+  const handleLogIn = async (e) => {
     e.preventDefault();
-    if (validateForm()) {
-      try {
-        // Example: Replace with your actual login API call
-        const response = await fakeLoginAPI(formData);
-        console.log("Login successful:", response);
-        // Redirect or perform further actions upon successful login
-      } catch (error) {
-        console.error("Login failed:", error);
-        // Handle login errors (e.g., display a global error message)
-      }
-    }
-  };
 
-  // Mock login API function (replace with real API call)
-  const fakeLoginAPI = (data) => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        if (data.username === "admin" && data.password === "password") {
-          resolve({ message: "Login successful" });
-        } else {
-          reject({ message: "Invalid credentials" });
-        }
-      }, 1000);
-    });
+    const username = e.target.username.value.trim();
+    const password = e.target.password.value;
+
+    if (!username || !password) {
+      alert("Please fill in all fields.");
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+      });
+
+      if (response.ok) {
+        alert("Login successful!");
+        navigate("/dashboard"); // Replace with the route after login
+      } else {
+        const errorData = await response.json();
+        alert(`Login failed: ${errorData.message}`);
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+      alert("An unexpected error occurred. Please try again later.");
+    }
   };
 
   return (
     <Body>
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={handleLogIn}>
         <Heading>Log In</Heading>
 
-        {/* Username Input */}
         <InputContainer>
-          <IconContainer>
-            <User size={20} />
-          </IconContainer>
-          <StyledInput
+          <Input
             type="text"
             placeholder="Enter your username"
             id="username"
-            value={formData.username}
-            onChange={(e) =>
-              setFormData({ ...formData, username: e.target.value })
-            }
+            name="username"
+            required
           />
-          {errors.username && <ErrorText>{errors.username}</ErrorText>}
+          <Icon className="fa fa-user" />
         </InputContainer>
 
-        {/* Password Input */}
-        <InputContainer marginBottom>
-          <IconContainer>
-            <Lock size={20} />
-          </IconContainer>
-          <StyledInput
+        <InputContainer>
+          <Input
             type="password"
             placeholder="Enter your password"
             id="password"
-            value={formData.password}
-            onChange={(e) =>
-              setFormData({ ...formData, password: e.target.value })
-            }
+            name="password"
+            required
           />
-          {errors.password && <ErrorText>{errors.password}</ErrorText>}
+          <Icon className="fa fa-lock" />
         </InputContainer>
 
-        {/* Remember Me & Forgot Password */}
         <CheckBoxContainer>
-          <div>
-            <input
-              type="checkbox"
-              id="remember"
-              checked={formData.remember}
-              onChange={(e) =>
-                setFormData({ ...formData, remember: e.target.checked })
-              }
-            />
-            <label htmlFor="remember">Remember me</label>
-          </div>
+          <label>
+            <input type="checkbox" id="remember" /> Remember me
+          </label>
+          <a href="/forgot-password" style={{ color: "#66c0f4" }}>
+            Forgot password?
+          </a>
         </CheckBoxContainer>
 
-        {/* Sign In Button */}
         <Button type="submit">Sign In</Button>
 
-        {/* Sign Up Link */}
         <Paragraph>
-          Need an account?
-          <a href="/sign-up">Sign up</a>
+          Need an account?{" "}
+          <a onClick={() => navigate("/sign-up")} style={{ cursor: "pointer" }}>
+            Sign Up
+          </a>
         </Paragraph>
       </Form>
     </Body>
   );
 };
+
+// Styled-components for consistency with SignUpPage
+const Body = styled.div`
+  width: 100%;
+  height: 100vh;
+  background: linear-gradient(to bottom, #1b2838, #0f171e);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #c7d5e0;
+  font-family: "Arial", sans-serif;
+`;
+
+const Form = styled.form`
+  width: 400px;
+  padding: 40px;
+  background: rgba(27, 40, 56, 0.9);
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  text-align: center;
+`;
+
+const Heading = styled.h1`
+  font-size: 24px;
+  color: #66c0f4;
+  margin-bottom: 20px;
+`;
+
+const InputContainer = styled.div`
+  position: relative;
+  margin-bottom: 15px;
+  width: 100%;
+`;
+
+const Input = styled.input`
+  width: 100%;
+  padding: 10px 15px;
+  margin: 10px 0;
+  border: 1px solid #66c0f4;
+  border-radius: 5px;
+  background-color: #1b2838;
+  color: #c7d5e0;
+  font-size: 14px;
+  box-sizing: border-box;
+
+  ::placeholder {
+    color: #a9a9a9;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: #4a90e2;
+  }
+`;
+
+const Icon = styled.i`
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+  color: #ffffffb9;
+  font-size: 1rem;
+`;
+
+const CheckBoxContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 15px 0;
+  font-size: 14px;
+  color: #c7d5e0;
+`;
+
+const Button = styled.button`
+  width: 100%;
+  padding: 12px;
+  margin-top: 20px;
+  border: none;
+  border-radius: 8px;
+  background-color: #4a90e2;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #357ab8;
+  }
+`;
+
+const Paragraph = styled.p`
+  font-size: 14px;
+  margin-top: 20px;
+  color: #a9a9a9;
+
+  a {
+    color: #66c0f4;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+
+    &:hover {
+      color: #4a90e2;
+    }
+  }
+`;
 
 export default LogInPage;

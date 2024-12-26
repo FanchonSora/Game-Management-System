@@ -32,29 +32,22 @@ const BadgesPage = () => {
   ];
 
   const renderBadge = (badge) => (
-    <div key={badge.id} style={styles.badgeContainer}>
+    <div key={badge.id} style={styles.badgeCard}>
       <div style={styles.badgeHeader}>
-        <div style={styles.badgeInfo}>
-          <div style={styles.badgeTitle}>{badge.title}</div>
-          <div style={styles.badgeXP}>
+        <div>
+          <h3 style={styles.badgeTitle}>{badge.title}</h3>
+          <p style={styles.badgeLevel}>
             Level {badge.level} - {badge.xp} XP
-          </div>
-          <div style={styles.badgeDescription}>{badge.description}</div>
-          <div style={styles.badgeTasks}>{badge.tasksRemaining}</div>
+          </p>
+          <p style={styles.badgeDescription}>{badge.description}</p>
+          <p style={styles.badgeTasks}>{badge.tasksRemaining}</p>
         </div>
-        <div style={styles.badgeImagePlaceholder}>
-          <span>Badge Icon</span>
-        </div>
+        <div style={styles.badgeIcon}>🏆</div>
       </div>
       {badge.cards.length > 0 && (
-        <div style={styles.cardsContainer}>
+        <div style={styles.cardContainer}>
           {badge.cards.map((card, index) => (
-            <img
-              key={index}
-              src={card}
-              alt="Card"
-              style={styles.cardImage}
-            />
+            <img key={index} src={card} alt="Card" style={styles.cardImage} />
           ))}
         </div>
       )}
@@ -63,34 +56,20 @@ const BadgesPage = () => {
 
   return (
     <div style={styles.container}>
-      {/* Header Section */}
+      {/* Header */}
       <div style={styles.header}>
-        <img
-          src="user-avatar-placeholder.png"
-          alt="User Avatar"
-          style={styles.avatar}
-        />
-        <div style={styles.userInfo}>
+        <img src="avatar.jpg" alt="User Avatar" style={styles.avatar} />
+        <div>
           <h1 style={styles.userName}>khanhngan1491</h1>
-          <div style={styles.userLevel}>
-            <span>Level 0</span>
-            <span style={styles.xp}>XP 0</span>
-          </div>
-          <div style={styles.userStatus}>
-            You cannot level up because your account is limited. Please visit{" "}
-            <a href="https://support.steampowered.com" style={styles.link}>
-              Steam Support
-            </a>{" "}
-            for details.
-          </div>
+          <p style={styles.userLevel}>Level 100 | XP 2409</p>
         </div>
       </div>
 
-      {/* Sort and Filter Section */}
+      {/* Filter & Sort Section */}
       <div style={styles.filterSort}>
-        <button style={styles.filterButton}>View my booster pack eligibility</button>
-        <button style={styles.filterButton}>Booster Pack Creator</button>
-        <div style={styles.sortOptions}>
+        {/* <button style={styles.filterButton}>Booster Pack Eligibility</button>
+        <button style={styles.filterButton}>Booster Pack Creator</button> */}
+        <div style={styles.sortButtons}>
           <button style={styles.sortButton}>In Progress</button>
           <button style={styles.sortButton}>Completed</button>
           <button style={styles.sortButton}>A - Z</button>
@@ -98,28 +77,30 @@ const BadgesPage = () => {
         </div>
       </div>
 
-      {/* Badges List */}
-      <div style={styles.badgesList}>
+      {/* Badge List */}
+      <div style={styles.badgeGrid}>
         {badges.map((badge) => renderBadge(badge))}
       </div>
     </div>
   );
 };
 
-// Styles
 const styles = {
   container: {
-    backgroundColor: "#1b2838",
-    color: "#c7d5e0",
+    backgroundColor: "#121212",
+    color: "#e0e0e0",
+    minHeight: "100vh",
     padding: "20px",
     fontFamily: "Arial, sans-serif",
   },
   header: {
     display: "flex",
     alignItems: "center",
-    borderBottom: "1px solid #3e4551",
-    paddingBottom: "20px",
-    marginBottom: "20px",
+    backgroundColor: "#1e3c72",
+    padding: "20px",
+    borderRadius: "10px",
+    marginBottom: "30px",
+    background: "linear-gradient(to right, rgb(24, 40, 68), rgb(27, 63, 124))",
   },
   avatar: {
     width: "80px",
@@ -127,109 +108,86 @@ const styles = {
     borderRadius: "50%",
     marginRight: "20px",
   },
-  userInfo: {
-    flex: 1,
-  },
   userName: {
     fontSize: "24px",
-    margin: 0,
+    margin: "0",
   },
   userLevel: {
-    fontSize: "18px",
-    margin: "5px 0",
-  },
-  xp: {
-    marginLeft: "10px",
-    fontWeight: "bold",
-  },
-  userStatus: {
-    fontSize: "14px",
-    marginTop: "10px",
-  },
-  link: {
+    fontSize: "16px",
     color: "#66c0f4",
-    textDecoration: "none",
   },
   filterSort: {
     display: "flex",
-    alignItems: "center",
     justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: "20px",
   },
   filterButton: {
     backgroundColor: "#2a475e",
     color: "#c7d5e0",
-    border: "1px solid #3e4551",
-    padding: "10px 20px",
-    borderRadius: "4px",
+    border: "none",
+    padding: "10px 15px",
+    borderRadius: "5px",
     cursor: "pointer",
-    marginRight: "10px",
   },
-  sortOptions: {
+  sortButtons: {
     display: "flex",
     gap: "10px",
   },
   sortButton: {
     backgroundColor: "#2a475e",
     color: "#c7d5e0",
-    border: "1px solid #3e4551",
+    border: "none",
     padding: "10px 15px",
-    borderRadius: "4px",
+    borderRadius: "5px",
     cursor: "pointer",
   },
-  badgesList: {
+  badgeGrid: {
     display: "grid",
     gap: "20px",
+    gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
   },
-  badgeContainer: {
-    backgroundColor: "#171a21",
+  badgeCard: {
+    backgroundColor: "#1e3c72",
     padding: "20px",
     borderRadius: "10px",
-    border: "1px solid #3e4551",
+    background: "linear-gradient(to right, rgb(24, 40, 68), rgb(27, 63, 124))",
+    boxShadow: "0 4px 10px rgba(0, 0, 0, 0.3)",
   },
   badgeHeader: {
     display: "flex",
     justifyContent: "space-between",
-  },
-  badgeInfo: {
-    flex: 1,
+    alignItems: "center",
+    marginBottom: "15px",
   },
   badgeTitle: {
-    fontSize: "20px",
-    marginBottom: "10px",
+    fontSize: "18px",
+    marginBottom: "5px",
   },
-  badgeXP: {
-    fontSize: "16px",
+  badgeLevel: {
+    fontSize: "14px",
     color: "#66c0f4",
-    marginBottom: "10px",
+    marginBottom: "5px",
   },
   badgeDescription: {
     fontSize: "14px",
-    marginBottom: "10px",
+    marginBottom: "5px",
   },
   badgeTasks: {
     fontSize: "14px",
     color: "#66c0f4",
   },
-  badgeImagePlaceholder: {
-    width: "80px",
-    height: "80px",
-    backgroundColor: "#2a475e",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: "8px",
-    color: "#c7d5e0",
+  badgeIcon: {
+    fontSize: "32px",
   },
-  cardsContainer: {
+  cardContainer: {
     display: "flex",
     gap: "10px",
-    marginTop: "20px",
+    marginTop: "10px",
   },
   cardImage: {
-    width: "50px",
-    height: "75px",
-    backgroundColor: "#2a475e",
+    width: "60px",
+    height: "90px",
     borderRadius: "5px",
   },
 };
