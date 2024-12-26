@@ -5,7 +5,7 @@ import LogInPage from "./pages/LogIn";
 import LibraryPageGame from "./pages/LibraryGame";
 import LibraryPageCode from "./pages/LibraryCode";
 import ProfilePage from "./pages/ProfilePage";
-import CommunityPage from "./pages/CommunityPage"
+import CommunityPage from "./pages/CommunityPage";
 import GamePage from "./pages/GameDetailPage";
 import MarketGamePage from "./pages/MarketGame";
 import CodePage from "./pages/CodeInforMarket";
