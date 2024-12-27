@@ -1,77 +1,129 @@
-// components/Card.jsx
+// src/components/Card.jsx
+
 import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import PropTypes from "prop-types";
 
-// Styled Components for Card
+// Styled Components
 const CardContainer = styled.div`
-  background-color: #ffffff;
-  border-radius: 12px;
+  background-color: rgba(42, 71, 94, 0.8);
+  border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  padding: 15px;
+  position: relative;
+  border: 1px solid #0f2b44;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  width: 100%;
-  max-width: ${(props) => props.maxWidth || "300px"};
+  max-width: ${(props) => props.maxWidth || "250px"};
+  height: ${(props) => props.height || "auto"};
 
   &:hover {
     transform: translateY(-5px);
-    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
   }
 `;
 
-const CardImage = styled.img`
+const GameImage = styled.img`
   width: 100%;
-  height: ${(props) => props.height || "200px"};
+  height: 150px;
   object-fit: cover;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 `;
 
-const CardContent = styled.div`
-  padding: 15px;
+const GameTitle = styled.p`
+  font-size: 18px;
+  font-weight: bold;
+  margin: 5px 0;
+  color: #ffffff;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
 `;
 
-const CardTitle = styled.h3`
-  font-size: 1.4rem;
-  color: #0366d6;
-  margin: 0 0 10px 0;
+const GameDescription = styled.p`
+  font-size: 14px;
+  color: #ff4d6d;
+  margin-bottom: 10px;
+  font-weight: bold;
 `;
 
-const CardDescription = styled.p`
-  font-size: 1rem;
-  color: #586069;
-  margin: 0 0 15px 0;
-  height: ${(props) => props.height || "60px"};
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
-
-const CardTags = styled.div`
+const TagsContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 5px;
+  justify-content: center;
 `;
 
 const Tag = styled.span`
-  background-color: #f1f8ff;
-  color: #0366d6;
-  padding: 5px 10px;
-  border-radius: 20px;
-  font-size: 0.8rem;
+  background-color: #2ecc71;
+  color: #fff;
+  padding: 3px 6px;
+  border-radius: 3px;
+  font-size: 12px;
 `;
 
-const CardButton = styled(Link)`
-  display: inline-block;
-  padding: 8px 16px;
-  background-color: ${(props) => props.bgColor || "#28a745"};
-  color: #fff;
-  border-radius: 6px;
+const ButtonGroup = styled.div`
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 10px; /* Tăng khoảng cách giữa nút và tags */
+`;
+
+const ViewButton = styled(Link)`
+  background-color: #2ecc71;
+  border: none;
+  border-radius: 5px;
+  color: #000;
+  padding: 8px 15px;
+  font-weight: bold;
+  cursor: pointer;
   text-decoration: none;
-  font-size: 0.9rem;
-  transition: background 0.3s ease, transform 0.2s;
+  transition: background 0.3s ease;
+  box-shadow: 0 2px 5px rgba(46, 204, 113, 0.5);
+  font-size: 0.9rem; /* Giảm kích thước font */
 
   &:hover {
-    background-color: ${(props) => props.hoverColor || "#218838"};
+    background-color: #28b54a;
+  }
+`;
+
+const AddButton = styled.button`
+  background: linear-gradient(45deg, #66c0f4, #5aa8e6);
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  padding: 7px 14px; /* Giảm padding để nút nhỏ hơn */
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 0.8rem; /* Giảm kích thước font */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
     transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(86, 168, 230, 0.4);
+  }
+`;
+
+const StyledLinkButton = styled.button` /* Thay đổi từ Link sang button để dễ dàng sử dụng onClick */
+  background: linear-gradient(45deg, #2ecc71, #28b54a);
+  border: none;
+  border-radius: 5px;
+  color: #000;
+  padding: 7px 14px;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 0.8rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(40, 181, 74, 0.4);
   }
 `;
 
@@ -79,51 +131,31 @@ const Card = ({
   image,
   title,
   description,
-  tags,
+  tags = [],
   buttonText,
   buttonLink,
-  bgColor,
-  hoverColor,
+  isFree,
+  onAddToLibrary,
+  onView, // Thêm prop onView
   maxWidth,
   height,
 }) => {
   return (
-    <CardContainer maxWidth={maxWidth}>
-      {image && <CardImage src={image} alt={title} height={height} />}
-      <CardContent>
-        <CardTitle>{title}</CardTitle>
-        {description && (
-          <CardDescription height={height}>{description}</CardDescription>
-        )}
-        {tags && (
-          <CardTags>
-            {tags.map((tag, index) => (
-              <Tag key={index}>{tag}</Tag>
-            ))}
-          </CardTags>
-        )}
-        {buttonText && buttonLink && (
-          <CardButton to={buttonLink} bgColor={bgColor} hoverColor={hoverColor}>
-            {buttonText}
-          </CardButton>
-        )}
-      </CardContent>
+    <CardContainer maxWidth={maxWidth} height={height}>
+      <GameImage src={image} alt={title} />
+      <GameTitle>{title}</GameTitle>
+      <GameDescription>{description}</GameDescription>
+      <TagsContainer>
+        {tags.map((tag) => (
+          <Tag key={tag}>{tag}</Tag>
+        ))}
+      </TagsContainer>
+      <ButtonGroup>
+        {isFree && <AddButton onClick={onAddToLibrary}>Add</AddButton>}
+        <StyledLinkButton onClick={onView}>{buttonText}</StyledLinkButton>
+      </ButtonGroup>
     </CardContainer>
   );
-};
-
-// PropTypes for type checking
-Card.propTypes = {
-  image: PropTypes.string,
-  title: PropTypes.string.isRequired,
-  description: PropTypes.string,
-  tags: PropTypes.arrayOf(PropTypes.string),
-  buttonText: PropTypes.string,
-  buttonLink: PropTypes.string,
-  bgColor: PropTypes.string,
-  hoverColor: PropTypes.string,
-  maxWidth: PropTypes.string,
-  height: PropTypes.string,
 };
 
 export default Card;

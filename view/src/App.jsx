@@ -6,18 +6,17 @@ import LibraryPageGame from "./pages/LibraryGame";
 import LibraryPageCode from "./pages/LibraryCode";
 import ProfilePage from "./pages/ProfilePage";
 import CommunityPage from "./pages/CommunityPage";
-import GamePage from "./pages/GameDetailPage";
 import MarketGamePage from "./pages/MarketGame";
-import CodePage from "./pages/CodeInforMarket";
+import GameDetailPage from "./pages/GameDetailPage";
 import FriendsPage from "./pages/FriendPage";
 import BadgesPage from "./pages/BadgesPage";
-import GameModePage from "./pages/GameModePage";
 import MarketCodePage from "./pages/MarketCode";
 import SignUpPage from "./pages/SignUpPage";
 import CodeDetailPage from "./pages/CodeDetailPage";
 import SupportBot from "./pages/SupportBotPage";
+import ActivityPage from "./pages/ActivityPage";
 
-import axios from 'axios';
+import UserProgressPage from "./pages/UserProgressPage";
 function App() {
   return (
     <BrowserRouter>
@@ -34,10 +33,11 @@ function App() {
         <Route path="/repository/:id" element={<CodeDetailPage />} />
         <Route path="/friends" element={<FriendsPage />} />
         <Route path="/badges" element={<BadgesPage />} />
-        <Route path="/market-game/:id" element={<GamePage />} />
-        <Route path="/market-code/:id" element={<CodePage />} />
-        <Route path="/library-game/:id" element={<GameModePage />} />
+        <Route path="/market-game/:id" element={<GameDetailPage />} />
+        <Route path="/market-code/:id" element={<CodeDetailPage />} />
+        <Route path="/library-game/:id" element={<UserProgressPage />} />
         <Route path="/support-bot" element={<SupportBot />} />
+        <Route path="/activity" element={<ActivityPage />} />
       </Routes>
     </BrowserRouter>
   );
