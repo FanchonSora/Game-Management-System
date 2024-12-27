@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 import ChatBox from "../components/ChatBox";
-
+import gameData from "../data/gameData";
 // Keyframes for Animations
 const fadeIn = keyframes`
   from {
@@ -493,21 +493,21 @@ const HomePage = () => {
   const products = [
     // Featured Games
     {
-      id: 1,
+      id: 22,
       title: "Asterigos: Curse of the Stars",
       category: "Featured",
       price: 39.99,
       image: "/game/Asterigos.jpg",
     },
     {
-      id: 2,
+      id: 23,
       title: "Elden Ring",
       category: "Featured",
       price: 59.99,
       image: "/game/Elden Ring.jpg",
     },
     {
-      id: 3,
+      id: 24,
       title: "Cyberpunk 2077",
       category: "Featured",
       price: 49.99,
@@ -515,21 +515,21 @@ const HomePage = () => {
     },
     // Massively Multiplayer Games
     {
-      id: 4,
+      id: 1,
       title: "Foxhole",
       category: "Massively Multiplayer",
       price: 0.0,
       image: "/game/Foxhole.jpg",
     },
     {
-      id: 5,
+      id: 2,
       title: "Hell Let Loose",
       category: "Massively Multiplayer",
       price: 59.99,
       image: "/game/Hell Let Loose.jpg",
     },
     {
-      id: 6,
+      id: 3,
       title: "SCUM",
       category: "Massively Multiplayer",
       price: 29.99,
@@ -537,28 +537,28 @@ const HomePage = () => {
     },
     // Casual Games
     {
-      id: 7,
+      id: 5,
       title: "Goat Simulator 3",
       category: "Casual",
       price: 19.99,
       image: "/game/Goat Simulator 3.jpg",
     },
     {
-      id: 8,
+      id: 6,
       title: "Luma Island",
       category: "Casual",
       price: 9.99,
       image: "/game/Luma Island.jpg",
     },
     {
-      id: 9,
+      id: 7,
       title: "F1 24",
       category: "Casual",
       price: 49.99,
       image: "/game/F1 24.jpg",
     },
     {
-      id: 10,
+      id: 8,
       title: "Dreamlight Valley",
       category: "Casual",
       price: 29.99,
@@ -566,35 +566,35 @@ const HomePage = () => {
     },
     // Additional Games
     {
-      id: 11,
+      id: 14,
       title: "War Thunder",
       category: "Massively Multiplayer",
       price: 0.0,
       image: "/game/War Thunder.jpg",
     },
     {
-      id: 12,
+      id: 15,
       title: "Albion Online",
       category: "Massively Multiplayer",
       price: 0.0,
       image: "/game/Albion Online.jpg",
     },
     {
-      id: 13,
+      id: 16,
       title: "Candy Crush Saga",
       category: "Casual",
       price: 0.0,
       image: "/game/Candy Crush Saga.jpg",
     },
     {
-      id: 14,
+      id: 17,
       title: "Among Us",
       category: "Casual",
       price: 0.0,
       image: "/game/Among Us.jpg",
     },
     {
-      id: 15,
+      id: 18,
       title: "Crab Game",
       category: "Featured",
       price: 0.0,

@@ -1,5 +1,3 @@
-// src/components/FeaturedMarketGamePage.jsx
-
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
@@ -396,8 +394,7 @@ const FeaturedMarketGamePage = () => {
 
   // Slides for carousel
   const slides = chunkArray(
-    gameData.filter((game) => game.tags.includes("Featured")),
-    3
+    gameData.filter((game) => game.tags.includes("Featured")),5
   );
   const totalSlides = slides.length;
 
@@ -429,10 +426,9 @@ const FeaturedMarketGamePage = () => {
   
   // View detail
   const handleView = (game) => {
-    logActivity('view', game); // Ghi lại hoạt động xem
     navigate(`/market-game/${game.id}`);
   };
-
+  
   // chunkArray helper
   function chunkArray(arr, size) {
     const result = [];

@@ -3,7 +3,7 @@ import { Routes, Route, BrowserRouter } from "react-router-dom"; // Import from 
 import HomePage from "./pages/HomePage";
 import LogInPage from "./pages/LogIn";
 import LibraryPageGame from "./pages/LibraryGame";
-import LibraryPageCode from "./pages/LibraryCode";
+import GameLibrary from "./pages/LibraryCode";
 import ProfilePage from "./pages/ProfilePage";
 import CommunityPage from "./pages/CommunityPage";
 import MarketGamePage from "./pages/MarketGame";
@@ -29,7 +29,7 @@ function App() {
         <Route path="/market-game" element={<MarketGamePage />} />
         <Route path="/market-code" element={<MarketCodePage />} />
         <Route path="/library-game" element={<LibraryPageGame />} />
-        <Route path="/library-code" element={<LibraryPageCode />} />
+        <Route path="/library-code" element={<GameLibrary />} />
         <Route path="/repository/:id" element={<CodeDetailPage />} />
         <Route path="/friends" element={<FriendsPage />} />
         <Route path="/badges" element={<BadgesPage />} />

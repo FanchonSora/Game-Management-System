@@ -1,9 +1,11 @@
-// src/components/GameDetailPage.jsx
+// src/pages/GameDetailPage.jsx
 
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 import gameData from "../data/gameData"; 
+import Card from "../components/Card"; // Đảm bảo bạn có component Card
+import Navbar from "../components/Navbar"; // Import Navbar component
 
 // Keyframes for Animations
 const fadeIn = keyframes`
@@ -19,7 +21,7 @@ const Container = styled.div`
   background-color: #f6f8fa;
   color: #24292e;
   min-height: 100vh;
-  padding: 20px;
+  padding: 120px 20px 20px 20px; /* Adjust padding to account for fixed Navbar */
   position: relative;
   overflow: hidden;
 `;
@@ -30,84 +32,12 @@ const ContentWrapper = styled.div`
   margin: 0 auto;
 `;
 
-// Navbar Styled Components
-const Navbar = styled.nav`
-  width: 100%;
-  background-color: #2d333b;
-  padding: 15px 30px;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  margin-bottom: 30px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-`;
-
-const NavLinks = styled.div`
-  display: flex;
-  gap: 20px;
-  align-items: center;
-`;
-
-// Dropdown Components
-const Dropdown = styled.div`
-  position: relative;
-`;
-
-const NavButton = styled.button`
-  background: none;
-  border: none;
-  color: #c7d5e0;
-  font-size: 16px;
-  cursor: pointer;
-  padding: 8px 12px;
-  border-radius: 4px;
-  transition: background 0.3s ease;
-
-  &:hover, &:focus {
-    background-color: rgba(255, 255, 255, 0.1);
-    outline: none;
-  }
-`;
-
-const DropdownMenu = styled.div`
-  position: absolute;
-  top: 38px;
-  left: 0;
-  background-color: rgba(42, 71, 94, 0.95);
-  border-radius: 5px;
-  min-width: 150px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-  z-index: 100;
-`;
-
-const DropdownItem = styled(Link)`
-  display: block;
-  padding: 10px 15px;
-  color: #c7d5e0;
-  text-decoration: none;
-  transition: background 0.2s ease;
-
-  &:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-  }
-`;
-
-const NavLinkStyled = styled(Link)`
-  color: #c7d5e0;
-  text-decoration: none;
-  font-size: 16px;
-  padding: 8px 12px;
-  border-radius: 4px;
-  transition: background 0.3s ease;
-
-  &:hover, &:focus {
-    background-color: rgba(255, 255, 255, 0.1);
-    outline: none;
-  }
+// SectionTitle
+const SectionTitle = styled.h2`
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #2c3e50;
+  text-align: center;
 `;
 
 // Game Detail Section
@@ -154,8 +84,25 @@ const Buttons = styled.div`
   gap: 20px;
 `;
 
-// Play Button
-const PlayButton = styled.button`
+// Add to Library Button
+const AddButton = styled.button`
+  background-color: #2ecc71;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  padding: 12px 25px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    background-color: #27ae60;
+    box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+  }
+`;
+
+// Purchase Button
+const PurchaseButton = styled.button`
   background-color: #e74c3c;
   border: none;
   border-radius: 5px;
@@ -163,29 +110,29 @@ const PlayButton = styled.button`
   padding: 12px 25px;
   font-weight: bold;
   cursor: pointer;
-  transition: background 0.3s ease;
-  box-shadow: 0 2px 5px rgba(231, 76, 60, 0.5);
+  transition: background 0.3s ease, box-shadow 0.3s ease;
 
   &:hover {
     background-color: #c0392b;
+    box-shadow: 0 4px 12px rgba(192, 57, 43, 0.3);
   }
 `;
 
 // Back Button
 const BackButton = styled(Link)`
-  background-color: #2ecc71;
+  background-color: #3498db;
   border: none;
   border-radius: 5px;
-  color: #000;
+  color: #fff;
   padding: 12px 25px;
   font-weight: bold;
   cursor: pointer;
   text-decoration: none;
-  transition: background 0.3s ease;
-  box-shadow: 0 2px 5px rgba(46, 204, 113, 0.5);
+  transition: background 0.3s ease, box-shadow 0.3s ease;
 
   &:hover {
-    background-color: #28b54a;
+    background-color: #2980b9;
+    box-shadow: 0 4px 12px rgba(41, 128, 185, 0.3);
   }
 `;
 
@@ -291,27 +238,6 @@ const GamesGridStyled = styled.div`
   gap: 20px;
 `;
 
-// Back to Top Button (optional)
-const BackToTopButton = styled.button`
-  position: fixed;
-  bottom: 40px;
-  right: 40px;
-  background-color: #3498db;
-  border: none;
-  border-radius: 50%;
-  color: #fff;
-  width: 50px;
-  height: 50px;
-  font-size: 20px;
-  cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-  transition: background 0.3s ease;
-
-  &:hover {
-    background-color: #2980b9;
-  }
-`;
-
 const GameDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -319,74 +245,55 @@ const GameDetailPage = () => {
   const [game, setGame] = useState(null);
 
   useEffect(() => {
-    const foundGame = gameData.find((item) => item.id === parseInt(id));
+    const numericId = Number(id);
+    console.log("Searching for game with id:", numericId);
+    if (isNaN(numericId)) {
+      alert("Invalid game ID.");
+      navigate("/library-game");
+      return;
+    }
+    const foundGame = gameData.find((item) => item.id === numericId);
+    console.log("Found game:", foundGame);
     if (foundGame) {
       setGame(foundGame);
     } else {
       // Redirect to Library page if game not found
+      alert("Game not found. Redirecting to Library.");
       navigate("/library-game");
     }
   }, [id, navigate]);
 
-  const handlePlay = () => {
-    // Implement play functionality, e.g., redirect to game URL or start the game
-    alert("Starting the game...");
+  // Add to library function
+  const handleAddToLibrary = () => {
+    if (game.price === 'Free') {
+      const storedGames = JSON.parse(localStorage.getItem('libraryGames')) || [];
+      // Thêm trò chơi mới nếu chưa có
+      if (!storedGames.find((g) => g.id === game.id)) {
+        storedGames.push({ id: game.id, name: game.title });
+        localStorage.setItem('libraryGames', JSON.stringify(storedGames));
+        // logActivity('add', game); // Nếu bạn có hàm này, hãy dùng hoặc bỏ dòng này
+        alert(`${game.title} đã được thêm vào Thư viện của bạn!`);
+      } else {
+        alert(`${game.title} đã có trong Thư viện của bạn.`);
+      }
+    }
+  };
+
+  // Purchase function
+  const handlePurchase = () => {
+    // Implement purchase functionality here, e.g., redirect to payment gateway
+    // For demo purposes, we'll just show an alert
+    alert(`Bạn đã chọn mua ${game.title} với giá ${game.price}.`);
+    // Sau khi mua thành công, bạn có thể thêm game vào thư viện hoặc thực hiện các bước tiếp theo
   };
 
   return (
     <Container>
+      <Navbar /> {/* Sử dụng component Navbar từ src/components/Navbar.jsx */}
+
       <ContentWrapper>
-        <Navbar>
-          <NavLinks>
-            {/* Market Dropdown */}
-            <Dropdown>
-              <NavButton
-                onClick={() => {
-                  // Toggle Dropdown Logic (if needed)
-                }}
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                Market
-              </NavButton>
-              {/* Add DropdownMenu if needed */}
-            </Dropdown>
-
-            {/* Community Link */}
-            <NavLinkStyled to="/community">Community</NavLinkStyled>
-
-            {/* Library Dropdown */}
-            <Dropdown>
-              <NavButton
-                onClick={() => {
-                  // Toggle Dropdown Logic (if needed)
-                }}
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                Library
-              </NavButton>
-              {/* Add DropdownMenu if needed */}
-            </Dropdown>
-
-            {/* Profile Dropdown */}
-            <Dropdown>
-              <NavButton
-                onClick={() => {
-                  // Toggle Dropdown Logic (if needed)
-                }}
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                Profile
-              </NavButton>
-              {/* Add DropdownMenu if needed */}
-            </Dropdown>
-          </NavLinks>
-        </Navbar>
-
         {/* Game Detail Section */}
-        {game && (
+        {game ? (
           <GameDetailContainer>
             <GameHeader>
               <GameImageWrapper>
@@ -394,7 +301,11 @@ const GameDetailPage = () => {
               </GameImageWrapper>
               <GameTitle>{game.title}</GameTitle>
               <Buttons>
-                <PlayButton onClick={handlePlay}>Play Now</PlayButton>
+                {game.price === 'Free' ? (
+                  <AddButton onClick={handleAddToLibrary}>Add to Library</AddButton>
+                ) : (
+                  <PurchaseButton onClick={handlePurchase}>Purchase</PurchaseButton>
+                )}
                 <BackButton to="/library-game">Back to Library</BackButton>
               </Buttons>
             </GameHeader>
@@ -453,7 +364,11 @@ const GameDetailPage = () => {
               <FeaturedGamesTitle>Featured Games</FeaturedGamesTitle>
               <GamesGridStyled>
                 {gameData
-                  .filter((featuredGame) => featuredGame.tags.includes("Featured") && featuredGame.id !== game.id)
+                  .filter(
+                    (featuredGame) =>
+                      featuredGame.tags.includes("Featured") &&
+                      featuredGame.id !== game.id
+                  )
                   .map((featuredGame) => (
                     <Card
                       key={featuredGame.id}
@@ -463,19 +378,37 @@ const GameDetailPage = () => {
                       tags={featuredGame.tags}
                       buttonText="View Detail"
                       buttonLink={`/market-game/${featuredGame.id}`}
-                      isFree={featuredGame.price === 'Free'}
+                      isFree={featuredGame.price === "Free"}
                       onAddToLibrary={() => {
-                        if (featuredGame.price === 'Free') {
-                          const storedGames = JSON.parse(localStorage.getItem('libraryGames')) || [];
-                          if (!storedGames.find((g) => g.id === featuredGame.id)) {
-                            storedGames.push({ id: featuredGame.id, name: featuredGame.title });
-                            localStorage.setItem('libraryGames', JSON.stringify(storedGames));
-                            alert(`${featuredGame.title} has been added to your Library!`);
+                        if (featuredGame.price === "Free") {
+                          const storedGames =
+                            JSON.parse(localStorage.getItem("libraryGames")) ||
+                            [];
+                          if (
+                            !storedGames.find(
+                              (g) => g.id === featuredGame.id
+                            )
+                          ) {
+                            storedGames.push({
+                              id: featuredGame.id,
+                              name: featuredGame.title,
+                            });
+                            localStorage.setItem(
+                              "libraryGames",
+                              JSON.stringify(storedGames)
+                            );
+                            alert(
+                              `${featuredGame.title} đã được thêm vào Thư viện của bạn!`
+                            );
                           } else {
-                            alert(`${featuredGame.title} is already in your Library.`);
+                            alert(
+                              `${featuredGame.title} đã có trong Thư viện của bạn.`
+                            );
                           }
                         } else {
-                          alert(`Cannot add ${featuredGame.title} to your Library. This game is not free.`);
+                          alert(
+                            `Không thể thêm ${featuredGame.title} vào Thư viện. Trò chơi này không miễn phí.`
+                          );
                         }
                       }}
                       maxWidth="300px"
@@ -487,32 +420,55 @@ const GameDetailPage = () => {
 
             {/* Massively Multiplayer Games Section */}
             <CategorizedGamesSection>
-              <CategorizedGamesTitle>Massively Multiplayer Games</CategorizedGamesTitle>
+              <CategorizedGamesTitle>
+                Massively Multiplayer Games
+              </CategorizedGamesTitle>
               <GamesGridStyled>
                 {gameData
-                  .filter((mmGame) => mmGame.tags.includes("MMO") && mmGame.id !== game.id)
+                  .filter(
+                    (mmGame) =>
+                      mmGame.tags.includes("MMO") && mmGame.id !== game.id
+                  )
                   .map((mmGame) => (
                     <Card
                       key={mmGame.id}
                       image={mmGame.image}
                       title={mmGame.title}
-                      description={`Price: ${mmGame.price} ${mmGame.discount ? `(${mmGame.discount})` : ""}`}
+                      description={`Price: ${mmGame.price} ${
+                        mmGame.discount ? `(${mmGame.discount})` : ""
+                      }`}
                       tags={mmGame.tags}
                       buttonText="View Detail"
                       buttonLink={`/market-game/${mmGame.id}`}
-                      isFree={mmGame.price === 'Free'}
+                      isFree={mmGame.price === "Free"}
                       onAddToLibrary={() => {
-                        if (mmGame.price === 'Free') {
-                          const storedGames = JSON.parse(localStorage.getItem('libraryGames')) || [];
-                          if (!storedGames.find((g) => g.id === mmGame.id)) {
-                            storedGames.push({ id: mmGame.id, name: mmGame.title });
-                            localStorage.setItem('libraryGames', JSON.stringify(storedGames));
-                            alert(`${mmGame.title} has been added to your Library!`);
+                        if (mmGame.price === "Free") {
+                          const storedGames =
+                            JSON.parse(localStorage.getItem("libraryGames")) ||
+                            [];
+                          if (
+                            !storedGames.find((g) => g.id === mmGame.id)
+                          ) {
+                            storedGames.push({
+                              id: mmGame.id,
+                              name: mmGame.title,
+                            });
+                            localStorage.setItem(
+                              "libraryGames",
+                              JSON.stringify(storedGames)
+                            );
+                            alert(
+                              `${mmGame.title} đã được thêm vào Thư viện của bạn!`
+                            );
                           } else {
-                            alert(`${mmGame.title} is already in your Library.`);
+                            alert(
+                              `${mmGame.title} đã có trong Thư viện của bạn.`
+                            );
                           }
                         } else {
-                          alert(`Cannot add ${mmGame.title} to your Library. This game is not free.`);
+                          alert(
+                            `Không thể thêm ${mmGame.title} vào Thư viện. Trò chơi này không miễn phí.`
+                          );
                         }
                       }}
                       maxWidth="300px"
@@ -527,29 +483,51 @@ const GameDetailPage = () => {
               <CategorizedGamesTitle>Casual Games</CategorizedGamesTitle>
               <GamesGridStyled>
                 {gameData
-                  .filter((casualGame) => casualGame.tags.includes("Casual") && casualGame.id !== game.id)
+                  .filter(
+                    (casualGame) =>
+                      casualGame.tags.includes("Casual") &&
+                      casualGame.id !== game.id
+                  )
                   .map((casualGame) => (
                     <Card
                       key={casualGame.id}
                       image={casualGame.image}
                       title={casualGame.title}
-                      description={`Price: ${casualGame.price} ${casualGame.discount ? `(${casualGame.discount})` : ""}`}
+                      description={`Price: ${casualGame.price} ${
+                        casualGame.discount ? `(${casualGame.discount})` : ""
+                      }`}
                       tags={casualGame.tags}
                       buttonText="View Detail"
                       buttonLink={`/market-game/${casualGame.id}`}
-                      isFree={casualGame.price === 'Free'}
+                      isFree={casualGame.price === "Free"}
                       onAddToLibrary={() => {
-                        if (casualGame.price === 'Free') {
-                          const storedGames = JSON.parse(localStorage.getItem('libraryGames')) || [];
-                          if (!storedGames.find((g) => g.id === casualGame.id)) {
-                            storedGames.push({ id: casualGame.id, name: casualGame.title });
-                            localStorage.setItem('libraryGames', JSON.stringify(storedGames));
-                            alert(`${casualGame.title} has been added to your Library!`);
+                        if (casualGame.price === "Free") {
+                          const storedGames =
+                            JSON.parse(localStorage.getItem("libraryGames")) ||
+                            [];
+                          if (
+                            !storedGames.find((g) => g.id === casualGame.id)
+                          ) {
+                            storedGames.push({
+                              id: casualGame.id,
+                              name: casualGame.title,
+                            });
+                            localStorage.setItem(
+                              "libraryGames",
+                              JSON.stringify(storedGames)
+                            );
+                            alert(
+                              `${casualGame.title} đã được thêm vào Thư viện của bạn!`
+                            );
                           } else {
-                            alert(`${casualGame.title} is already in your Library.`);
+                            alert(
+                              `${casualGame.title} đã có trong Thư viện của bạn.`
+                            );
                           }
                         } else {
-                          alert(`Cannot add ${casualGame.title} to your Library. This game is not free.`);
+                          alert(
+                            `Không thể thêm ${casualGame.title} vào Thư viện. Trò chơi này không miễn phí.`
+                          );
                         }
                       }}
                       maxWidth="300px"
@@ -559,6 +537,8 @@ const GameDetailPage = () => {
               </GamesGridStyled>
             </CategorizedGamesSection>
           </GameDetailContainer>
+        ) : (
+          <div>Loading game details...</div>
         )}
       </ContentWrapper>
     </Container>

@@ -1,7 +1,7 @@
 // src/data/gameData.js
 
 const gameData = [
-  // Massively Multiplayer Games (IDs 1-8)
+  // --- Các game MMO / Market cũ ---
   {
     id: 1,
     title: "Foxhole",
@@ -9,7 +9,7 @@ const gameData = [
     discount: "-38%",
     image: "/game/Foxhole.jpg",
     description:
-      "Foxhole is a persistent, massively multiplayer game of war. It is a top-down MMO where every player matters. Participate in strategic battles and contribute to the war effort.",
+      "Foxhole is a persistent, massively multiplayer game of war...",
     genre: "MMO, Strategy",
     developer: "Clashstar",
     releaseDate: "2018-02-28",
@@ -19,7 +19,7 @@ const gameData = [
       "/screenshots/Foxhole2.jpg",
       "/screenshots/Foxhole3.jpg",
     ],
-    tags: ["MMO", "Strategy"],
+    tags: ["MMO", "Strategy"], 
   },
   {
     id: 2,
@@ -28,7 +28,7 @@ const gameData = [
     discount: "-50%",
     image: "/game/Hell Let Loose.jpg",
     description:
-      "Hell Let Loose is a realistic World War II first-person shooter that emphasizes teamwork and strategy. Engage in large-scale battles with up to 100 players.",
+      "Hell Let Loose is a realistic World War II first-person shooter...",
     genre: "Shooter, War",
     developer: "Black Matter",
     releaseDate: "2019-06-23",
@@ -47,7 +47,7 @@ const gameData = [
     discount: "-50%",
     image: "/game/SCUM.jpg",
     description:
-      "SCUM is an open-world survival game that places a heavy emphasis on character customization, metabolism, and combat.",
+      "SCUM is an open-world survival game that places a heavy emphasis...",
     genre: "Survival, Open World",
     developer: "Gamepires",
     releaseDate: "2018-08-29",
@@ -66,7 +66,7 @@ const gameData = [
     discount: "-30%",
     image: "/game/Test Drive Unlimited.jpg",
     description:
-      "Test Drive Unlimited is an open-world racing game that offers a vast environment to explore, race, and customize your vehicles.",
+      "Test Drive Unlimited is an open-world racing game...",
     genre: "Racing, Open World",
     developer: "Eden Games",
     releaseDate: "2006-09-12",
@@ -85,7 +85,7 @@ const gameData = [
     discount: "-67%",
     image: "/game/Goat Simulator 3.jpg",
     description:
-      "Goat Simulator 3 takes the chaotic fun of its predecessors into a larger, more dynamic world where you can wreak havoc as a goat.",
+      "Goat Simulator 3 takes the chaotic fun of its predecessors...",
     genre: "Simulation, Comedy",
     developer: "Coffee Stain Studios",
     releaseDate: "2021-07-15",
@@ -104,7 +104,7 @@ const gameData = [
     discount: "-20%",
     image: "/game/Luma Island.jpg",
     description:
-      "Luma Island is a charming sandbox adventure game where you can explore, build, and interact with the vibrant island inhabitants.",
+      "Luma Island is a charming sandbox adventure game...",
     genre: "Adventure, Sandbox",
     developer: "StudyLight",
     releaseDate: "2020-10-05",
@@ -123,7 +123,7 @@ const gameData = [
     discount: "-60%",
     image: "/game/F1 24.jpg",
     description:
-      "F1 24 offers an authentic Formula 1 racing experience with realistic physics, detailed car models, and extensive career modes.",
+      "F1 24 offers an authentic Formula 1 racing experience...",
     genre: "Racing, Sports",
     developer: "Codemasters",
     releaseDate: "2023-09-14",
@@ -142,7 +142,7 @@ const gameData = [
     discount: "-25%",
     image: "/game/Dreamlight Valley.jpg",
     description:
-      "Dreamlight Valley is a life-simulation adventure game where you can build your own home, interact with villagers, and explore enchanting landscapes.",
+      "Dreamlight Valley is a life-simulation adventure game...",
     genre: "Simulation, RPG",
     developer: "Stardoll",
     releaseDate: "2022-03-22",
@@ -155,7 +155,7 @@ const gameData = [
     tags: ["Simulation", "RPG"],
   },
 
-  // Market Games (IDs 9-22)
+  // --- Market Games cũ ---
   {
     id: 9,
     title: "Lord of the Rings: Return to Moria",
@@ -163,7 +163,7 @@ const gameData = [
     discount: "",
     image: "/game/Lord of the Rings.jpg",
     description:
-      "An immersive action RPG that takes players deep into the Mines of Moria, facing formidable foes and uncovering ancient secrets.",
+      "An immersive action RPG that takes players deep into the Mines of Moria...",
     genre: "Action RPG",
     developer: "Warner Bros. Games",
     releaseDate: "2023-04-12",
@@ -183,7 +183,7 @@ const gameData = [
     discount: "",
     image: "/game/Ready or Not.jpg",
     description:
-      "Ready or Not is a tactical first-person shooter that puts players in the shoes of SWAT officers, executing high-risk operations with precision.",
+      "Ready or Not is a tactical first-person shooter that puts players in the shoes of SWAT...",
     genre: "Action, Shooter",
     developer: "Void Interactive",
     releaseDate: "2022-08-10",
@@ -203,7 +203,7 @@ const gameData = [
     discount: "",
     image: "/game/Dead by Daylight.jpg",
     description:
-      "Dead by Daylight is a multiplayer horror game where one player takes on the role of a killer, and the others try to survive and escape.",
+      "Dead by Daylight is a multiplayer horror game where one player takes on the role of a killer...",
     genre: "Horror, Multiplayer",
     developer: "Behaviour Interactive",
     releaseDate: "2016-04-14",
@@ -223,7 +223,7 @@ const gameData = [
     discount: "",
     image: "/game/WWE 2K24.jpg",
     description:
-      "WWE 2K24 brings the excitement of professional wrestling to life with enhanced graphics, realistic gameplay, and an extensive roster of WWE superstars.",
+      "WWE 2K24 brings the excitement of professional wrestling to life with enhanced graphics...",
     genre: "Sports, Fighting",
     developer: "Visual Concepts",
     releaseDate: "2023-09-05",
@@ -243,7 +243,7 @@ const gameData = [
     discount: "",
     image: "/game/Stellaris.jpg",
     description:
-      "Stellaris is a grand strategy game set in space, allowing players to explore, expand, exploit, and exterminate across the galaxy.",
+      "Stellaris is a grand strategy game set in space...",
     genre: "Strategy, Sci-Fi",
     developer: "Paradox Development Studio",
     releaseDate: "2020-05-06",
@@ -263,7 +263,7 @@ const gameData = [
     discount: "-100%",
     image: "/game/War Thunder.jpg",
     description:
-      "War Thunder is a comprehensive war game offering combined arms battles on air, land, and sea with vehicles from the interwar period and the Second World War.",
+      "War Thunder is a comprehensive war game offering combined arms battles...",
     genre: "Simulation, Multiplayer",
     developer: "Gaijin Entertainment",
     releaseDate: "2013-11-18",
@@ -283,7 +283,7 @@ const gameData = [
     discount: "-100%",
     image: "/game/Albion Online.jpg",
     description:
-      "Albion Online is a sandbox MMORPG with a player-driven economy, housing, and territory control, set in a medieval fantasy world.",
+      "Albion Online is a sandbox MMORPG with a player-driven economy...",
     genre: "MMORPG, Fantasy",
     developer: "Sandbox Interactive",
     releaseDate: "2017-12-07",
@@ -303,7 +303,7 @@ const gameData = [
     discount: "-100%",
     image: "/game/Candy Crush Saga.jpg",
     description:
-      "Candy Crush Saga is a popular match-three puzzle game where players swap colorful candies to create matches and clear levels.",
+      "Candy Crush Saga is a popular match-three puzzle game...",
     genre: "Casual, Puzzle",
     developer: "King",
     releaseDate: "2012-04-12",
@@ -323,7 +323,7 @@ const gameData = [
     discount: "-100%",
     image: "/game/Among Us.jpg",
     description:
-      "Among Us is a multiplayer social deduction game where players work together to complete tasks on a spaceship while identifying impostors among the crew.",
+      "Among Us is a multiplayer social deduction game where players work together...",
     genre: "Party, Multiplayer",
     developer: "InnerSloth",
     releaseDate: "2018-06-15",
@@ -343,7 +343,7 @@ const gameData = [
     discount: "",
     image: "/game/Crab Game.jpg",
     description:
-      "Crab Game is a fun and chaotic multiplayer game inspired by the TV show Squid Game. Compete in various mini-games to win the ultimate prize.",
+      "Crab Game is a fun and chaotic multiplayer game inspired by the TV show Squid Game...",
     genre: "Action, Multiplayer",
     developer: "Jon St. John",
     releaseDate: "2021-08-20",
@@ -362,7 +362,7 @@ const gameData = [
     price: "Free",
     discount: "",
     image: "/game/Apex Legends.jpg",
-    description: "Một trò chơi battle royale với các nhân vật đặc biệt và kỹ năng độc đáo.",
+    description: "Battle royale với các nhân vật đặc biệt...",
     genre: "Battle Royale",
     developer: "Respawn Entertainment",
     releaseDate: "2019-02-04",
@@ -379,7 +379,7 @@ const gameData = [
     price: "Free",
     discount: "",
     image: "/game/Valorant.jpg",
-    description: "Một trò chơi bắn súng chiến thuật đội hình 5v5 với các agent có kỹ năng đặc biệt.",
+    description: "Bắn súng chiến thuật 5v5 với agent có kỹ năng đặc biệt...",
     genre: "Bắn súng",
     developer: "Riot Games",
     releaseDate: "2020-06-02",
@@ -396,7 +396,7 @@ const gameData = [
     price: "Free",
     discount: "",
     image: "/game/Path of Exile.jpg",
-    description: "Một trò chơi nhập vai hành động với hệ thống kỹ năng phong phú và thế giới mở.",
+    description: "Nhập vai hành động với thế giới mở và hệ thống kỹ năng phong phú.",
     genre: "Nhập vai",
     developer: "Grinding Gear Games",
     releaseDate: "2013-10-23",
@@ -407,5 +407,50 @@ const gameData = [
     ],
     tags: ["Featured", "ARPG"],
   },
+
+  // Thêm 3 game trước kia ở HomePage nhưng chưa có trong gameData
+  {
+    id: 22,
+    title: "Asterigos: Curse of the Stars",
+    price: "39.99",
+    discount: "",
+    image: "/game/Asterigos.jpg",
+    description: "Action RPG phong cách fantasy, khám phá thành phố Aphes...",
+    genre: "Action RPG",
+    developer: "Acme Games",
+    releaseDate: "2022-10-11",
+    rating: "8.5/10",
+    screenshots: [],
+    tags: ["Featured", "Action", "RPG"], 
+  },
+  {
+    id: 23,
+    title: "Elden Ring",
+    price: "59.99",
+    discount: "",
+    image: "/game/Elden Ring.jpg",
+    description: "Bom tấn hành động thế giới mở của FromSoftware...",
+    genre: "Action, RPG, Open World",
+    developer: "FromSoftware",
+    releaseDate: "2022-02-25",
+    rating: "9.6/10",
+    screenshots: [],
+    tags: ["Featured", "Action", "RPG", "Open World"], 
+  },
+  {
+    id: 24,
+    title: "Cyberpunk 2077",
+    price: "49.99",
+    discount: "",
+    image: "/game/Cyberpunk 2077.jpg",
+    description: "Game nhập vai thế giới mở bối cảnh tương lai...",
+    genre: "RPG, Open World",
+    developer: "CD Projekt Red",
+    releaseDate: "2020-12-10",
+    rating: "9/10",
+    screenshots: [],
+    tags: ["Featured", "Open World", "RPG"],
+  },
 ];
+
 export default gameData;
