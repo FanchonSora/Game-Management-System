@@ -1,4 +1,5 @@
-// CodeDetailPage.jsx
+// src/pages/CodeDetailPage.jsx
+
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
@@ -6,39 +7,11 @@ import { Light as SyntaxHighlighter } from "react-syntax-highlighter";
 import { github } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import python from "react-syntax-highlighter/dist/esm/languages/hljs/python";
 import cpp from "react-syntax-highlighter/dist/esm/languages/hljs/cpp";
-import Card from "../components/Card"; // Import the Card component
+import codeData from "../data/codeData"; // Import codeData từ file mới tạo
+import CodeCard from "../components/CodeCard"; // Import CodeCard component
 
 SyntaxHighlighter.registerLanguage("python", python);
 SyntaxHighlighter.registerLanguage("cpp", cpp);
-
-// Mock data for code snippets
-const codeData = [
-  // ... your existing codeData
-  // Add more code entries if needed
-];
-
-// Mock data for related codes
-const relatedCodes = [
-  {
-    id: 5,
-    title: "Pathfinding Algorithms",
-    tags: ["Python", "C++"],
-    description:
-      "Implementing A* and Dijkstra's algorithms for efficient pathfinding in games.",
-    link: "/code/5",
-    image: "/code/pathfinding.jpg", // Ensure this image exists in your public folder
-  },
-  {
-    id: 6,
-    title: "AI Behavior Trees",
-    tags: ["Python", "C++"],
-    description:
-      "Designing AI behavior trees to create complex and realistic NPC behaviors.",
-    link: "/code/6",
-    image: "/code/ai_behavior.jpg",
-  },
-  // Add more related code entries as needed
-];
 
 // Keyframes for animations
 const fadeIn = keyframes`
@@ -62,90 +35,6 @@ const Container = styled.div`
   animation: ${fadeIn} 0.5s ease-out;
 `;
 
-const Navbar = styled.nav`
-  width: 100%;
-  background-color: #2d333b;
-  padding: 15px 30px;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  margin-bottom: 30px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-`;
-
-const NavLinks = styled.div`
-  display: flex;
-  gap: 20px;
-  align-items: center;
-`;
-
-// Dropdown Components
-const Dropdown = styled.div`
-  position: relative;
-`;
-
-const NavButton = styled.button`
-  background: none;
-  border: none;
-  color: #c9d1d9;
-  font-size: 16px;
-  cursor: pointer;
-  padding: 8px 12px;
-  border-radius: 4px;
-  transition: background 0.3s ease;
-
-  &:hover,
-  &:focus {
-    background-color: rgba(255, 255, 255, 0.1);
-    outline: none;
-  }
-`;
-
-const DropdownMenu = styled.div`
-  position: absolute;
-  top: 50px;
-  left: 0;
-  background-color: #24292e;
-  border-radius: 6px;
-  min-width: 160px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  z-index: 100;
-  animation: ${fadeIn} 0.3s ease-out;
-`;
-
-const DropdownItem = styled(Link)`
-  display: block;
-  padding: 10px 15px;
-  color: #c9d1d9;
-  text-decoration: none;
-  transition: background 0.2s ease;
-
-  &:hover {
-    background-color: #3a424a;
-  }
-`;
-
-// Simple NavLink
-const NavLinkStyled = styled(Link)`
-  color: #c9d1d9;
-  text-decoration: none;
-  font-size: 16px;
-  padding: 8px 12px;
-  border-radius: 4px;
-  transition: background 0.3s ease;
-
-  &:hover,
-  &:focus {
-    background-color: rgba(255, 255, 255, 0.1);
-    outline: none;
-  }
-`;
-
-// Code Detail Section
 const CodeDetailContainer = styled.div`
   background-color: #fff;
   border-radius: 12px;
@@ -175,6 +64,7 @@ const Buttons = styled.div`
   gap: 10px;
 `;
 
+// Download Button
 const DownloadButton = styled.button`
   padding: 10px 20px;
   background-color: #28a745;
@@ -192,6 +82,7 @@ const DownloadButton = styled.button`
   }
 `;
 
+// Back Button
 const BackButton = styled(Link)`
   padding: 10px 20px;
   background-color: #6c757d;
@@ -208,6 +99,7 @@ const BackButton = styled(Link)`
   }
 `;
 
+// Tags
 const Tags = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -224,6 +116,7 @@ const Tag = styled.span`
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 `;
 
+// Description
 const Description = styled.p`
   font-size: 16px;
   color: #586069;
@@ -231,6 +124,7 @@ const Description = styled.p`
   margin-bottom: 20px;
 `;
 
+// Code Block
 const CodeBlock = styled.div`
   background-color: #f6f8fa;
   padding: 20px;
@@ -241,7 +135,7 @@ const CodeBlock = styled.div`
   box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
 `;
 
-// Tabs for Code Snippets
+// Language Tabs
 const LanguageTabs = styled.div`
   display: flex;
   gap: 10px;
@@ -274,7 +168,7 @@ const Notification = styled.div`
   color: #fff;
   padding: 12px 20px;
   border-radius: 6px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
   animation: ${fadeIn} 0.3s ease-out, fadeOut 0.3s ease-out 2.5s forwards;
   opacity: 0;
 
@@ -307,6 +201,7 @@ const CardsGrid = styled.div`
   gap: 20px;
 `;
 
+// CodeDetailPage Component
 const CodeDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -316,7 +211,13 @@ const CodeDetailPage = () => {
   const [notification, setNotification] = useState("");
 
   useEffect(() => {
-    const foundCode = codeData.find((item) => item.id === parseInt(id));
+    const numericId = Number(id);
+    if (isNaN(numericId)) {
+      alert("ID code không hợp lệ.");
+      navigate("/library-code");
+      return;
+    }
+    const foundCode = codeData.find((item) => item.id === numericId);
     if (foundCode) {
       setCode(foundCode);
       const languages = Object.keys(foundCode.codeSnippets);
@@ -324,67 +225,31 @@ const CodeDetailPage = () => {
         setActiveLanguage(languages[0]);
       }
     } else {
+      alert("Không tìm thấy code. Đang chuyển hướng đến Thư viện.");
       navigate("/library-code");
     }
   }, [id, navigate]);
 
   const handleDownload = () => {
-    // Implement actual download functionality here
-    setNotification("Code download initiated!");
-    setTimeout(() => setNotification(""), 3000);
+    // Implement download functionality here
+    // Ví dụ: Tạo file Blob và tải về
+    if (code) {
+      const element = document.createElement("a");
+      const file = new Blob([code.codeSnippets[activeLanguage]], {
+        type: "text/plain",
+      });
+      element.href = URL.createObjectURL(file);
+      element.download = `${code.title}.${activeLanguage === "Python" ? "py" : "cpp"}`;
+      document.body.appendChild(element); // Required for this to work in FireFox
+      element.click();
+      alert("Code đã được tải xuống!");
+      // Sau khi download, loại bỏ phần tử a
+      document.body.removeChild(element);
+    }
   };
 
   return (
     <Container>
-      {/* Top Navigation Bar */}
-      <Navbar>
-        <NavLinks>
-          {/* Market Dropdown */}
-          <Dropdown>
-            <NavButton
-              onClick={() => {
-                // Toggle Dropdown Logic (if needed)
-              }}
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              Market
-            </NavButton>
-            {/* Add DropdownMenu if needed */}
-          </Dropdown>
-
-          {/* Community Link */}
-          <NavLinkStyled to="/community">Community</NavLinkStyled>
-
-          {/* Library Dropdown */}
-          <Dropdown>
-            <NavButton
-              onClick={() => {
-                // Toggle Dropdown Logic (if needed)
-              }}
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              Library
-            </NavButton>
-            {/* Add DropdownMenu if needed */}
-          </Dropdown>
-
-          {/* Profile Dropdown */}
-          <Dropdown>
-            <NavButton
-              onClick={() => {
-                // Toggle Dropdown Logic (if needed)
-              }}
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              Profile
-            </NavButton>
-            {/* Add DropdownMenu if needed */}
-          </Dropdown>
-        </NavLinks>
-      </Navbar>
 
       {/* Code Detail Section */}
       {code && (
@@ -437,18 +302,27 @@ const CodeDetailPage = () => {
           <RelatedCodesSection>
             <RelatedCodesTitle>Related Code Snippets</RelatedCodesTitle>
             <CardsGrid>
-              {relatedCodes.map((relatedCode) => (
-                <Card
-                  key={relatedCode.id}
-                  image={relatedCode.image}
-                  title={relatedCode.title}
-                  description={relatedCode.description}
-                  tags={relatedCode.tags}
-                  buttonText="View Code"
-                  buttonLink={relatedCode.link}
-                  maxWidth="300px"
-                />
-              ))}
+              {codeData
+                .filter(
+                  (relatedCode) =>
+                    relatedCode.id !== code.id &&
+                    relatedCode.tags.some(tag => code.tags.includes(tag))
+                )
+                .map((relatedCode) => (
+                  <CodeCard
+                    key={relatedCode.id}
+                    image={relatedCode.image}
+                    title={relatedCode.title}
+                    description={relatedCode.description}
+                    tags={relatedCode.tags}
+                    buttonText="View Code"
+                    buttonLink={`/library-code/${relatedCode.id}`} // Chuyển hướng đến trang chi tiết code liên quan
+                    isAdded={false} // Hoặc tùy thuộc vào logic bạn muốn
+                    onAddToLibrary={() => {}} // Nếu cần, hãy thêm chức năng tương ứng
+                    maxWidth="300px"
+                    height="auto"
+                  />
+                ))}
             </CardsGrid>
           </RelatedCodesSection>
         </CodeDetailContainer>

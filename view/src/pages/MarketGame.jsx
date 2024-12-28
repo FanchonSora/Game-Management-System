@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 import gameData from '../data/gameData';
-import Card from '../components/Card';
+import Card from '../components/GameCard';
 
 // Keyframes
 const fadeIn = keyframes`
