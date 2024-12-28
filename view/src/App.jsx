@@ -15,6 +15,7 @@ import SignUpPage from "./pages/SignUpPage";
 import CodeDetailPage from "./pages/CodeDetailPage";
 import SupportBot from "./pages/SupportBotPage";
 import ActivityPage from "./pages/ActivityPage";
+import CodeDetailMarket from "./pages/CodeDetailMarket";
 
 import UserProgressPage from "./pages/UserProgressPage";
 function App() {
@@ -34,10 +35,11 @@ function App() {
         <Route path="/friends" element={<FriendsPage />} />
         <Route path="/badges" element={<BadgesPage />} />
         <Route path="/market-game/:id" element={<GameDetailPage />} />
-        <Route path="/market-code/:id" element={<CodeDetailPage />} />
+        <Route path="/market-code/:id" element={<CodeDetailMarket />} />
         <Route path="/library-game/:id" element={<UserProgressPage />} />
         <Route path="/support-bot" element={<SupportBot />} />
         <Route path="/activity" element={<ActivityPage />} />
+        <Route path="*" element={<HomePage />} />
       </Routes>
     </BrowserRouter>
   );

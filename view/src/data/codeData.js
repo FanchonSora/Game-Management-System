@@ -18,7 +18,8 @@ const codeData = [
       numbers = generate_random_numbers(10)
       print("Random Numbers:", numbers)`,
       },
-      image: "/code/random_number.png", // Đảm bảo hình ảnh tồn tại trong thư mục public/code/
+      image: "/code/random_number.png",
+      price: "Free", // Thêm trường price
     },
     {
       id: 2,
@@ -54,6 +55,7 @@ const codeData = [
   }`,
       },
       image: "/code/collision_detection.png",
+      price: "Free",
     },
     {
       id: 3,
@@ -96,6 +98,7 @@ const codeData = [
           ai.update()`,
       },
       image: "/code/ai_behavior.png",
+      price: "Free",
     },
     {
       id: 4,
@@ -165,6 +168,7 @@ const codeData = [
       print("Path:", path)`,
       },
       image: "/code/pathfinding.png",
+      price: "Free",
     },
     {
       id: 5,
@@ -204,6 +208,7 @@ const codeData = [
       print("Inventory:", inv.get_inventory())`,
       },
       image: "/code/inventory_management.png",
+      price: "Free",
     },
     // Thêm các đoạn mã khác nếu cần
   ];
