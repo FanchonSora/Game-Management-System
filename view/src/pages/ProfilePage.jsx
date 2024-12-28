@@ -41,7 +41,7 @@ const ProfilePage = () => {
             <p style={styles.profileUsername}>@khanhngan</p>
             <p style={styles.profileInfo}>No information given.</p>
           </div>
-          <button onClick={() => navigate("/sign-up")} style={styles.editButton}>Edit Profile</button>
+          <button onClick={() => navigate("/edit-profile")} style={styles.editButton}>Edit Profile</button>
         </div>
       </header>
 

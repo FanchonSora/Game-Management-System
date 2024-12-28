@@ -88,6 +88,8 @@ const LogInPage = () => {
   );
 };
 
+export default LogInPage;
+
 // Styled-components for consistency with SignUpPage
 const Body = styled.div`
   width: 100%;
@@ -194,5 +196,3 @@ const Paragraph = styled.p`
     }
   }
 `;
-
-export default LogInPage;

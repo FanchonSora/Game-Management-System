@@ -105,6 +105,8 @@ const SignUpPage = () => {
   );
 };
 
+export default SignUpPage;
+
 // Styled Components
 const Body = styled.div`
   color: #fff;
@@ -205,5 +207,3 @@ const Paragraph = styled.p`
     }
   }
 `;
-
-export default SignUpPage;

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { User, Lock, Camera } from "lucide-react"; // Assuming you have lucide-react installed
+import { Camera } from "lucide-react"; // Assuming you have lucide-react installed
 
 const EditProfile = () => {
   const navigate = useNavigate();
@@ -14,6 +14,7 @@ const EditProfile = () => {
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
+    avatar: "",
   });
 
   const handleSaveChanges = (e) => {
@@ -96,7 +97,8 @@ const EditProfile = () => {
             <AvatarSection>
               <SectionTitle>Avatar</SectionTitle>
               <AvatarPreview>
-                <img src={formData.avatar} alt="Avatar" />
+                {/* Display a fallback image if no avatar is set */}
+                <img src={formData.avatar || "https://via.placeholder.com/150"} alt="Avatar" />
               </AvatarPreview>
               <UploadButton>
                 <label htmlFor="avatar-upload">
@@ -156,12 +158,14 @@ const EditProfile = () => {
   );
 };
 
+export default EditProfile;
+
 // Styled-components for consistency with EditProfile
 const Body = styled.div`
   width: 100%;
   height: 100vh;
   background: linear-gradient(to bottom, #1b2838, #0f171e);
-  color: #c7d5e0;
+  color: #ffffff;  /* Changed to white for better visibility */
   font-family: "Arial", sans-serif;
 `;
 
@@ -179,7 +183,7 @@ const Sidebar = styled.div`
 `;
 
 const SidebarItem = styled.div`
-  color: ${(props) => (props.active ? "#66c0f4" : "#c7d5e0")};
+  color: ${(props) => (props.active ? "#66c0f4" : "#ffffff")};  /* White color for inactive */
   font-size: 18px;
   margin-bottom: 20px;
   cursor: pointer;
@@ -212,7 +216,7 @@ const SectionTitle = styled.h2`
 
 const Label = styled.label`
   font-size: 14px;
-  color: #c7d5e0;
+  color: #ffffff;
   margin-bottom: 8px;
   display: block;
 `;
@@ -227,7 +231,7 @@ const Input = styled.input`
   border: 1px solid #66c0f4;
   border-radius: 5px;
   background-color: #1b2838;
-  color: #c7d5e0;
+  color: #ffffff;
   font-size: 14px;
   box-sizing: border-box;
 
@@ -283,5 +287,3 @@ const Button = styled.button`
     background-color: #357ab8;
   }
 `;
-
-export default EditProfile;
