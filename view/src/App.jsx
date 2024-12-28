@@ -16,6 +16,7 @@ import MarketCodePage from "./pages/MarketCode";
 import SignUpPage from "./pages/SignUpPage";
 import CodeDetailPage from "./pages/CodeDetailPage";
 import SupportBot from "./pages/SupportBotPage";
+import EditProfile from "./pages/EditProfile";
 
 import axios from 'axios';
 function App() {
@@ -38,6 +39,7 @@ function App() {
         <Route path="/market-code/:id" element={<CodePage />} />
         <Route path="/library-game/:id" element={<GameModePage />} />
         <Route path="/support-bot" element={<SupportBot />} />
+        <Route path="/edit-profile" element={<EditProfile />} />
       </Routes>
     </BrowserRouter>
   );

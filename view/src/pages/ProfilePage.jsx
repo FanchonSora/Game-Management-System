@@ -1,6 +1,9 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const ProfilePage = () => {
+  const navigate = useNavigate();
+
   const recentActivity = [
     {
       id: 1,
@@ -38,7 +41,7 @@ const ProfilePage = () => {
             <p style={styles.profileUsername}>@khanhngan</p>
             <p style={styles.profileInfo}>No information given.</p>
           </div>
-          <button style={styles.editButton}>Edit Profile</button>
+          <button onClick={() => navigate("/sign-up")} style={styles.editButton}>Edit Profile</button>
         </div>
       </header>
 
