@@ -17,8 +17,10 @@ import SignUpPage from "./pages/SignUpPage";
 import CodeDetailPage from "./pages/CodeDetailPage";
 import SupportBot from "./pages/SupportBotPage";
 import EditProfile from "./pages/EditProfile";
+import ActivityPage from "./pages/ActivityPage";
+import CodeDetailMarket from "./pages/CodeDetailMarket";
 
-import axios from 'axios';
+import axios from "axios";
 function App() {
   return (
     <BrowserRouter>
@@ -40,6 +42,8 @@ function App() {
         <Route path="/library-game/:id" element={<GameModePage />} />
         <Route path="/support-bot" element={<SupportBot />} />
         <Route path="/edit-profile" element={<EditProfile />} />
+        <Route path="/activity" element={<ActivityPage />} />
+        <Route path="*" element={<HomePage />} />
       </Routes>
     </BrowserRouter>
   );

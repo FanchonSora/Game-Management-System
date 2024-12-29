@@ -1,7 +1,10 @@
-// GameLibrary.jsx
-import React, { useState, useRef, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+// src/pages/LibraryCode.jsx
+
+import React, { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
+import codeData from "../data/codeData"; // Import codeData từ file mới tạo
+import CodeCard from "../components/CodeCard"; // Import CodeCard component
+import Navbar from "../components/Navbar"; // Import Navbar component
 
 // Keyframes for Animations
 const fadeIn = keyframes`
@@ -13,17 +16,6 @@ const fadeIn = keyframes`
   }
 `;
 
-const slideDown = keyframes`
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-`;
-
 // Styled Components
 
 // Container
@@ -32,92 +24,8 @@ const Container = styled.div`
   background-color: #f6f8fa;
   color: #24292e;
   min-height: 100vh;
-  padding: 20px;
-`;
-
-// Navbar
-const Navbar = styled.nav`
-  width: 100%;
-  background-color: #2d333b;
-  padding: 15px 30px;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  margin-bottom: 30px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-`;
-
-// Nav Links
-const NavLinks = styled.div`
-  display: flex;
-  gap: 20px;
-  align-items: center;
-`;
-
-// Dropdown Components
-const Dropdown = styled.div`
-  position: relative;
-`;
-
-const NavButton = styled.button`
-  background: none;
-  border: none;
-  color: #c9d1d9;
-  font-size: 16px;
-  cursor: pointer;
-  padding: 8px 12px;
-  border-radius: 4px;
-  transition: background 0.3s ease;
-
-  &:hover,
-  &:focus {
-    background-color: rgba(255, 255, 255, 0.1);
-    outline: none;
-  }
-`;
-
-const DropdownMenu = styled.div`
-  position: absolute;
-  top: 40px;
-  left: 0;
-  background-color: #24292e;
-  border-radius: 6px;
-  min-width: 160px;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-  z-index: 100;
-  animation: ${fadeIn} 0.3s ease-out;
-`;
-
-const DropdownItem = styled.a`
-  display: block;
-  padding: 10px 15px;
-  color: #c9d1d9;
-  text-decoration: none;
-  transition: background 0.2s ease;
-
-  &:hover {
-    background-color: #3a424a;
-  }
-`;
-
-// Simple NavLink
-const NavLinkStyled = styled(Link)`
-  color: #c9d1d9;
-  text-decoration: none;
-  font-size: 16px;
-  padding: 8px 12px;
-  border-radius: 4px;
-  transition: background 0.3s ease;
-
-  &:hover,
-  &:focus {
-    background-color: rgba(255, 255, 255, 0.1);
-    outline: none;
-  }
+  padding: 80px 20px 20px 20px; /* Padding top để không che Navbar fixed */
+  animation: ${fadeIn} 0.5s ease-out;
 `;
 
 // Header Section
@@ -128,23 +36,26 @@ const Header = styled.div`
 `;
 
 const ProfilePicture = styled.img`
-  width: 80px;
-  height: 80px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
   margin-right: 20px;
+  object-fit: cover;
+  border: 3px solid #0366d6;
 `;
 
 const ProfileInfo = styled.div``;
 
 const ProfileName = styled.h2`
   margin: 0;
-  font-size: 24px;
+  font-size: 28px;
   color: #0366d6;
 `;
 
 const ProfileUsername = styled.p`
   margin: 5px 0 0 0;
   color: #586069;
+  font-size: 18px;
 `;
 
 // Tabs
@@ -152,25 +63,22 @@ const Tabs = styled.div`
   display: flex;
   gap: 15px;
   margin-bottom: 20px;
+  flex-wrap: wrap;
 `;
 
 const TabButton = styled.button`
-  padding: 8px 16px;
-  background-color: #fff;
+  padding: 10px 20px;
+  background-color: ${(props) => (props.active ? "#0366d6" : "#fff")};
+  color: ${(props) => (props.active ? "#fff" : "#0366d6")};
   border: 1px solid #d0d7de;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 14px;
-  transition: background 0.3s ease;
+  font-size: 16px;
+  transition: background 0.3s ease, color 0.3s ease;
 
   &:hover {
-    background-color: #f6f8fa;
-  }
-
-  &.active {
     background-color: #0366d6;
     color: #fff;
-    border-color: #0366d6;
   }
 `;
 
@@ -178,112 +86,25 @@ const TabButton = styled.button`
 const SearchBar = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-bottom: 20px;
-`;
-
-const SearchInput = styled.input`
-  width: 75%;
-  padding: 10px 15px;
-  border: 1px solid #d0d7de;
-  border-radius: 6px;
-  font-size: 14px;
-`;
-
-const NewButton = styled.button`
-  padding: 10px 20px;
-  background-color: #28a745;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background 0.3s ease;
-
-  &:hover {
-    background-color: #218838;
-  }
-`;
-
-// Game List
-const GameList = styled.div``;
-
-// Game Card
-const GameCard = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 20px;
-  margin-bottom: 10px;
-  background-color: #fff;
-  border-radius: 6px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-
-  &:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 4px 6px rgba(0,0,0,0.15);
-  }
-`;
-
-const GameDetails = styled.div``;
-
-const GameTitle = styled.h3`
-  margin: 0;
-  font-size: 18px;
-  color: #0366d6;
-`;
-
-const Language = styled.p`
-  margin: 5px 0 0 0;
-  color: #586069;
-  font-size: 14px;
-`;
-
-const Updated = styled.span`
-  margin-left: 10px;
-  color: #586069;
-  font-size: 12px;
-`;
-
-const Actions = styled.div`
-  display: flex;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
   gap: 10px;
 `;
 
-// Add Button
-const AddButton = styled.button`
-  padding: 6px 12px;
-  background-color: #28a745;
-  color: #fff;
-  border: none;
+const SearchInput = styled.input`
+  flex: 1;
+  min-width: 200px;
+  padding: 12px 20px;
+  border: 1px solid #d0d7de;
   border-radius: 6px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background 0.3s ease;
-
-  &:hover {
-    background-color: #218838;
-  }
-
-  &.added {
-    background-color: #6c757d;
-    cursor: not-allowed;
-  }
+  font-size: 16px;
 `;
 
-// View Link
-const ViewLink = styled(Link)`
-  padding: 6px 12px;
-  background-color: #0366d6;
-  color: #fff;
-  border-radius: 6px;
-  text-decoration: none;
-  font-size: 14px;
-  transition: background 0.3s ease;
-
-  &:hover {
-    background-color: #0356b6;
-  }
+// Code/List
+const CodeList = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 25px;
 `;
 
 // Notification (Optional)
@@ -293,7 +114,7 @@ const Notification = styled.div`
   right: 20px;
   background-color: #28a745;
   color: #fff;
-  padding: 12px 20px;
+  padding: 15px 25px;
   border-radius: 6px;
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
   animation: ${fadeIn} 0.3s ease-out, fadeOut 0.3s ease-out 2.5s forwards;
@@ -310,12 +131,10 @@ const Notification = styled.div`
   }
 `;
 
-// GameLibrary Component
-const GameLibrary = () => {
-  const navigate = useNavigate();
-
-  // State for active tab (Optional)
-  const [activeTab, setActiveTab] = useState("Overview");
+// LibraryCode Component
+const LibraryCode = () => {
+  // State for active tab
+  const [activeTab, setActiveTab] = useState("All");
 
   // State for added codes
   const [addedCodes, setAddedCodes] = useState([]);
@@ -327,62 +146,11 @@ const GameLibrary = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
 
-  // Refs for Dropdowns in Navbar
-  const marketRef = useRef(null);
-  const libraryRef = useRef(null);
-  const profileRef = useRef(null);
-
-  // Games Data
-  const games = [
-    { id: 1, name: "Random Number Generation", language: "Python", updated: "6 hours ago" },
-    { id: 2, name: "Collision Detection", language: "C++", updated: "yesterday" },
-    { id: 3, name: "Vector Mathematics (Movement)", language: "C++", updated: "Sep 9" },
-    { id: 4, name: "Game Timer (Frame Update)", language: "Python", updated: "Sep 9" },
-    // Add more games as needed
-  ];
-
   // Load added codes from localStorage on mount
   useEffect(() => {
     const storedCodes = JSON.parse(localStorage.getItem("libraryCodes")) || [];
     setAddedCodes(storedCodes);
   }, []);
-
-  // Click outside handler to close dropdowns
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (marketRef.current && !marketRef.current.contains(event.target)) {
-        setMarketDropdownOpen(false);
-      }
-      if (libraryRef.current && !libraryRef.current.contains(event.target)) {
-        setLibraryDropdownOpen(false);
-      }
-      if (profileRef.current && !profileRef.current.contains(event.target)) {
-        setProfileDropdownOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
-  // State for Dropdowns
-  const [isMarketDropdownOpen, setMarketDropdownOpen] = useState(false);
-  const [isLibraryDropdownOpen, setLibraryDropdownOpen] = useState(false);
-  const [isProfileDropdownOpen, setProfileDropdownOpen] = useState(false);
-
-  // Function to handle adding code to library
-  const handleAddCode = (game) => {
-    if (!addedCodes.find((code) => code.id === game.id)) {
-      const updatedCodes = [...addedCodes, game];
-      setAddedCodes(updatedCodes);
-      localStorage.setItem("libraryCodes", JSON.stringify(updatedCodes));
-      setNotification(`${game.name} has been added to your library!`);
-      // Hide notification after 3 seconds
-      setTimeout(() => setNotification(""), 3000);
-    }
-  };
 
   // Debounce the search query input
   useEffect(() => {
@@ -396,82 +164,38 @@ const GameLibrary = () => {
     };
   }, [searchQuery]);
 
-  // Filtering games based on debounced search query
-  const filteredGames = games.filter((game) => {
+  // Filtering codes based on active tab and debounced search query
+  const filteredCodes = codeData.filter((code) => {
+    const matchesCategory =
+      activeTab === "All" || code.category === activeTab;
     const query = debouncedSearchQuery.toLowerCase();
-    return (
-      game.name.toLowerCase().includes(query) ||
-      game.language.toLowerCase().includes(query)
-    );
+    const matchesSearch =
+      code.title.toLowerCase().includes(query) ||
+      code.tags.some((tag) => tag.toLowerCase().includes(query));
+    return matchesCategory && matchesSearch;
   });
+
+  // Function to handle adding code to library
+  const handleAddCode = (code) => {
+    if (!addedCodes.find((c) => c.id === code.id)) {
+      const updatedCodes = [...addedCodes, code];
+      setAddedCodes(updatedCodes);
+      localStorage.setItem("libraryCodes", JSON.stringify(updatedCodes));
+      setNotification(`${code.title} đã được thêm vào thư viện của bạn!`);
+      // Hide notification after 3 seconds
+      setTimeout(() => setNotification(""), 3000);
+    }
+  };
 
   return (
     <Container>
       {/* Top Navigation Bar */}
-      <Navbar>
-        <NavLinks>
-          {/* Market Dropdown */}
-          <Dropdown ref={marketRef}>
-            <NavButton
-              onClick={() => setMarketDropdownOpen(!isMarketDropdownOpen)}
-              aria-haspopup="true"
-              aria-expanded={isMarketDropdownOpen}
-            >
-              Market
-            </NavButton>
-            {isMarketDropdownOpen && (
-              <DropdownMenu>
-                <DropdownItem href="/market-game">Market Game</DropdownItem>
-                <DropdownItem href="/market-code">Market Code</DropdownItem>
-              </DropdownMenu>
-            )}
-          </Dropdown>
-
-          {/* Community Link */}
-          <NavLinkStyled to="/community">Community</NavLinkStyled>
-
-          {/* Library Dropdown */}
-          <Dropdown ref={libraryRef}>
-            <NavButton
-              onClick={() => setLibraryDropdownOpen(!isLibraryDropdownOpen)}
-              aria-haspopup="true"
-              aria-expanded={isLibraryDropdownOpen}
-            >
-              Library
-            </NavButton>
-            {isLibraryDropdownOpen && (
-              <DropdownMenu>
-                <DropdownItem href="/library-code">Library Code</DropdownItem>
-                <DropdownItem href="/library-game">Library Game</DropdownItem>
-              </DropdownMenu>
-            )}
-          </Dropdown>
-
-          {/* Profile Dropdown */}
-          <Dropdown ref={profileRef}>
-            <NavButton
-              onClick={() => setProfileDropdownOpen(!isProfileDropdownOpen)}
-              aria-haspopup="true"
-              aria-expanded={isProfileDropdownOpen}
-            >
-              Personal Profile
-            </NavButton>
-            {isProfileDropdownOpen && (
-              <DropdownMenu>
-                <DropdownItem href="/activity">Activity</DropdownItem>
-                <DropdownItem href="/profile">Profile</DropdownItem>
-                <DropdownItem href="/friends">Friends</DropdownItem>
-                <DropdownItem href="/badges">Badges</DropdownItem>
-              </DropdownMenu>
-            )}
-          </Dropdown>
-        </NavLinks>
-      </Navbar>
+      <Navbar />
 
       {/* Header Section */}
       <Header>
         <ProfilePicture
-          src="https://via.placeholder.com/100"
+          src="avatar.jpg" 
           alt="Profile"
         />
         <ProfileInfo>
@@ -482,10 +206,10 @@ const GameLibrary = () => {
 
       {/* Tabs */}
       <Tabs>
-        {["Overview", "Projects", "Packages", "Function"].map((tab) => (
+        {["All", "Function", "Project", "Package"].map((tab) => (
           <TabButton
             key={tab}
-            className={activeTab === tab ? "active" : ""}
+            active={activeTab === tab}
             onClick={() => setActiveTab(tab)}
           >
             {tab}
@@ -502,37 +226,30 @@ const GameLibrary = () => {
           onChange={(e) => setSearchQuery(e.target.value)}
           aria-label="Search Repositories"
         />
-        <NewButton>New</NewButton>
       </SearchBar>
 
-      {/* Game/List */}
-      <GameList>
-        {filteredGames.length > 0 ? (
-          filteredGames.map((game) => (
-            <GameCard key={game.id}>
-              <GameDetails>
-                <GameTitle>{game.name}</GameTitle>
-                <Language>
-                  {game.language} <Updated>Updated {game.updated}</Updated>
-                </Language>
-              </GameDetails>
-              <Actions>
-                <AddButton
-                  onClick={() => handleAddCode(game)}
-                  disabled={addedCodes.some((code) => code.id === game.id)}
-                  className={addedCodes.some((code) => code.id === game.id) ? "added" : ""}
-                  aria-label={addedCodes.some((code) => code.id === game.id) ? "Code Added" : "Add Code"}
-                >
-                  {addedCodes.some((code) => code.id === game.id) ? "Added" : "Add Code"}
-                </AddButton>
-                <ViewLink to={`/repository/${game.id}`}>View</ViewLink>
-              </Actions>
-            </GameCard>
+      {/* Code/List */}
+      <CodeList>
+        {filteredCodes.length > 0 ? (
+          filteredCodes.map((code) => (
+            <CodeCard
+              key={code.id}
+              image={code.image}
+              title={code.title}
+              description={code.description}
+              tags={code.tags}
+              buttonText="View"
+              buttonLink={`/library-code/${code.id}`} // Chuyển hướng đến trang chi tiết code
+              isAdded={addedCodes.some((c) => c.id === code.id)}
+              onAddToLibrary={() => handleAddCode(code)}
+              maxWidth="300px"
+              height="auto"
+            />
           ))
         ) : (
           <p>No repositories found matching your search.</p>
         )}
-      </GameList>
+      </CodeList>
 
       {/* Notification */}
       {notification && <Notification>{notification}</Notification>}
@@ -540,5 +257,4 @@ const GameLibrary = () => {
   );
 };
 
-export default GameLibrary;
-
+export default LibraryCode;

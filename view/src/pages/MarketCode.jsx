@@ -1,7 +1,10 @@
-// MarketCodePage.jsx
+// src/pages/MarketCodePage.jsx
+
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
+import marketCodes from "../data/marketCodes"; // Import dữ liệu từ marketCodes.js
+import Navbar from "../components/Navbar"; // Import Navbar component
 
 // Keyframes for Animations
 const fadeIn = keyframes`
@@ -36,8 +39,8 @@ const Container = styled.div`
   flex-direction: column;
 `;
 
-// Navbar Styled Components
-const Navbar = styled.nav`
+// StyledNavbar để tránh xung đột với component đã import
+const StyledNavbar = styled.nav`
   width: 100%;
   background-color: rgba(42, 71, 94, 0.8);
   padding: 1rem 2rem;
@@ -308,52 +311,41 @@ const Grid = styled.div`
   animation: ${fadeIn} 1s ease-out;
 `;
 
-// Body Layout
-const Body = styled.div`
-  display: flex;
-  flex: 1;
-`;
-
-// Sidebar
-const Sidebar = styled.aside`
-  width: 20%;
-  background: rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(8px);
-  padding: 20px;
-  border-right: 1px solid #0f2b44;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
-
-  @media (max-width: 768px) {
-    display: none;
+// Function to chunk array into smaller arrays
+const chunkArray = (arr, size) => {
+  const result = [];
+  for (let i = 0; i < arr.length; i += size) {
+    result.push(arr.slice(i, i + size));
   }
-`;
+  return result;
+};
 
-const SidebarTitle = styled.h2`
-  font-size: 20px;
-  margin-bottom: 15px;
-  color: #ffffff;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
-`;
+// Function to render code cards for categories
+const renderCodeCards = (codes, handleAdd, handleView) => {
+  return codes.map((code) => (
+    <FeaturedCard key={code.id}>
+      {/* Hiển thị DiscountBadge nếu không miễn phí */}
+      {code.price !== "Free" && (
+        <DiscountBadge>{code.discount || ""}</DiscountBadge>
+      )}
+      <CodeImage src={code.image} alt={code.title} />
+      <CodeTitle>{code.title}</CodeTitle>
+      <CodePrice>{code.price}</CodePrice>
+      <div>
+        {code.tags.map((tag, index) => (
+          <Tag key={index}>{tag}</Tag>
+        ))}
+      </div>
+      <ButtonGroup>
+        {code.price === "Free" && (
+          <FreeButton onClick={() => handleAdd(code)}>Thêm</FreeButton>
+        )}
+        <ViewButton onClick={() => handleView(code)}>Xem</ViewButton>
+      </ButtonGroup>
+    </FeaturedCard>
+  ));
+};
 
-const SidebarDescription = styled.p`
-  font-size: 14px;
-  color: #c7d5e0;
-`;
-
-// Main Content
-const MainContent = styled.main`
-  width: 80%;
-  padding: 20px;
-
-  @media (max-width: 768px) {
-    width: 100%;
-  }
-`;
-
-// Tag Styled Component (Repeated for clarity)
-const TagStyled = Tag;
-
-// Navbar Component
 const MarketCodePage = () => {
   const navigate = useNavigate();
 
@@ -370,188 +362,8 @@ const MarketCodePage = () => {
   const libraryRef = useRef(null);
   const profileRef = useRef(null);
 
-  // Featured Codes Data
-  const featuredCodes = [
-    { 
-      id: 1, 
-      title: 'React Router v6', 
-      price: 'Free', 
-      image: '/code/react-router.jpg', 
-      tags: ['JavaScript', 'React'] 
-    },
-    { 
-      id: 2, 
-      title: 'Styled Components', 
-      price: 'Free', 
-      image: '/code/styled-components.jpg', 
-      tags: ['JavaScript', 'CSS'] 
-    },
-    { 
-      id: 3, 
-      title: 'Redux Toolkit', 
-      price: 'Free', 
-      image: '/code/redux-toolkit.jpg', 
-      tags: ['JavaScript', 'React'] 
-    },
-    { 
-      id: 4, 
-      title: 'Next.js 13', 
-      price: 'Free', 
-      image: '/code/nextjs.jpg', 
-      tags: ['JavaScript', 'React', 'TypeScript'] 
-    },
-    { 
-      id: 5, 
-      title: 'TypeScript Basics', 
-      price: 'Free', 
-      image: '/code/typescript.jpg', 
-      tags: ['TypeScript'] 
-    },
-    { 
-      id: 6, 
-      title: 'GraphQL Essentials', 
-      price: 'Free', 
-      image: '/code/graphql.jpg', 
-      tags: ['JavaScript', 'GraphQL'] 
-    },
-  ];
-
-  // Categorized Codes Data
-  const libraries = [
-    { 
-      id: 7, 
-      title: 'Lodash', 
-      price: 'Free', 
-      discount: '-100%', 
-      image: '/code/lodash.jpg', 
-      tags: ['JavaScript'] 
-    },
-    { 
-      id: 8, 
-      title: 'Axios', 
-      price: 'Free', 
-      discount: '-100%', 
-      image: '/code/axios.jpg', 
-      tags: ['JavaScript'] 
-    },
-    { 
-      id: 9, 
-      title: 'Moment.js', 
-      price: 'Free', 
-      discount: '-100%', 
-      image: '/code/moment.jpg', 
-      tags: ['JavaScript'] 
-    },
-    { 
-      id: 10, 
-      title: 'D3.js', 
-      price: 'Free', 
-      discount: '-100%', 
-      image: '/code/d3.jpg', 
-      tags: ['JavaScript'] 
-    },
-  ];
-
-  const snippets = [
-    { 
-      id: 11, 
-      title: 'Debounce Function', 
-      price: 'Free', 
-      discount: '-100%', 
-      image: '/code/debounce.jpg', 
-      tags: ['JavaScript'] 
-    },
-    { 
-      id: 12, 
-      title: 'Throttling Technique', 
-      price: 'Free', 
-      discount: '-100%', 
-      image: '/code/throttle.jpg', 
-      tags: ['JavaScript'] 
-    },
-    { 
-      id: 13, 
-      title: 'Responsive Grid', 
-      price: 'Free', 
-      discount: '-100%', 
-      image: '/code/grid.jpg', 
-      tags: ['CSS', 'HTML'] 
-    },
-    { 
-      id: 14, 
-      title: 'API Request Handler', 
-      price: 'Free', 
-      discount: '-100%', 
-      image: '/code/api-handler.jpg', 
-      tags: ['JavaScript'] 
-    },
-  ];
-
-  const tools = [
-    { 
-      id: 15, 
-      title: 'Webpack Configuration', 
-      price: 'Free', 
-      discount: '-100%', 
-      image: '/code/webpack.jpg', 
-      tags: ['JavaScript', 'Webpack'] 
-    },
-    { 
-      id: 16, 
-      title: 'Babel Setup', 
-      price: 'Free', 
-      discount: '-100%', 
-      image: '/code/babel.jpg', 
-      tags: ['JavaScript', 'Babel'] 
-    },
-    { 
-      id: 17, 
-      title: 'ESLint Rules', 
-      price: 'Free', 
-      discount: '-100%', 
-      image: '/code/eslint.jpg', 
-      tags: ['JavaScript', 'ESLint'] 
-    },
-    { 
-      id: 18, 
-      title: 'Prettier Formatting', 
-      price: 'Free', 
-      discount: '-100%', 
-      image: '/code/prettier.jpg', 
-      tags: ['JavaScript', 'Prettier'] 
-    },
-  ];
-
-  // Function to handle adding free codes to library
-  const handleAdd = (code) => {
-    if (code.price === 'Free') {
-      const storedCodes = JSON.parse(localStorage.getItem('libraryCodes')) || [];
-      // Add the new code if not already present
-      if (!storedCodes.find((c) => c.id === code.id)) {
-        storedCodes.push({ id: code.id, name: code.title });
-        localStorage.setItem('libraryCodes', JSON.stringify(storedCodes));
-        alert(`${code.title} has been added to your Library!`);
-      } else {
-        alert(`${code.title} is already in your Library.`);
-      }
-    } else {
-      alert(`Cannot add ${code.title} to your Library. This code is not free.`);
-    }
-  };
-
-  // Function to handle viewing code details
-  const handleView = (code) => {
-    navigate(`/market-code/${code.id}`);
-  };
-
-  // Function to chunk array into smaller arrays
-  const chunkArray = (arr, size) => {
-    const result = [];
-    for (let i = 0; i < arr.length; i += size) {
-      result.push(arr.slice(i, i + size));
-    }
-    return result;
-  };
+  // Destructure data từ marketCodes
+  const { featuredCodes, libraries, snippets, tools } = marketCodes;
 
   // Prepare slides for carousel (3 codes per slide)
   const slides = chunkArray(featuredCodes, 3);
@@ -566,30 +378,46 @@ const MarketCodePage = () => {
     return () => clearInterval(interval);
   }, [totalSlides]);
 
-  // Function to render code cards for categories
-  const renderCodeCards = (codes) => {
-    return codes.map((code) => (
-      <FeaturedCard key={code.id}>
-        {code.discount && <DiscountBadge>{code.discount}</DiscountBadge>}
-        <CodeImage src={code.image} alt={code.title} />
-        <CodeTitle>{code.title}</CodeTitle>
-        
-        {/* Tags Section */}
-        <div>
-          {code.tags && code.tags.map((tag, index) => (
-            <Tag key={index}>{tag}</Tag>
-          ))}
-        </div>
-        
-        <CodePrice>{code.price === 'Free' ? 'Free' : code.price}</CodePrice>
-        <ButtonGroup>
-          {code.price === 'Free' && (
-            <FreeButton onClick={() => handleAdd(code)}>ADD</FreeButton>
-          )}
-          <ViewButton onClick={() => handleView(code)}>VIEW</ViewButton>
-        </ButtonGroup>
-      </FeaturedCard>
-    ));
+  // Click outside handler to close dropdowns
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (marketRef.current && !marketRef.current.contains(event.target)) {
+        setMarketDropdownOpen(false);
+      }
+      if (libraryRef.current && !libraryRef.current.contains(event.target)) {
+        setLibraryDropdownOpen(false);
+      }
+      if (profileRef.current && !profileRef.current.contains(event.target)) {
+        setProfileDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  // Function to handle adding free codes to library
+  const handleAdd = (code) => {
+    if (code.price === "Free") {
+      const storedCodes = JSON.parse(localStorage.getItem("libraryCodes")) || [];
+      // Add the new code if not already present
+      if (!storedCodes.find((c) => c.id === code.id)) {
+        storedCodes.push({ id: code.id, name: code.title });
+        localStorage.setItem("libraryCodes", JSON.stringify(storedCodes));
+        alert(`${code.title} đã được thêm vào thư viện của bạn!`);
+      } else {
+        alert(`${code.title} đã có trong thư viện của bạn.`);
+      }
+    } else {
+      alert(`Không thể thêm ${code.title} vào thư viện. Đoạn mã này không miễn phí.`);
+    }
+  };
+
+  // Function to handle viewing code details
+  const handleView = (code) => {
+    navigate(`/market-code/${code.id}`);
   };
 
   // Function to render featured codes carousel
@@ -620,9 +448,9 @@ const MarketCodePage = () => {
                   <CodePrice>{code.price === 'Free' ? 'Free' : code.price}</CodePrice>
                   <ButtonGroup>
                     {code.price === 'Free' && (
-                      <FreeButton onClick={() => handleAdd(code)}>ADD</FreeButton>
+                      <FreeButton onClick={() => handleAdd(code)}>Thêm</FreeButton>
                     )}
-                    <ViewButton onClick={() => handleView(code)}>VIEW</ViewButton>
+                    <ViewButton onClick={() => handleView(code)}>Xem</ViewButton>
                   </ButtonGroup>
                 </FeaturedCard>
               ))}
@@ -633,30 +461,10 @@ const MarketCodePage = () => {
     );
   };
 
-  // Click outside handler to close dropdowns
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (marketRef.current && !marketRef.current.contains(event.target)) {
-        setMarketDropdownOpen(false);
-      }
-      if (libraryRef.current && !libraryRef.current.contains(event.target)) {
-        setLibraryDropdownOpen(false);
-      }
-      if (profileRef.current && !profileRef.current.contains(event.target)) {
-        setProfileDropdownOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
   return (
     <Container>
       {/* Top Navigation Bar */}
-      <Navbar>
+      <Navbar> {/* Sử dụng component đã import */}
         <NavLinks>
           {/* Market Dropdown */}
           <Dropdown ref={marketRef}>
@@ -729,7 +537,7 @@ const MarketCodePage = () => {
         <SectionTitle>Libraries</SectionTitle>
         <Subtitle>Essential libraries to boost your projects</Subtitle>
         <Grid>
-          {renderCodeCards(libraries)}
+          {renderCodeCards(libraries, handleAdd, handleView)}
         </Grid>
       </CategorySection>
 
@@ -738,7 +546,7 @@ const MarketCodePage = () => {
         <SectionTitle>Snippets</SectionTitle>
         <Subtitle>Reusable code snippets for common tasks</Subtitle>
         <Grid>
-          {renderCodeCards(snippets)}
+          {renderCodeCards(snippets, handleAdd, handleView)}
         </Grid>
       </CategorySection>
 
@@ -747,7 +555,7 @@ const MarketCodePage = () => {
         <SectionTitle>Tools</SectionTitle>
         <Subtitle>Tools to enhance your development workflow</Subtitle>
         <Grid>
-          {renderCodeCards(tools)}
+          {renderCodeCards(tools, handleAdd, handleView)}
         </Grid>
       </CategorySection>
     </Container>

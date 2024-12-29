@@ -178,8 +178,6 @@ const Navbar = () => {
           )}
         </Dropdown>
 
-        {/* Support Bot Link */}
-        <StyledNavLink to="/support-bot">Support Bot</StyledNavLink>
       </NavLinks>
     </NavbarContainer>
   );
