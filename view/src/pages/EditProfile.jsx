@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Camera } from "lucide-react"; // Assuming you have lucide-react installed
@@ -8,9 +8,9 @@ const EditProfile = () => {
   const [activeSection, setActiveSection] = useState("general");
   const [errors, setErrors] = useState({ username: false, email: false, general: "" });
   const [formData, setFormData] = useState({
-    username: "@khanhngan",
-    name: "khanhngan1491",
-    email: "fanchon2506@gmail.com",
+    username: "",
+    name: "",
+    email: "",
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
@@ -18,6 +18,42 @@ const EditProfile = () => {
     backgroundImage: "profilebanner.jpg",
     country: "VN",
   });
+
+  const username = localStorage.getItem("username");
+
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      try {
+        const response = await fetch(`http://localhost:8000/api/profile/${username}`);
+        if (response.ok) {
+          const data = await response.json();
+          setFormData({
+            username: data.username,
+            name: data.name,
+            email: data.email,
+            country: data.country,
+            currentPassword: "",
+            newPassword: "",
+            confirmPassword: "",
+            avatar: data.profile_picture,
+            backgroundImage: data.profile_banner,
+          });
+        } else {
+          alert("Failed to fetch profile data.");
+        }
+      } catch (error) {
+        console.error("Error fetching profile data:", error);
+        alert("An error occurred while fetching the profile data.");
+      }
+    };
+  
+    if (username) {
+      fetchProfileData();
+    } else {
+      setError("No user logged in");
+      setLoading(false);
+    }
+  }, [username]);
 
   const handleSaveChanges = async (e) => {
     e.preventDefault();
@@ -329,7 +365,7 @@ const Heading = styled.h1`
 `;
 
 const SectionTitle = styled.h2`
-  font-size: 18px;
+  font-size: 25px;
   color: #66c0f4;
   margin-bottom: 10px;
   margin-top: 30px;

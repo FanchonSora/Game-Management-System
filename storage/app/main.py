@@ -59,14 +59,17 @@ async def get_profile(username: str):
     
     return {
         "username": user_data["username"],
+        "name": user_data["name"],
         "email": user_data["email"],
-        "profile_picture": "avatar.jpg",
-        "profile_banner": "profilebanner.jpg",
+        "profile_picture": user_data.get("avatar", "avatar.jpg"),  # Provide a default if not set
+        "profile_banner": user_data.get("backgroundImage", "profilebanner.jpg"),  # Default background
+        "country": user_data.get("country", "VN"),  # Default country
         "recent_activity": [
             {"id": 1, "title": "Among Us", "image": "game/Among Us.jpg", "playTime": "1.3 hrs on record", "lastPlayed": "17 Nov", "achievementProgress": "1 of 1"},
             {"id": 2, "title": "F1 2024", "image": "game/F1 24.jpg", "playTime": "41 hrs on record", "lastPlayed": "10 Nov", "achievementProgress": "0 of 24"},
         ]
     }
+
 @app.put("/api/profile/update")
 async def update_profile(user_data: User):
     users = load_users()

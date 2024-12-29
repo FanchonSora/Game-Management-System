@@ -27,11 +27,8 @@ const LogInPage = () => {
       });
 
       if (response.ok) {
-        // Store the username in localStorage after successful login
         localStorage.setItem("username", username);
-
-        alert("Login successful!");
-        navigate("/dashboard");  // Navigate to the dashboard or profile page
+        navigate("/dashboard");
       } else {
         const errorData = await response.json();
         alert(`Login failed: ${errorData.detail}`);

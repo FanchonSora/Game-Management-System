@@ -18,13 +18,14 @@ const ProfilePage = () => {
         }
         const data = await response.json();
         setUserData(data);
+        console.log(data);
       } catch (err) {
         setError(err.message);
       } finally {
         setLoading(false);
       }
     };
-
+  
     if (username) {
       fetchProfileData();
     } else {
@@ -58,8 +59,8 @@ const ProfilePage = () => {
             style={styles.profilePicture}
           />
           <div>
-            <h2 style={styles.profileName}>{userData.username}</h2>
-            <p style={styles.profileUsername}>{`@${userData.username}`}</p>
+            <h2 style={styles.profileName}>{userData.name}</h2>
+            <p style={styles.profileUsername}>{`${userData.username}`}</p>
             <p style={styles.profileInfo}>{userData.email || "No information given."}</p>
           </div>
           <button onClick={() => navigate("/edit-profile")} style={styles.editButton}>
