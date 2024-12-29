@@ -1,57 +1,79 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
+  const [userData, setUserData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const recentActivity = [
-    {
-      id: 1,
-      title: "Among Us",
-      image: "game/Among Us.jpg",
-      playTime: "1.3 hrs on record",
-      lastPlayed: "17 Nov",
-      achievementProgress: "1 of 1",
-    },
-    {
-      id: 2,
-      title: "F1 2024",
-      image: "game/F1 24.jpg",
-      playTime: "41 hrs on record",
-      lastPlayed: "10 Nov",
-      achievementProgress: "0 of 24",
-    },
-  ];
+  const username = localStorage.getItem("username");
+
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      try {
+        const response = await fetch(`http://localhost:8000/api/profile/${username}`);
+        if (!response.ok) {
+          throw new Error("Profile not found");
+        }
+        const data = await response.json();
+        setUserData(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (username) {
+      fetchProfileData();
+    } else {
+      setError("No user logged in");
+      setLoading(false);
+    }
+  }, [username]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
     <div style={styles.container}>
-      {/* Profile Header */}
       <header style={styles.header}>
         <div style={styles.profileBanner}>
           <img
-            src="profilebanner.jpg"
+            src={userData.profile_banner}
             alt="Profile Banner"
             style={styles.bannerImage}
           />
         </div>
         <div style={styles.profileInfoContainer}>
-          <img src="avatar.jpg" alt="Profile" style={styles.profilePicture} />
+          <img
+            src={userData.profile_picture}
+            alt="Profile"
+            style={styles.profilePicture}
+          />
           <div>
-            <h2 style={styles.profileName}>khanhngan1491</h2>
-            <p style={styles.profileUsername}>@khanhngan</p>
-            <p style={styles.profileInfo}>No information given.</p>
+            <h2 style={styles.profileName}>{userData.username}</h2>
+            <p style={styles.profileUsername}>{`@${userData.username}`}</p>
+            <p style={styles.profileInfo}>{userData.email || "No information given."}</p>
           </div>
-          <button onClick={() => navigate("/edit-profile")} style={styles.editButton}>Edit Profile</button>
+          <button onClick={() => navigate("/edit-profile")} style={styles.editButton}>
+            Edit Profile
+          </button>
         </div>
       </header>
 
-      {/* Main Content */}
       <main style={styles.mainContent}>
         <section style={styles.recentActivitySection}>
           <h3 style={styles.sectionTitle}>Recent Activity</h3>
           <p style={styles.activityDuration}>0 hours past 2 weeks</p>
           <div style={styles.activityGrid}>
-            {recentActivity.map((activity) => (
+            {userData.recent_activity.map((activity) => (
               <div key={activity.id} style={styles.activityCard}>
                 <img
                   src={activity.image}
@@ -61,8 +83,7 @@ const ProfilePage = () => {
                 <div style={styles.activityDetails}>
                   <h4 style={styles.activityTitle}>{activity.title}</h4>
                   <p style={styles.activityInfo}>
-                    {activity.playTime} <br /> Last played on{" "}
-                    {activity.lastPlayed}
+                    {activity.playTime} <br /> Last played on {activity.lastPlayed}
                   </p>
                   <p style={styles.achievementProgress}>
                     Achievement Progress: {activity.achievementProgress}
@@ -71,15 +92,10 @@ const ProfilePage = () => {
                     <div
                       style={{
                         ...styles.progressBar,
-                        width: `$${
-                          (parseInt(
-                            activity.achievementProgress.split(" ")[0]
-                          ) /
-                            parseInt(
-                              activity.achievementProgress.split(" ")[2]
-                            )) *
+                        width: `${(parseInt(activity.achievementProgress.split(" ")[0]) /
+                            parseInt(activity.achievementProgress.split(" ")[2])) *
                           100
-                        }%`,
+                          }%`,
                       }}
                     ></div>
                   </div>
@@ -95,10 +111,6 @@ const ProfilePage = () => {
             Badges: <span style={styles.badgeCount}>1</span>
           </p>
           <ul style={styles.onlineList}>
-            {/* <li>Games</li>
-            <li>Inventory</li>
-            <li>Screenshots</li>
-            <li>Videos</li> */}
           </ul>
         </section>
       </main>

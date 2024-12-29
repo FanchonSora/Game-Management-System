@@ -10,3 +10,14 @@ class User(BaseModel):
 class LoginData(BaseModel):
     username: str
     password: str
+
+# Profile data model
+class User(BaseModel):
+    username: str
+    name: str
+    email: EmailStr
+    avatar: str = None
+    backgroundImage: str = None
+    currentPassword: str
+    newPassword: str
+    confirmPassword: str

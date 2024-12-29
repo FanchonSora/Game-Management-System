@@ -8,18 +8,54 @@ const EditProfile = () => {
   const [activeSection, setActiveSection] = useState("general");
   const [errors, setErrors] = useState({ username: false, email: false, general: "" });
   const [formData, setFormData] = useState({
-    username: "khanhngan1491",
-    name: "@khanhngan",
-    email: "@khanhngan",
+    username: "@khanhngan",
+    name: "khanhngan1491",
+    email: "fanchon2506@gmail.com",
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
-    avatar: "",
+    avatar: "avatar.jpg",
+    backgroundImage: "profilebanner.jpg",
+    country: "VN",
   });
 
-  const handleSaveChanges = (e) => {
+  const handleSaveChanges = async (e) => {
     e.preventDefault();
-    console.log("Form submitted", formData);
+  
+    const updatedData = {
+      username: formData.username,
+      name: formData.name,
+      email: formData.email,
+      country: formData.country,
+      avatar: formData.avatar,
+      backgroundImage: formData.backgroundImage,
+      currentPassword: formData.currentPassword,
+      newPassword: formData.newPassword,
+      confirmPassword: formData.confirmPassword,
+    };
+  
+    try {
+      const response = await fetch("http://127.0.0.1:8000/api/profile/update", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedData),
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Error response from backend:", errorData);
+        throw new Error(errorData.detail || "Failed to update profile");
+      }
+  
+      const data = await response.json();
+      alert("Profile updated successfully!");
+      navigate("/profile");
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      alert("There was an error updating your profile.");
+    }
   };
 
   const handleAvatarChange = (e) => {
@@ -33,8 +69,28 @@ const EditProfile = () => {
     }
   };
 
+  const handleBackgroundChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData({ ...formData, backgroundImage: reader.result });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   return (
     <Body>
+      <PathLabel>
+        <span onClick={() => navigate("/profile")} style={{ cursor: "pointer" }}>
+          {formData.name}
+        </span>{" "}
+        &raquo;{" "}
+        <span onClick={() => navigate("/edit-profile", { replace: true })} style={{ cursor: "pointer" }}>
+          Edit Profile
+        </span>
+      </PathLabel>
       <Container>
         <Sidebar>
           <SidebarItem active={activeSection === "general"} onClick={() => setActiveSection("general")}>
@@ -46,13 +102,14 @@ const EditProfile = () => {
           <SidebarItem active={activeSection === "account"} onClick={() => setActiveSection("account")}>
             Account
           </SidebarItem>
+          <SidebarItem active={activeSection === "background"} onClick={() => setActiveSection("background")}>
+            Background
+          </SidebarItem>
         </Sidebar>
         <Content>
-          <Heading>Edit Profile</Heading>
           {activeSection === "general" && (
             <Form onSubmit={handleSaveChanges}>
               <SectionTitle>General</SectionTitle>
-
               <InputContainer>
                 <Label>Username</Label>
                 <Input
@@ -89,6 +146,20 @@ const EditProfile = () => {
                 />
               </InputContainer>
 
+              <InputContainer>
+                <Label>Country</Label>
+                <Select
+                  value={formData.country}
+                  onChange={(e) => setFormData({ ...formData, country: e.target.value })}
+                >
+                  <option value="US">United States</option>
+                  <option value="CA">Canada</option>
+                  <option value="GB">United Kingdom</option>
+                  <option value="IN">India</option>
+                  <option value="VN">Vietnam</option>
+                </Select>
+              </InputContainer>
+
               <Button type="submit">Save Changes</Button>
             </Form>
           )}
@@ -102,7 +173,7 @@ const EditProfile = () => {
               </AvatarPreview>
               <UploadButton>
                 <label htmlFor="avatar-upload">
-                  <Camera size={24} /> Upload Avatar
+                  Upload Avatar
                 </label>
                 <input
                   type="file"
@@ -113,6 +184,32 @@ const EditProfile = () => {
                 />
               </UploadButton>
             </AvatarSection>
+          )}
+
+          {activeSection === "background" && (
+            <BackgroundSection>
+              <SectionTitle>Background</SectionTitle>
+
+              <BackgroundPreview>
+                <img
+                  src={formData.backgroundImage || "https://via.placeholder.com/1200x400"} // Fallback image if no background is set
+                  alt="Background"
+                />
+              </BackgroundPreview>
+
+              <UploadButton>
+                <label htmlFor="background-upload">
+                  Upload Background
+                </label>
+                <input
+                  type="file"
+                  id="background-upload"
+                  accept="image/*"
+                  onChange={handleBackgroundChange}
+                  style={{ display: "none" }}
+                />
+              </UploadButton>
+            </BackgroundSection>
           )}
 
           {activeSection === "account" && (
@@ -161,11 +258,20 @@ const EditProfile = () => {
 export default EditProfile;
 
 // Styled-components for consistency with EditProfile
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 20px;
+  background: rgba(27, 40, 56, 0.9);
+  border-radius: 10px;
+`;
+
 const Body = styled.div`
   width: 100%;
   height: 100vh;
   background: linear-gradient(to bottom, #1b2838, #0f171e);
-  color: #ffffff;  /* Changed to white for better visibility */
+  color: #ffffff;
   font-family: "Arial", sans-serif;
 `;
 
@@ -173,6 +279,17 @@ const Container = styled.div`
   display: flex;
   justify-content: space-between;
   padding: 20px;
+  flex-direction: row; /* Added this to make the sidebar and content appear in a row */
+`;
+
+const PathLabel = styled.div`
+  font-size: 16px;
+  color: #66c0f4;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-weight: bold;
+  display: inline-block;
+  margin-left: 20px;
 `;
 
 const Sidebar = styled.div`
@@ -183,17 +300,22 @@ const Sidebar = styled.div`
 `;
 
 const SidebarItem = styled.div`
-  color: ${(props) => (props.active ? "#66c0f4" : "#ffffff")};  /* White color for inactive */
+  color: #ffffff;
   font-size: 18px;
+  font-weight: bold;
   margin-bottom: 20px;
   cursor: pointer;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: ${(props) => (props.active ? "#1b2838" : "transparent")};
+
   &:hover {
-    color: #66c0f4;
+    background-color: #1b2838;
   }
 `;
 
 const Content = styled.div`
-  width: 70%;
+  width: 70%; /* Adjusted width for content */
   padding: 20px;
   background: rgba(27, 40, 56, 0.9);
   border-radius: 15px;
@@ -285,5 +407,36 @@ const Button = styled.button`
 
   &:hover {
     background-color: #357ab8;
+  }
+`;
+
+const Select = styled.select`
+  width: 100%;
+  padding: 10px 15px;
+  border: 1px solid #66c0f4;
+  border-radius: 5px;
+  background-color: #1b2838;
+  color: #ffffff;
+  font-size: 14px;
+  box-sizing: border-box;
+
+  &:focus {
+    outline: none;
+    border-color: #4a90e2;
+  }
+`;
+
+const BackgroundSection = styled.div`
+  text-align: center;
+  margin-top: 30px;
+`;
+
+const BackgroundPreview = styled.div`
+  margin-bottom: 20px;
+  img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover; // Ensures the image covers the container without distortion
+    border-radius: 10px;
   }
 `;
