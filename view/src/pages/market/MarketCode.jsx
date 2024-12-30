@@ -3,8 +3,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
-import marketCodes from "../data/marketCodes"; // Import dữ liệu từ marketCodes.js
-import Navbar from "../components/Navbar"; // Import Navbar component
+import marketCodes from "../../data/marketCodes"; // Import dữ liệu từ marketCodes.js
+import Navbar from "../../components/Navbar"; // Import Navbar component
 
 // Keyframes for Animations
 const fadeIn = keyframes`

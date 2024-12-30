@@ -2,9 +2,9 @@
 
 import React, { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
-import codeData from "../data/codeData"; // Import codeData từ file mới tạo
-import CodeCard from "../components/CodeCard"; // Import CodeCard component
-import Navbar from "../components/Navbar"; // Import Navbar component
+import codeData from "../../data/codeData"; // Import codeData từ file mới tạo
+import CodeCard from "../../components/CodeCard"; // Import CodeCard component
+import Navbar from "../../components/Navbar"; // Import Navbar component
 
 // Keyframes for Animations
 const fadeIn = keyframes`

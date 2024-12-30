@@ -1,4 +1,4 @@
-// src/pages/CodeDetailMarket.jsx
+// src/pages/market/CodeDetailMarket.jsx
 
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -8,8 +8,8 @@ import { github } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import python from "react-syntax-highlighter/dist/esm/languages/hljs/python";
 import cpp from "react-syntax-highlighter/dist/esm/languages/hljs/cpp";
 import javascript from "react-syntax-highlighter/dist/esm/languages/hljs/javascript";
-import marketCodes from "../data/marketCodes"; // Import dữ liệu từ marketCodes.js
-import Navbar from "../components/Navbar"; // Import Navbar component
+import marketCodes from "../../data/marketCodes";
+import Navbar from "../../components/Navbar"; // Import Navbar component
 
 // Register languages for syntax highlighter
 SyntaxHighlighter.registerLanguage("python", python);

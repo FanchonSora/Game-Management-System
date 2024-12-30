@@ -7,8 +7,8 @@ import { Light as SyntaxHighlighter } from "react-syntax-highlighter";
 import { github } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import python from "react-syntax-highlighter/dist/esm/languages/hljs/python";
 import cpp from "react-syntax-highlighter/dist/esm/languages/hljs/cpp";
-import codeData from "../data/codeData"; // Import codeData từ file mới tạo
-import CodeCard from "../components/CodeCard"; // Import CodeCard component
+import codeData from "../../data/codeData"; // Import codeData từ file mới tạo
+import CodeCard from "../../components/CodeCard"; // Import CodeCard component
 
 SyntaxHighlighter.registerLanguage("python", python);
 SyntaxHighlighter.registerLanguage("cpp", cpp);

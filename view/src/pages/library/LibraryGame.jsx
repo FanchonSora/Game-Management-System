@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import styled from "styled-components";
-import gameData from "../data/gameData"; // Correctly import gameData
+import gameData from "../../data/gameData"; // Correctly import gameData
 
 const LibraryPage = () => {
   const [searchTerm, setSearchTerm] = useState("");

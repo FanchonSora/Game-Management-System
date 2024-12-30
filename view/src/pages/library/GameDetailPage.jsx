@@ -3,9 +3,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
-import gameData from "../data/gameData"; 
-import Card from "../components/GameCard"; // Đảm bảo bạn có component Card
-import Navbar from "../components/Navbar"; // Import Navbar component
+import gameData from "../../data/gameData"; 
+import Card from "../../components/GameCard"; // Đảm bảo bạn có component Card
+import Navbar from "../../components/Navbar"; // Import Navbar component
 
 // Keyframes for Animations
 const fadeIn = keyframes`
