@@ -9,16 +9,17 @@ import CommunityPage from "./pages/CommunityPage";
 import MarketGamePage from "./pages/market/MarketGame";
 import FriendsPage from "./pages/FriendPage";
 import BadgesPage from "./pages/BadgesPage";
-import GameDetailPage from "./pages/library/GameDetailPage";
+import GameDetailPage from "./pages/market/GameDetailPage";
 import MarketCodePage from "./pages/market/MarketCode";
 import SignUpPage from "./pages/SignUpPage";
 import CodeDetailPage from "./pages/library/CodeDetailPage";
 import EditProfile from "./pages/EditProfile";
 import ActivityPage from "./pages/ActivityPage";
 import CodeDetailMarket from "./pages/market/CodeDetailMarket";
+import LibraryGameDetailPage from "./pages/library/LibraryGameDetailPage";
 
-import axios from "axios";
 function App() {
+
   return (
     <BrowserRouter>
       <Routes>
@@ -30,7 +31,7 @@ function App() {
         <Route path="/market-game" element={<MarketGamePage />} />
         <Route path="/market-code" element={<MarketCodePage />} />
         <Route path="/library-game" element={<LibraryPageGame />} />
-        <Route path="/library-game/:id" element={<GameDetailPage />} />
+        <Route path="/library-game/:id" element={<LibraryGameDetailPage />} />
         <Route path="/library-code" element={<LibraryPageCode />} />
         <Route path="/library-code/:id" element={<CodeDetailPage />} />
         <Route path="/friends" element={<FriendsPage />} />
