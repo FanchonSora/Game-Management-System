@@ -434,13 +434,10 @@ const FeaturedMarketGamePage = () => {
     return () => clearInterval(interval);
   }, [totalSlides]);
 
-  // Add to library nếu Free
   const handleFree = (game) => {
     if (game.price === 'Free') {
-      const storedLibrary = JSON.parse(localStorage.getItem('libraryGames')) || [];
-
-      // Check nếu game chưa có trong library
-      const found = storedLibrary.find((g) => g.id === game.id);
+      const found = libraryGames.find((g) => g.id === game.id);
+  
       if (!found) {
         const newGame = {
           ...game,
@@ -449,11 +446,16 @@ const FeaturedMarketGamePage = () => {
             expPercentage: 0,
             achievementsPercentage: 0,
           },
-          achievements: [], // Empty achievements initially
+          achievements: [],
         };
-
-        storedLibrary.push(newGame);
-        localStorage.setItem('libraryGames', JSON.stringify(storedLibrary));
+  
+        // Add new game to libraryGames
+        libraryGames.push(newGame);
+  
+        // Save updated libraryGames to localStorage
+        localStorage.setItem('libraryGames', JSON.stringify(libraryGames));
+  
+        console.log("LibraryGames after adding:", libraryGames);
         alert(`${game.title} đã được thêm vào Thư viện của bạn!`);
       } else {
         alert(`${game.title} đã có trong Thư viện của bạn.`);
