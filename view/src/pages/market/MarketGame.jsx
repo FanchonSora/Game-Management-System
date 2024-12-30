@@ -9,7 +9,7 @@ import libraryGames from '../../data/libraryGames';
 const fadeIn = keyframes`
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
-`; 
+`;
 
 const slideIn = keyframes`
   from { transform: translateX(100%); }
@@ -17,7 +17,6 @@ const slideIn = keyframes`
 `;
 
 // Styled Components
-
 const Container = styled.div`
   font-family: 'Roboto', sans-serif;
   background-image: url('/images/img2.jpg');
@@ -124,6 +123,28 @@ const NavLinkStyled = styled(Link)`
   &:hover, &:focus {
     background-color: rgba(255, 255, 255, 0.1);
     outline: none;
+  }
+`;
+
+// Search Bar
+const SearchBarContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+`;
+
+const SearchInput = styled.input`
+  width: 50%;
+  max-width: 400px;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 20px;
+  font-size: 16px;
+  outline: none;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+
+  &::placeholder {
+    color: #aaa;
   }
 `;
 
@@ -360,6 +381,9 @@ const FeaturedMarketGamePage = () => {
   // Tag Filtering
   const [selectedTags, setSelectedTags] = useState([]);
 
+  // Search Query State
+  const [searchQuery, setSearchQuery] = useState('');
+
   // All unique tags
   const allTags = Array.from(
     new Set(gameData.flatMap((game) => game.tags))
@@ -372,14 +396,16 @@ const FeaturedMarketGamePage = () => {
     );
   };
 
-  // Filtered games by tags
-  const filteredMarketGames = selectedTags.length
-    ? gameData.filter((game) =>
-        selectedTags.every((tag) => game.tags.includes(tag))
-      )
-    : gameData;
+  // Lọc dữ liệu dựa trên Tag và từ khoá
+  const filteredMarketGames = gameData.filter((game) => {
+    const matchesTags =
+      selectedTags.length === 0 || selectedTags.every(tag => game.tags.includes(tag));
+    const matchesSearch =
+      game.title.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesTags && matchesSearch;
+  });
 
-  // Categorize
+  // Hàm chia game theo category
   const categorizeGames = (games) => {
     const categories = {};
     games.forEach((game) => {
@@ -393,13 +419,14 @@ const FeaturedMarketGamePage = () => {
 
   const categorizedGames = categorizeGames(filteredMarketGames);
 
-  // Slides for carousel
+  // Tạo slide cho carousel (5 game mỗi slide)
   const slides = chunkArray(
-    gameData.filter((game) => game.tags.includes("Featured")),5
+    gameData.filter((game) => game.tags.includes("Featured")), 
+    5
   );
   const totalSlides = slides.length;
 
-  // Auto-slide every 10 seconds
+  // Tự động chuyển slide mỗi 10 giây
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % totalSlides);
@@ -407,13 +434,16 @@ const FeaturedMarketGamePage = () => {
     return () => clearInterval(interval);
   }, [totalSlides]);
 
+  // Add to library nếu Free
   const handleFree = (game) => {
     if (game.price === 'Free') {
-      const found = libraryGames.find((g) => g.id === game.id);
-  
+      const storedLibrary = JSON.parse(localStorage.getItem('libraryGames')) || [];
+
+      // Check nếu game chưa có trong library
+      const found = storedLibrary.find((g) => g.id === game.id);
       if (!found) {
         const newGame = {
-          ...game, // Copy all properties from the original game
+          ...game,
           progress: {
             levelPercentage: 0,
             expPercentage: 0,
@@ -421,13 +451,9 @@ const FeaturedMarketGamePage = () => {
           },
           achievements: [], // Empty achievements initially
         };
-  
-        // Modify the `libraryGames` array by pushing the new game into it
-        libraryGames.push(newGame); // Add the new game to the array
-      // Save updated libraryGames to localStorage
-      localStorage.setItem('libraryGames', JSON.stringify(libraryGames));
-  
-        console.log("LibraryGames after adding:", libraryGames);
+
+        storedLibrary.push(newGame);
+        localStorage.setItem('libraryGames', JSON.stringify(storedLibrary));
         alert(`${game.title} đã được thêm vào Thư viện của bạn!`);
       } else {
         alert(`${game.title} đã có trong Thư viện của bạn.`);
@@ -436,13 +462,13 @@ const FeaturedMarketGamePage = () => {
       alert(`Không thể thêm ${game.title} vào Thư viện. Trò chơi này không miễn phí.`);
     }
   };
-  
-  // View detail
+
+  // Xem chi tiết
   const handleView = (game) => {
     navigate(`/market-game/${game.id}`);
   };
-  
-  // chunkArray helper
+
+  // Chia mảng game ra thành các nhóm
   function chunkArray(arr, size) {
     const result = [];
     for (let i = 0; i < arr.length; i += size) {
@@ -451,7 +477,7 @@ const FeaturedMarketGamePage = () => {
     return result;
   }
 
-  // Render game cards in categories
+  // Render card game
   const renderGameCards = (games) => {
     return games.map((game) => (
       <Card
@@ -464,14 +490,14 @@ const FeaturedMarketGamePage = () => {
         buttonLink={`/market-game/${game.id}`}
         isFree={game.price === 'Free'}
         onAddToLibrary={() => handleFree(game)}
-        onView={() => handleView(game)} // Thêm prop onView
+        onView={() => handleView(game)}
         maxWidth="250px"
         height="auto"
       />
     ));
   };
-  
-  // Render featured carousel
+
+  // Render carousel
   const renderFeaturedGamesCarousel = () => {
     return (
       <CarouselWrapper>
@@ -510,7 +536,7 @@ const FeaturedMarketGamePage = () => {
     );
   };
 
-  // Close dropdown on outside click
+  // Đóng dropdown khi click bên ngoài
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (marketRef.current && !marketRef.current.contains(event.target)) {
@@ -591,12 +617,15 @@ const FeaturedMarketGamePage = () => {
           </NavLinks>
         </Navbar>
 
-        {/* Featured Games Carousel */}
-        <CarouselContainer>
-          <CarouselTitle>Featured Games</CarouselTitle>
-          <CarouselSubtitle>Don't miss out on our top picks!</CarouselSubtitle>
-          {renderFeaturedGamesCarousel()}
-        </CarouselContainer>
+        {/* Thanh Tìm Kiếm */}
+        <SearchBarContainer>
+          <SearchInput
+            type="text"
+            placeholder="Searching game..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </SearchBarContainer>
 
         {/* Tag Filters */}
         <TagFilterComponent
@@ -605,7 +634,14 @@ const FeaturedMarketGamePage = () => {
           toggleTag={toggleTag}
         />
 
-        {/* Dynamically Rendered Categories */}
+        {/* Featured Games Carousel */}
+        <CarouselContainer>
+          <CarouselTitle>Featured Games</CarouselTitle>
+          <CarouselSubtitle>Don't miss out on our top picks!</CarouselSubtitle>
+          {renderFeaturedGamesCarousel()}
+        </CarouselContainer>
+
+        {/* Render các Category tương ứng */}
         {Object.keys(categorizedGames).map((category) => (
           <CategorySection key={category}>
             <SectionTitle>{category}</SectionTitle>

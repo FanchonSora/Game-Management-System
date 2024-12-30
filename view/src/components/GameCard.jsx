@@ -145,9 +145,6 @@ const GameCard = ({
         {onRemoveFromLibrary && (
           <RemoveButtonStyled onClick={onRemoveFromLibrary}>Remove</RemoveButtonStyled>
         )}
-        {buttonText && buttonLink && (
-          <ViewButton to={buttonLink}>{buttonText}</ViewButton>
-        )}
         {onView && (
           <AddButton onClick={onView}>View</AddButton>
         )}

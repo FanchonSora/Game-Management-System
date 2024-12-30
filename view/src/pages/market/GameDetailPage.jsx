@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 import gameData from "../../data/gameData"; 
-import Card from "../../components/GameCard"; // Đảm bảo bạn có component Card
+import HoverCard from "../../components/HoverCard";
 import Navbar from "../../components/Navbar"; // Import Navbar component
 
 // Keyframes for Animations
@@ -370,113 +370,15 @@ const GameDetailPage = () => {
                       featuredGame.id !== game.id
                   )
                   .map((featuredGame) => (
-                    <Card
+                    <HoverCard
                       key={featuredGame.id}
                       image={featuredGame.image}
                       title={featuredGame.title}
-                      description={`Price: ${featuredGame.price}`}
-                      tags={featuredGame.tags}
-                      buttonText="View Detail"
-                      buttonLink={`/market-game/${featuredGame.id}`}
-                      isFree={featuredGame.price === "Free"}
-                      onAddToLibrary={() => {
-                        if (featuredGame.price === "Free") {
-                          const storedGames =
-                            JSON.parse(localStorage.getItem("libraryGames")) ||
-                            [];
-                          if (
-                            !storedGames.find(
-                              (g) => g.id === featuredGame.id
-                            )
-                          ) {
-                            storedGames.push({
-                              id: featuredGame.id,
-                              name: featuredGame.title,
-                            });
-                            localStorage.setItem(
-                              "libraryGames",
-                              JSON.stringify(storedGames)
-                            );
-                            alert(
-                              `${featuredGame.title} đã được thêm vào Thư viện của bạn!`
-                            );
-                          } else {
-                            alert(
-                              `${featuredGame.title} đã có trong Thư viện của bạn.`
-                            );
-                          }
-                        } else {
-                          alert(
-                            `Không thể thêm ${featuredGame.title} vào Thư viện. Trò chơi này không miễn phí.`
-                          );
-                        }
-                      }}
-                      maxWidth="300px"
-                      height="150px"
+                      gameId={featuredGame.id}
                     />
                   ))}
               </GamesGridStyled>
             </FeaturedGamesSection>
-
-            {/* Massively Multiplayer Games Section */}
-            <CategorizedGamesSection>
-              <CategorizedGamesTitle>
-                Massively Multiplayer Games
-              </CategorizedGamesTitle>
-              <GamesGridStyled>
-                {gameData
-                  .filter(
-                    (mmGame) =>
-                      mmGame.tags.includes("MMO") && mmGame.id !== game.id
-                  )
-                  .map((mmGame) => (
-                    <Card
-                      key={mmGame.id}
-                      image={mmGame.image}
-                      title={mmGame.title}
-                      description={`Price: ${mmGame.price} ${
-                        mmGame.discount ? `(${mmGame.discount})` : ""
-                      }`}
-                      tags={mmGame.tags}
-                      buttonText="View Detail"
-                      buttonLink={`/market-game/${mmGame.id}`}
-                      isFree={mmGame.price === "Free"}
-                      onAddToLibrary={() => {
-                        if (mmGame.price === "Free") {
-                          const storedGames =
-                            JSON.parse(localStorage.getItem("libraryGames")) ||
-                            [];
-                          if (
-                            !storedGames.find((g) => g.id === mmGame.id)
-                          ) {
-                            storedGames.push({
-                              id: mmGame.id,
-                              name: mmGame.title,
-                            });
-                            localStorage.setItem(
-                              "libraryGames",
-                              JSON.stringify(storedGames)
-                            );
-                            alert(
-                              `${mmGame.title} đã được thêm vào Thư viện của bạn!`
-                            );
-                          } else {
-                            alert(
-                              `${mmGame.title} đã có trong Thư viện của bạn.`
-                            );
-                          }
-                        } else {
-                          alert(
-                            `Không thể thêm ${mmGame.title} vào Thư viện. Trò chơi này không miễn phí.`
-                          );
-                        }
-                      }}
-                      maxWidth="300px"
-                      height="150px"
-                    />
-                  ))}
-              </GamesGridStyled>
-            </CategorizedGamesSection>
 
             {/* Casual Games Section */}
             <CategorizedGamesSection>
@@ -489,49 +391,11 @@ const GameDetailPage = () => {
                       casualGame.id !== game.id
                   )
                   .map((casualGame) => (
-                    <Card
+                    <HoverCard
                       key={casualGame.id}
                       image={casualGame.image}
                       title={casualGame.title}
-                      description={`Price: ${casualGame.price} ${
-                        casualGame.discount ? `(${casualGame.discount})` : ""
-                      }`}
-                      tags={casualGame.tags}
-                      buttonText="View Detail"
-                      buttonLink={`/market-game/${casualGame.id}`}
-                      isFree={casualGame.price === "Free"}
-                      onAddToLibrary={() => {
-                        if (casualGame.price === "Free") {
-                          const storedGames =
-                            JSON.parse(localStorage.getItem("libraryGames")) ||
-                            [];
-                          if (
-                            !storedGames.find((g) => g.id === casualGame.id)
-                          ) {
-                            storedGames.push({
-                              id: casualGame.id,
-                              name: casualGame.title,
-                            });
-                            localStorage.setItem(
-                              "libraryGames",
-                              JSON.stringify(storedGames)
-                            );
-                            alert(
-                              `${casualGame.title} đã được thêm vào Thư viện của bạn!`
-                            );
-                          } else {
-                            alert(
-                              `${casualGame.title} đã có trong Thư viện của bạn.`
-                            );
-                          }
-                        } else {
-                          alert(
-                            `Không thể thêm ${casualGame.title} vào Thư viện. Trò chơi này không miễn phí.`
-                          );
-                        }
-                      }}
-                      maxWidth="300px"
-                      height="150px"
+                      gameId={casualGame.id}
                     />
                   ))}
               </GamesGridStyled>
