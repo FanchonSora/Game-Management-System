@@ -2,24 +2,24 @@ import React from "react";
 import { Routes, Route, BrowserRouter } from "react-router-dom"; // Import from react-router-dom
 import HomePage from "./pages/HomePage";
 import LogInPage from "./pages/LogIn";
-import LibraryPageGame from "./pages/LibraryGame";
-import LibraryPageCode from "./pages/LibraryCode";
+import LibraryPageGame from "./pages/library/LibraryGame";
+import LibraryPageCode from "./pages/library/LibraryCode";
 import ProfilePage from "./pages/ProfilePage";
 import CommunityPage from "./pages/CommunityPage";
-import GamePage from "./pages/GameDetailPage";
-import MarketGamePage from "./pages/MarketGame";
+import MarketGamePage from "./pages/market/MarketGame";
 import FriendsPage from "./pages/FriendPage";
 import BadgesPage from "./pages/BadgesPage";
-import MarketCodePage from "./pages/MarketCode";
+import GameDetailPage from "./pages/market/GameDetailPage";
+import MarketCodePage from "./pages/market/MarketCode";
 import SignUpPage from "./pages/SignUpPage";
-import CodeDetailPage from "./pages/CodeDetailPage";
-import SupportBot from "./pages/SupportBotPage";
+import CodeDetailPage from "./pages/library/CodeDetailPage";
 import EditProfile from "./pages/EditProfile";
 import ActivityPage from "./pages/ActivityPage";
-import CodeDetailMarket from "./pages/CodeDetailMarket";
+import CodeDetailMarket from "./pages/market/CodeDetailMarket";
+import LibraryGameDetailPage from "./pages/library/LibraryGameDetailPage";
 
-import axios from "axios";
 function App() {
+
   return (
     <BrowserRouter>
       <Routes>
@@ -31,12 +31,13 @@ function App() {
         <Route path="/market-game" element={<MarketGamePage />} />
         <Route path="/market-code" element={<MarketCodePage />} />
         <Route path="/library-game" element={<LibraryPageGame />} />
+        <Route path="/library-game/:id" element={<LibraryGameDetailPage />} />
         <Route path="/library-code" element={<LibraryPageCode />} />
-        <Route path="/repository/:id" element={<CodeDetailPage />} />
+        <Route path="/library-code/:id" element={<CodeDetailPage />} />
         <Route path="/friends" element={<FriendsPage />} />
         <Route path="/badges" element={<BadgesPage />} />
-        <Route path="/market-game/:id" element={<GamePage />} />
-        <Route path="/support-bot" element={<SupportBot />} />
+        <Route path="/market-game/:id" element={<GameDetailPage />} />
+        <Route path="/market-code/:id" element={<CodeDetailMarket />} />
         <Route path="/edit-profile" element={<EditProfile />} />
         <Route path="/activity" element={<ActivityPage />} />
         <Route path="*" element={<HomePage />} />
