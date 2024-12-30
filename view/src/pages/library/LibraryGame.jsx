@@ -1,9 +1,7 @@
-// src/components/LibraryPage.jsx
-
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import styled from "styled-components";
-import gameData from "../../data/gameData"; // Correctly import gameData
+import libraryGames from "../../data/libraryGames";
 
 const LibraryPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -17,6 +15,7 @@ const LibraryPage = () => {
   const profileRef = useRef(null);
   const navigate = useNavigate();
 
+  // Đóng dropdown khi click ngoài
   const handleClickOutside = (event) => {
     if (marketRef.current && !marketRef.current.contains(event.target)) {
       setMarketDropdownOpen(false);
@@ -32,32 +31,12 @@ const LibraryPage = () => {
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
 
-    // Load library games from local storage
+    // 1. Lưu data (nếu muốn chắc chắn localStorage luôn có)
+    localStorage.setItem("libraryGames", JSON.stringify(libraryGames));
+
+    // 2. Đọc data từ localStorage
     const storedGames = JSON.parse(localStorage.getItem("libraryGames")) || [];
-
-    // Original games from gameData.js
-    const originalGames = gameData.map((game) => ({
-      id: game.id,
-      name: game.title,
-      image: game.image, // Add image path
-    }));
-
-    // Merge stored games with original (avoid duplicates)
-    const uniqueGames = [...originalGames];
-    storedGames.forEach((g) => {
-      if (!uniqueGames.find((ug) => ug.id === g.id)) {
-        const gameDetail = gameData.find((game) => game.id === g.id);
-        if (gameDetail) {
-          uniqueGames.push({
-            id: gameDetail.id,
-            name: gameDetail.title,
-            image: gameDetail.image, // Ensure image is included
-          });
-        }
-      }
-    });
-
-    setAllGames(uniqueGames);
+    setAllGames(storedGames);
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -66,16 +45,15 @@ const LibraryPage = () => {
 
   // Filter the game list based on the search term
   const filteredGames = allGames.filter((game) =>
-    game.name.toLowerCase().includes(searchTerm.toLowerCase())
+    game.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const handleGameClick = (gameId) => {
-    navigate(`/library-game/${gameId}`); // Navigate to the specific game's page
+    navigate(`/library-game/${gameId}`);
   };
 
   return (
     <Container>
-      {/* Top Navigation Bar */}
       <Navbar>
         <NavLinks>
           {/* Market Dropdown */}
@@ -134,45 +112,34 @@ const LibraryPage = () => {
         </NavLinks>
       </Navbar>
 
-      {/* Content */}
       <Body>
-        {/* Sidebar */}
         <Sidebar>
           <SidebarTitle>Your Library</SidebarTitle>
-          {/* Search Bar */}
           <SearchInput
             type="text"
             placeholder="Search games..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          {/* Game List */}
           <SidebarList>
             {filteredGames.map((game) => (
-              <SidebarItem
-                key={game.id}
-                onClick={() => handleGameClick(game.id)}
-              >
-                <GameImage src={game.image} alt={game.name} />
-                <GameName>{game.name}</GameName>
+              <SidebarItem key={game.id} onClick={() => handleGameClick(game.id)}>
+                <GameImage src={game.image} alt={game.title} />
+                <GameName>{game.title}</GameName>
               </SidebarItem>
             ))}
           </SidebarList>
         </Sidebar>
 
-        {/* Main Content */}
         <MainContent>
           <Section>
             <SectionTitle>Recent Games</SectionTitle>
             <GameGrid>
               {filteredGames.map((game) => (
-                <GameCard
-                  key={game.id}
-                  onClick={() => handleGameClick(game.id)}
-                >
+                <GameCard key={game.id} onClick={() => handleGameClick(game.id)}>
                   <GameInfo>
-                    <GameTitle>{game.name}</GameTitle>
-                    <GameImage src={game.image} alt={game.name} />
+                    <GameTitle>{game.title}</GameTitle>
+                    <GameImageStyled src={game.image} alt={game.title} />
                   </GameInfo>
                 </GameCard>
               ))}
@@ -183,6 +150,7 @@ const LibraryPage = () => {
     </Container>
   );
 };
+
 
 // Styled Components
 

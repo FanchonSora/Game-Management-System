@@ -306,7 +306,7 @@ const GameDetailPage = () => {
                 ) : (
                   <PurchaseButton onClick={handlePurchase}>Purchase</PurchaseButton>
                 )}
-                <BackButton to="/library-game">Back to Library</BackButton>
+                <BackButton to="/market-game">Back</BackButton>
               </Buttons>
             </GameHeader>
 

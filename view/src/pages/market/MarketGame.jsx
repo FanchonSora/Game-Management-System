@@ -409,12 +409,27 @@ const FeaturedMarketGamePage = () => {
   // Add to library if free
   const handleFree = (game) => {
     if (game.price === 'Free') {
-      const storedGames = JSON.parse(localStorage.getItem('libraryGames')) || [];
-      // Thêm trò chơi mới nếu chưa có
-      if (!storedGames.find((g) => g.id === game.id)) {
-        storedGames.push({ id: game.id, name: game.title });
-        localStorage.setItem('libraryGames', JSON.stringify(storedGames));
-        logActivity('add', game); // Ghi lại hoạt động thêm
+      const storedLibrary = JSON.parse(localStorage.getItem('libraryGames')) || [];
+  
+      // Kiểm tra game đã có trong Library hay chưa
+      const found = storedLibrary.find((g) => g.id === game.id);
+      if (!found) {
+        // Clone game gốc (có đầy đủ trường)
+        const newGame = {
+          ...game,
+          // Hoặc có thể đặt progress & achievements mặc định ban đầu
+          progress: {
+            levelPercentage: 0,
+            expPercentage: 0,
+            achievementsPercentage: 0,
+          },
+          achievements: [],
+        };
+  
+        // Đưa vào Library
+        storedLibrary.push(newGame);
+        localStorage.setItem('libraryGames', JSON.stringify(storedLibrary));
+        console.log("LibraryGames after adding:", storedLibrary);
         alert(`${game.title} đã được thêm vào Thư viện của bạn!`);
       } else {
         alert(`${game.title} đã có trong Thư viện của bạn.`);
