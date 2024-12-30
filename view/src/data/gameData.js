@@ -368,8 +368,8 @@ const gameData = [
     releaseDate: "2019-02-04",
     rating: "9/10",
     screenshots: [
-      "/images/screenshots/apex1.jpg",
-      "/images/screenshots/apex2.jpg",
+      "/screenshots/apex1.jpg",
+      "/screenshots/apex2.jpg",
     ],
     tags: ["Featured", "Battle Royale"],
   },
@@ -385,8 +385,9 @@ const gameData = [
     releaseDate: "2020-06-02",
     rating: "8.5/10",
     screenshots: [
-      "/images/screenshots/valorant1.jpg",
-      "/images/screenshots/valorant2.jpg",
+      "/screenshots/valorant1.jpg",
+      "/screenshots/valorant2.jpg",
+      "/screenshots/valorant3.jpg",
     ],
     tags: ["Featured", "Shooter"],
   },
@@ -402,8 +403,8 @@ const gameData = [
     releaseDate: "2013-10-23",
     rating: "8/10",
     screenshots: [
-      "/images/screenshots/pox1.jpg",
-      "/images/screenshots/pox2.jpg",
+      "/screenshots/pox1.jpg",
+      "/screenshots/pox2.jpg",
     ],
     tags: ["Featured", "ARPG"],
   },
@@ -420,7 +421,11 @@ const gameData = [
     developer: "Acme Games",
     releaseDate: "2022-10-11",
     rating: "8.5/10",
-    screenshots: [],
+    screenshots: [
+      "/screenshots/asterigos1.jpg",
+      "/screenshots/asterigos2.jpg",
+      "/screenshots/asterigos3.jpg",
+    ],
     tags: ["Featured", "Action", "RPG"], 
   },
   {
@@ -434,7 +439,11 @@ const gameData = [
     developer: "FromSoftware",
     releaseDate: "2022-02-25",
     rating: "9.6/10",
-    screenshots: [],
+    screenshots: [
+      "/screenshots/eldenring1.jpg",
+      "/screenshots/eldenring2.jpg",
+      "/screenshots/eldenring3.jpg",
+    ],
     tags: ["Featured", "Action", "RPG", "Open World"], 
   },
   {
@@ -448,7 +457,11 @@ const gameData = [
     developer: "CD Projekt Red",
     releaseDate: "2020-12-10",
     rating: "9/10",
-    screenshots: [],
+    screenshots: [
+      "/screenshots/cyberpunk1.jpg",
+      "/screenshots/cyberpunk2.jpg",
+      "/screenshots/cyberpunk3.jpg",
+    ],
     tags: ["Featured", "Open World", "RPG"],
   },
 ];

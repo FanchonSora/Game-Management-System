@@ -215,7 +215,7 @@ const LibraryGameDetailPage = () => {
 
     if (!foundGame) {
       alert("Game không tồn tại trong Thư viện. Đang chuyển hướng tới Thư viện.");
-      navigate("/library");
+      navigate("/library-game");
     } else {
       setGame(foundGame);
     }
@@ -228,7 +228,7 @@ const LibraryGameDetailPage = () => {
     const updatedGames = storedGames.filter((g) => g.id !== game.id);
     localStorage.setItem("libraryGames", JSON.stringify(updatedGames));
     alert(`${game.title} đã được loại bỏ khỏi Thư viện của bạn.`);
-    navigate("/library");
+    navigate("/library-game");
   };
 
   return (
