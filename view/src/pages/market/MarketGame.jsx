@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 import gameData from '../../data/gameData';
 import Card from '../../components/GameCard';
+import libraryGames from '../../data/libraryGames';
 
 // Keyframes
 const fadeIn = keyframes`
@@ -406,30 +407,27 @@ const FeaturedMarketGamePage = () => {
     return () => clearInterval(interval);
   }, [totalSlides]);
 
-  // Add to library if free
   const handleFree = (game) => {
     if (game.price === 'Free') {
-      const storedLibrary = JSON.parse(localStorage.getItem('libraryGames')) || [];
+      const found = libraryGames.find((g) => g.id === game.id);
   
-      // Kiểm tra game đã có trong Library hay chưa
-      const found = storedLibrary.find((g) => g.id === game.id);
       if (!found) {
-        // Clone game gốc (có đầy đủ trường)
         const newGame = {
-          ...game,
-          // Hoặc có thể đặt progress & achievements mặc định ban đầu
+          ...game, // Copy all properties from the original game
           progress: {
             levelPercentage: 0,
             expPercentage: 0,
             achievementsPercentage: 0,
           },
-          achievements: [],
+          achievements: [], // Empty achievements initially
         };
   
-        // Đưa vào Library
-        storedLibrary.push(newGame);
-        localStorage.setItem('libraryGames', JSON.stringify(storedLibrary));
-        console.log("LibraryGames after adding:", storedLibrary);
+        // Modify the `libraryGames` array by pushing the new game into it
+        libraryGames.push(newGame); // Add the new game to the array
+      // Save updated libraryGames to localStorage
+      localStorage.setItem('libraryGames', JSON.stringify(libraryGames));
+  
+        console.log("LibraryGames after adding:", libraryGames);
         alert(`${game.title} đã được thêm vào Thư viện của bạn!`);
       } else {
         alert(`${game.title} đã có trong Thư viện của bạn.`);
