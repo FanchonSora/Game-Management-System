@@ -8,10 +8,8 @@ import ProfilePage from "./pages/ProfilePage";
 import CommunityPage from "./pages/CommunityPage";
 import GamePage from "./pages/GameDetailPage";
 import MarketGamePage from "./pages/MarketGame";
-import CodePage from "./pages/CodeInforMarket";
 import FriendsPage from "./pages/FriendPage";
 import BadgesPage from "./pages/BadgesPage";
-import GameModePage from "./pages/GameModePage";
 import MarketCodePage from "./pages/MarketCode";
 import SignUpPage from "./pages/SignUpPage";
 import CodeDetailPage from "./pages/CodeDetailPage";
@@ -38,8 +36,6 @@ function App() {
         <Route path="/friends" element={<FriendsPage />} />
         <Route path="/badges" element={<BadgesPage />} />
         <Route path="/market-game/:id" element={<GamePage />} />
-        <Route path="/market-code/:id" element={<CodePage />} />
-        <Route path="/library-game/:id" element={<GameModePage />} />
         <Route path="/support-bot" element={<SupportBot />} />
         <Route path="/edit-profile" element={<EditProfile />} />
         <Route path="/activity" element={<ActivityPage />} />
