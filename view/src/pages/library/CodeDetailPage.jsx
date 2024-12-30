@@ -138,8 +138,8 @@ const CodeBlock = styled.div`
 // Language Tabs
 const LanguageTabs = styled.div`
   display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
+  gap: 20px;
+  margin-bottom: 30px;
   flex-wrap: wrap;
 `;
 
@@ -200,6 +200,31 @@ const CardsGrid = styled.div`
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 20px;
 `;
+const ImplementButton = styled.button`
+  padding: 10px 20px;
+  background-color: #ff9800;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s ease, transform 0.2s;
+  box-shadow: 0 2px 5px rgba(255, 152, 0, 0.5);
+  margin-right: 20px; 
+  &:hover {
+    background-color: #e38c00;
+    transform: translateY(-2px);
+  }
+`;
+
+const ImplementationContainer = styled.div`
+  background-color: #fff5e6;
+  padding: 20px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  line-height: 1.6;
+  white-space: pre-line; /* Giữ nguyên định dạng xuống dòng */
+`;
 
 // CodeDetailPage Component
 const CodeDetailPage = () => {
@@ -209,6 +234,7 @@ const CodeDetailPage = () => {
   const [code, setCode] = useState(null);
   const [activeLanguage, setActiveLanguage] = useState("");
   const [notification, setNotification] = useState("");
+  const [showImplementation, setShowImplementation] = useState(false);
 
   useEffect(() => {
     const numericId = Number(id);
@@ -250,8 +276,6 @@ const CodeDetailPage = () => {
 
   return (
     <Container>
-
-      {/* Code Detail Section */}
       {code && (
         <CodeDetailContainer>
           <CodeHeader>
@@ -271,6 +295,24 @@ const CodeDetailPage = () => {
 
           {/* Description */}
           <Description>{code.description}</Description>
+
+          {/* Nút "Implement" và nội dung howToImplement */}
+          {code.howToImplement && (
+            <>
+              <ImplementButton
+                onClick={() => setShowImplementation(!showImplementation)}
+              >
+                {showImplementation
+                  ? "Hide Implementation Guide"
+                  : "Show Implementation Guide"}
+              </ImplementButton>
+              {showImplementation && (
+                <ImplementationContainer>
+                  {code.howToImplement}
+                </ImplementationContainer>
+              )}
+            </>
+          )}
 
           {/* Language Tabs */}
           <LanguageTabs>
@@ -298,7 +340,7 @@ const CodeDetailPage = () => {
             </SyntaxHighlighter>
           </CodeBlock>
 
-          {/* Related Codes Section */}
+          {/* Related Codes Section (giữ nguyên như cũ) */}
           <RelatedCodesSection>
             <RelatedCodesTitle>Related Code Snippets</RelatedCodesTitle>
             <CardsGrid>
@@ -306,7 +348,7 @@ const CodeDetailPage = () => {
                 .filter(
                   (relatedCode) =>
                     relatedCode.id !== code.id &&
-                    relatedCode.tags.some(tag => code.tags.includes(tag))
+                    relatedCode.tags.some((tag) => code.tags.includes(tag))
                 )
                 .map((relatedCode) => (
                   <CodeCard
@@ -316,9 +358,9 @@ const CodeDetailPage = () => {
                     description={relatedCode.description}
                     tags={relatedCode.tags}
                     buttonText="View Code"
-                    buttonLink={`/library-code/${relatedCode.id}`} // Chuyển hướng đến trang chi tiết code liên quan
-                    isAdded={false} // Hoặc tùy thuộc vào logic bạn muốn
-                    onAddToLibrary={() => {}} // Nếu cần, hãy thêm chức năng tương ứng
+                    buttonLink={`/library-code/${relatedCode.id}`}
+                    isAdded={false}
+                    onAddToLibrary={() => {}}
                     maxWidth="300px"
                     height="auto"
                   />

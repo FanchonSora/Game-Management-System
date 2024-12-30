@@ -4,7 +4,6 @@ import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 import marketCodes from "../../data/marketCodes"; // Import dữ liệu từ marketCodes.js
-import Navbar from "../../components/Navbar"; // Import Navbar component
 
 // Keyframes for Animations
 const fadeIn = keyframes`
@@ -29,7 +28,7 @@ const slideIn = keyframes`
 
 // Styled Components
 
-// Container with Background Gradient
+// Container with Background Gradient and Padding to Avoid Navbar Overlap
 const Container = styled.div`
   font-family: "Roboto", sans-serif;
   background: linear-gradient(135deg, #182b3a 0%, #0d1c2e 100%);
@@ -37,6 +36,7 @@ const Container = styled.div`
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  padding-top: 80px; /* Thêm padding-top để tránh bị che bởi Navbar */
 `;
 
 // StyledNavbar để tránh xung đột với component đã import
@@ -47,8 +47,10 @@ const StyledNavbar = styled.nav`
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.5);
   margin-bottom: 2rem;
-  z-index: 1000; /* Ensure Navbar is always on top */
-  position: relative;
+  z-index: 1000;
+  position: fixed; /* Đặt Navbar cố định ở đầu trang */
+  top: 0;
+  left: 0;
 `;
 
 const NavLinks = styled.div`
@@ -135,6 +137,32 @@ const Tag = styled.span`
   }
 `;
 
+// Search Bar Styled Components
+const SearchBarContainer = styled.div`
+  width: 90%;
+  margin: 0 auto 30px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 500; /* Đảm bảo thanh tìm kiếm nằm trên carousel nếu cần */
+`;
+
+const SearchInput = styled.input`
+  width: 100%;
+  max-width: 500px;
+  padding: 10px 15px;
+  border-radius: 25px;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+  transition: box-shadow 0.3s ease;
+
+  &:focus {
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+  }
+`;
+
 // Carousel Styled Components
 const CarouselContainer = styled.div`
   margin-bottom: 60px;
@@ -212,7 +240,7 @@ const DiscountBadge = styled.div`
   position: absolute;
   top: 10px;
   left: 10px;
-  background-color: #2ecc71;
+  background-color: #ff9800; /* Đổi màu cho nổi bật */
   color: #fff;
   padding: 5px 8px;
   border-radius: 3px;
@@ -248,14 +276,33 @@ const ButtonGroup = styled.div`
   display: flex;
   gap: 10px;
   justify-content: center;
+  margin-top: 10px; /* Thêm khoảng cách */
 `;
 
+// Nút Mua cho mã trả phí
+const BuyButton = styled.button`
+  background-color: #ff5722;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  padding: 8px 13px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  box-shadow: 0 2px 5px rgba(255, 87, 34, 0.5);
+
+  &:hover {
+    background-color: #e64a19;
+  }
+`;
+
+// Nút Thêm cho mã miễn phí
 const FreeButton = styled.button`
   background-color: #66c0f4;
   border: none;
   border-radius: 5px;
   color: #000;
-  padding: 8px 15px;
+  padding: 8px 13px;
   font-weight: bold;
   cursor: pointer;
   transition: background 0.3s ease;
@@ -266,19 +313,20 @@ const FreeButton = styled.button`
   }
 `;
 
+// Nút Xem cho mã miễn phí
 const ViewButton = styled.button`
-  background-color: #2ecc71;
+  background-color: #66c0f4;
   border: none;
   border-radius: 5px;
   color: #000;
-  padding: 8px 15px;
+  padding: 8px 13px;
   font-weight: bold;
   cursor: pointer;
   transition: background 0.3s ease;
   box-shadow: 0 2px 5px rgba(46, 204, 113, 0.5);
 
   &:hover {
-    background-color: #28b54a;
+    background-color: #218838;
   }
 `;
 
@@ -311,6 +359,8 @@ const Grid = styled.div`
   animation: ${fadeIn} 1s ease-out;
 `;
 
+// Nút Thêm vào Library và Mua Code (AddButton and BuyButton) được định nghĩa ở trên
+
 // Function to chunk array into smaller arrays
 const chunkArray = (arr, size) => {
   const result = [];
@@ -320,27 +370,33 @@ const chunkArray = (arr, size) => {
   return result;
 };
 
-// Function to render code cards for categories
-const renderCodeCards = (codes, handleAdd, handleView) => {
+// Render code cards
+const renderCodeCards = (codes, handleAdd, handleView, handleBuy) => {
   return codes.map((code) => (
     <FeaturedCard key={code.id}>
-      {/* Hiển thị DiscountBadge nếu không miễn phí */}
-      {code.price !== "Free" && (
-        <DiscountBadge>{code.discount || ""}</DiscountBadge>
-      )}
+      {/* Hiển thị DiscountBadge nếu có */}
+      {code.discount && <DiscountBadge>{code.discount}</DiscountBadge>}
       <CodeImage src={code.image} alt={code.title} />
       <CodeTitle>{code.title}</CodeTitle>
-      <CodePrice>{code.price}</CodePrice>
       <div>
         {code.tags.map((tag, index) => (
           <Tag key={index}>{tag}</Tag>
         ))}
       </div>
+      <CodePrice>{code.price}</CodePrice>
       <ButtonGroup>
+        {/* Hiển thị nút "Thêm" nếu mã miễn phí */}
         {code.price === "Free" && (
           <FreeButton onClick={() => handleAdd(code)}>Thêm</FreeButton>
         )}
-        <ViewButton onClick={() => handleView(code)}>Xem</ViewButton>
+        {/* Hiển thị nút "Xem" nếu mã miễn phí */}
+        {code.price === "Free" && (
+          <ViewButton onClick={() => handleView(code)}>Xem</ViewButton>
+        )}
+        {/* Hiển thị nút "Mua" nếu mã có giá */}
+        {code.price !== "Free" && (
+          <BuyButton onClick={() => handleBuy(code)}>Mua</BuyButton>
+        )}
       </ButtonGroup>
     </FeaturedCard>
   ));
@@ -357,6 +413,9 @@ const MarketCodePage = () => {
   const [isLibraryDropdownOpen, setLibraryDropdownOpen] = useState(false);
   const [isProfileDropdownOpen, setProfileDropdownOpen] = useState(false);
 
+  // State for Search
+  const [searchQuery, setSearchQuery] = useState("");
+
   // Refs for Dropdowns
   const marketRef = useRef(null);
   const libraryRef = useRef(null);
@@ -365,12 +424,23 @@ const MarketCodePage = () => {
   // Destructure data từ marketCodes
   const { featuredCodes, libraries, snippets, tools } = marketCodes;
 
-  // Prepare slides for carousel (3 codes per slide)
-  const slides = chunkArray(featuredCodes, 3);
+  // Lọc featuredCodes dựa trên searchQuery
+  const filteredFeaturedCodes = featuredCodes.filter((code) => {
+    const query = searchQuery.toLowerCase();
+    return (
+      code.title.toLowerCase().includes(query) ||
+      code.tags.some((tag) => tag.toLowerCase().includes(query))
+    );
+  });
+
+  // Chunk for carousel (2 codes per slide)
+  const slides = chunkArray(filteredFeaturedCodes, 2); // Thay đổi từ 3 thành 2
   const totalSlides = slides.length;
 
   // useEffect to handle auto-slide every 10 seconds
   useEffect(() => {
+    if (totalSlides === 0) return;
+
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % totalSlides);
     }, 10000); // 10 seconds
@@ -401,11 +471,11 @@ const MarketCodePage = () => {
   // Function to handle adding free codes to library
   const handleAdd = (code) => {
     if (code.price === "Free") {
-      const storedCodes = JSON.parse(localStorage.getItem("libraryCodes")) || [];
+      const storedCodes = JSON.parse(localStorage.getItem("codeData")) || [];
       // Add the new code if not already present
       if (!storedCodes.find((c) => c.id === code.id)) {
         storedCodes.push({ id: code.id, name: code.title });
-        localStorage.setItem("libraryCodes", JSON.stringify(storedCodes));
+        localStorage.setItem("codeData", JSON.stringify(storedCodes));
         alert(`${code.title} đã được thêm vào thư viện của bạn!`);
       } else {
         alert(`${code.title} đã có trong thư viện của bạn.`);
@@ -420,8 +490,19 @@ const MarketCodePage = () => {
     navigate(`/market-code/${code.id}`);
   };
 
+  // Function to handle buying code
+  const handleBuy = (code) => {
+    // Implement logic mua code, ví dụ mở modal thanh toán hoặc chuyển hướng tới trang mua hàng
+    alert(`Bạn sẽ mua ${code.title} với giá ${code.price}!`);
+    // Ví dụ: navigate(`/buy-code/${code.id}`);
+  };
+
   // Function to render featured codes carousel
   const renderFeaturedCodesCarousel = () => {
+    if (filteredFeaturedCodes.length === 0) {
+      return <p style={{ textAlign: "center", color: "#fff" }}>Không tìm thấy đoạn mã nào phù hợp.</p>;
+    }
+
     return (
       <CarouselWrapper>
         <SlidesContainer
@@ -434,23 +515,28 @@ const MarketCodePage = () => {
             <Slide key={index}>
               {slide.map((code) => (
                 <FeaturedCard key={code.id}>
+                  {/* Discount badge nếu code có discount */}
                   {code.discount && <DiscountBadge>{code.discount}</DiscountBadge>}
                   <CodeImage src={code.image} alt={code.title} />
                   <CodeTitle>{code.title}</CodeTitle>
-                  
-                  {/* Tags Section */}
                   <div>
                     {code.tags && code.tags.map((tag, idx) => (
                       <Tag key={idx}>{tag}</Tag>
                     ))}
                   </div>
-                  
-                  <CodePrice>{code.price === 'Free' ? 'Free' : code.price}</CodePrice>
+                  <CodePrice>
+                    {code.price === "Free" ? "Free" : code.price}
+                  </CodePrice>
                   <ButtonGroup>
-                    {code.price === 'Free' && (
+                    {code.price === "Free" && (
                       <FreeButton onClick={() => handleAdd(code)}>Thêm</FreeButton>
                     )}
-                    <ViewButton onClick={() => handleView(code)}>Xem</ViewButton>
+                    {code.price === "Free" && (
+                      <ViewButton onClick={() => handleView(code)}>Xem</ViewButton>
+                    )}
+                    {code.price !== "Free" && (
+                      <BuyButton onClick={() => handleBuy(code)}>Mua</BuyButton>
+                    )}
                   </ButtonGroup>
                 </FeaturedCard>
               ))}
@@ -464,7 +550,7 @@ const MarketCodePage = () => {
   return (
     <Container>
       {/* Top Navigation Bar */}
-      <Navbar> {/* Sử dụng component đã import */}
+      <StyledNavbar>
         <NavLinks>
           {/* Market Dropdown */}
           <Dropdown ref={marketRef}>
@@ -523,7 +609,18 @@ const MarketCodePage = () => {
             )}
           </Dropdown>
         </NavLinks>
-      </Navbar>
+      </StyledNavbar>
+
+      {/* Thanh Tìm Kiếm */}
+      <SearchBarContainer>
+        <SearchInput
+          type="text"
+          placeholder="Tìm kiếm đoạn mã..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          aria-label="Tìm kiếm đoạn mã"
+        />
+      </SearchBarContainer>
 
       {/* Featured Codes Carousel */}
       <CarouselContainer>
@@ -537,7 +634,7 @@ const MarketCodePage = () => {
         <SectionTitle>Libraries</SectionTitle>
         <Subtitle>Essential libraries to boost your projects</Subtitle>
         <Grid>
-          {renderCodeCards(libraries, handleAdd, handleView)}
+          {renderCodeCards(libraries, handleAdd, handleView, handleBuy)}
         </Grid>
       </CategorySection>
 
@@ -546,7 +643,7 @@ const MarketCodePage = () => {
         <SectionTitle>Snippets</SectionTitle>
         <Subtitle>Reusable code snippets for common tasks</Subtitle>
         <Grid>
-          {renderCodeCards(snippets, handleAdd, handleView)}
+          {renderCodeCards(snippets, handleAdd, handleView, handleBuy)}
         </Grid>
       </CategorySection>
 
@@ -555,7 +652,7 @@ const MarketCodePage = () => {
         <SectionTitle>Tools</SectionTitle>
         <Subtitle>Tools to enhance your development workflow</Subtitle>
         <Grid>
-          {renderCodeCards(tools, handleAdd, handleView)}
+          {renderCodeCards(tools, handleAdd, handleView, handleBuy)}
         </Grid>
       </CategorySection>
     </Container>

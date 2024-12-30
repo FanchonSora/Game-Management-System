@@ -16,10 +16,16 @@ const codeData = [
   
   if __name__ == "__main__":
       numbers = generate_random_numbers(10)
-      print("Random Numbers:", numbers)`,
+      print("Random Numbers:", numbers)
+  `,
       },
       image: "/code/random_number.png",
-      price: "Free", // Thêm trường price
+      price: "Free",
+      howToImplement: `
+  1. Cài đặt Python (nếu chưa có).
+  2. Tạo file \`random_number.py\` và sao chép đoạn code bên trên.
+  3. Chạy \`python random_number.py\` để xem kết quả.
+  `,
     },
     {
       id: 2,
@@ -44,18 +50,25 @@ const codeData = [
   int main() {
       Circle circle1 = {0.0f, 0.0f, 5.0f};
       Circle circle2 = {3.0f, 4.0f, 5.0f};
-      
+  
       if (areColliding(circle1, circle2)) {
           std::cout << "Circles are colliding!" << std::endl;
       } else {
           std::cout << "Circles are not colliding." << std::endl;
       }
-      
+  
       return 0;
-  }`,
+  }
+  `,
       },
       image: "/code/collision_detection.png",
       price: "Free",
+      howToImplement: `
+  1. Cài đặt trình biên dịch C++ (VD: g++).
+  2. Tạo file \`collision_detection.cpp\` và copy đoạn code.
+  3. Biên dịch: \`g++ collision_detection.cpp -o collision\`.
+  4. Chạy: \`./collision\`.
+  `,
     },
     {
       id: 3,
@@ -95,10 +108,16 @@ const codeData = [
   if __name__ == "__main__":
       ai = AICharacter("Goblin")
       for _ in range(5):
-          ai.update()`,
+          ai.update()
+  `,
       },
       image: "/code/ai_behavior.png",
       price: "Free",
+      howToImplement: `
+  1. Tạo file \`ai_behavior.py\` với nội dung trên.
+  2. Chạy \`python ai_behavior.py\`.
+  3. Tuỳ chỉnh logic \`patrol\`, \`chase\`, \`attack\` theo AI bạn muốn.
+  `,
     },
     {
       id: 4,
@@ -165,10 +184,16 @@ const codeData = [
       start = (0, 0)
       goal = (2, 2)
       path = a_star_search(graph, start, goal)
-      print("Path:", path)`,
+      print("Path:", path)
+  `,
       },
       image: "/code/pathfinding.png",
       price: "Free",
+      howToImplement: `
+  1. Copy đoạn code vào \`pathfinding.py\`.
+  2. Chạy \`python pathfinding.py\`.
+  3. Thay đổi \`graph\`, \`start\`, \`goal\` tuỳ theo dữ liệu trò chơi của bạn.
+  `,
     },
     {
       id: 5,
@@ -205,10 +230,16 @@ const codeData = [
       inv.add_item("Sword", 2)
       inv.add_item("Potion", 5)
       inv.remove_item("Potion", 2)
-      print("Inventory:", inv.get_inventory())`,
+      print("Inventory:", inv.get_inventory())
+  `,
       },
       image: "/code/inventory_management.png",
       price: "Free",
+      howToImplement: `
+  1. Tạo một module \`inventory\` và thêm file \`__init__.py\`.
+  2. Tạo object \`Inventory\`, thêm/xoá item.
+  3. Tích hợp module này vào trò chơi để quản lý đồ (items).
+  `,
     },
     // Thêm các đoạn mã khác nếu cần
   ];
