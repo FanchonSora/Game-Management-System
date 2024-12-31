@@ -17,6 +17,7 @@ import EditProfile from "./pages/EditProfile";
 import ActivityPage from "./pages/ActivityPage";
 import CodeDetailMarket from "./pages/market/CodeDetailMarket";
 import LibraryGameDetailPage from "./pages/library/LibraryGameDetailPage";
+import CartPage from "./pages/CartPage";
 
 function App() {
 
@@ -40,6 +41,7 @@ function App() {
         <Route path="/market-code/:id" element={<CodeDetailMarket />} />
         <Route path="/edit-profile" element={<EditProfile />} />
         <Route path="/activity" element={<ActivityPage />} />
+        <Route path="/CartPage" element={<CartPage />} />
         <Route path="*" element={<HomePage />} />
       </Routes>
     </BrowserRouter>
