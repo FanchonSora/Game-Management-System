@@ -152,6 +152,15 @@ const LibraryCode = () => {
     setAddedCodes(storedCodes);
   }, []);
 
+  // Hàm xóa code khỏi thư viện
+  const handleRemoveCode = (code) => {
+    const updatedCodes = addedCodes.filter((c) => c.id !== code.id);
+    setAddedCodes(updatedCodes);
+    localStorage.setItem("libraryCodes", JSON.stringify(updatedCodes));
+    setNotification(`${code.title} đã được xóa khỏi thư viện của bạn!`);
+    setTimeout(() => setNotification(""), 3000);
+  };
+
   // Debounce the search query input
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -231,21 +240,24 @@ const LibraryCode = () => {
       {/* Code/List */}
       <CodeList>
         {filteredCodes.length > 0 ? (
-          filteredCodes.map((code) => (
-            <CodeCard
-              key={code.id}
-              image={code.image}
-              title={code.title}
-              description={code.description}
-              tags={code.tags}
-              buttonText="View"
-              buttonLink={`/library-code/${code.id}`} // Chuyển hướng đến trang chi tiết code
-              isAdded={addedCodes.some((c) => c.id === code.id)}
-              onAddToLibrary={() => handleAddCode(code)}
-              maxWidth="300px"
-              height="auto"
-            />
-          ))
+          filteredCodes.map((code) => {
+            const isAdded = addedCodes.some((c) => c.id === code.id);
+            return (
+              <CodeCard
+                key={code.id}
+                image={code.image}
+                title={code.title}
+                description={code.description}
+                tags={code.tags}
+                buttonText="View"
+                buttonLink={`/library-code/${code.id}`}
+                isAdded={isAdded}
+                onAddToLibrary={() => handleAddCode(code)}
+                // Thêm onRemoveFromLibrary
+                onRemoveFromLibrary={() => handleRemoveCode(code)}
+              />
+            );
+          })
         ) : (
           <p>No repositories found matching your search.</p>
         )}
