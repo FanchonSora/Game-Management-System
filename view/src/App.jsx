@@ -14,7 +14,6 @@ import MarketCodePage from "./pages/market/MarketCode";
 import SignUpPage from "./pages/SignUpPage";
 import CodeDetailPage from "./pages/library/CodeDetailPage";
 import EditProfile from "./pages/EditProfile";
-import ActivityPage from "./pages/ActivityPage";
 import CodeDetailMarket from "./pages/market/CodeDetailMarket";
 import LibraryGameDetailPage from "./pages/library/LibraryGameDetailPage";
 
@@ -39,7 +38,6 @@ function App() {
         <Route path="/market-game/:id" element={<GameDetailPage />} />
         <Route path="/market-code/:id" element={<CodeDetailMarket />} />
         <Route path="/edit-profile" element={<EditProfile />} />
-        <Route path="/activity" element={<ActivityPage />} />
         <Route path="*" element={<HomePage />} />
       </Routes>
     </BrowserRouter>

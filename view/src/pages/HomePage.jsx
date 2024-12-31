@@ -363,11 +363,6 @@ const ProductCard = ({ product, toggleFavorite, viewDetails, isFavorite }) => {
         {product.price === 0 ? "Free" : `$${product.price.toFixed(2)}`}
       </CardPrice>
       <ButtonGroup>
-        {product.price === 0 && (
-          <FreeButton onClick={() => toggleFavorite(product.id)}>
-            Free
-          </FreeButton>
-        )}
         <ViewButton onClick={() => viewDetails(product.id)}>
           View
         </ViewButton>

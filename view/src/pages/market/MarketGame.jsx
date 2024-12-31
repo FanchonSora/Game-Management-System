@@ -609,7 +609,6 @@ const FeaturedMarketGamePage = () => {
               </NavButton>
               {isProfileDropdownOpen && (
                 <DropdownMenu>
-                  <DropdownItem to="/activity">Activity</DropdownItem>
                   <DropdownItem to="/profile">Profile</DropdownItem>
                   <DropdownItem to="/friends">Friends</DropdownItem>
                   <DropdownItem to="/badges">Badges</DropdownItem>
