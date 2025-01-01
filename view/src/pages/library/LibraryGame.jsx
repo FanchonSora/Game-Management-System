@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import styled from "styled-components";
-import libraryGames from "../../data/libraryGames";
 
 const LibraryPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -31,12 +30,10 @@ const LibraryPage = () => {
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
 
-    // 1. Lưu data (nếu muốn chắc chắn localStorage luôn có)
+    const libraryGames = JSON.parse(localStorage.getItem("libraryGames")) || [];
     localStorage.setItem("libraryGames", JSON.stringify(libraryGames));
 
-    // 2. Đọc data từ localStorage
-    const storedGames = JSON.parse(localStorage.getItem("libraryGames")) || [];
-    setAllGames(storedGames);
+    setAllGames(libraryGames);
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);

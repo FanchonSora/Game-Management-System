@@ -7,7 +7,6 @@ import { Light as SyntaxHighlighter } from "react-syntax-highlighter";
 import { github } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import python from "react-syntax-highlighter/dist/esm/languages/hljs/python";
 import cpp from "react-syntax-highlighter/dist/esm/languages/hljs/cpp";
-import libraryCodes from "../../data/libraryCodes"; // Import codeData từ file mới tạo
 import CodeCard from "../../components/CodeCard"; // Import CodeCard component
 
 SyntaxHighlighter.registerLanguage("python", python);
@@ -235,6 +234,8 @@ const CodeDetailPage = () => {
   const [activeLanguage, setActiveLanguage] = useState("");
   const [notification, setNotification] = useState("");
   const [showImplementation, setShowImplementation] = useState(false);
+
+  const libraryCodes = JSON.parse(localStorage.getItem("libraryCodes")) || [];
 
   useEffect(() => {
     const numericId = Number(id);
