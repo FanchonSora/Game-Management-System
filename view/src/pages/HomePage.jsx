@@ -683,11 +683,13 @@ const HomePage = () => {
               </DropdownMenu>
             )}
           </Dropdown>
+
+          {/* Cart Icon */}
+          <NavButton onClick={() => navigate("/CartPage")} aria-label="Go to Cart">
+            <FaShoppingCart size={24} color="#c7d5e0" />
+          </NavButton>
         </NavLinks>
-        {/* Cart Icon */}
-        <NavButton onClick={() => navigate("/CartPage")} aria-label="Go to Cart">
-          <FaShoppingCart size={24} color="#c7d5e0" />
-        </NavButton>
+
       </Navbar>
 
       {/* Hero Section */}

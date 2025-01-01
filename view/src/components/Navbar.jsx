@@ -1,7 +1,7 @@
-// src/components/Navbar.jsx
 import React, { useState, useRef, useEffect } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { FaShoppingCart } from 'react-icons/fa'; // Import Cart Icon
 
 const NavbarContainer = styled.nav`
   width: 100%;
@@ -87,16 +87,41 @@ const StyledNavLink = styled(NavLink)`
   }
 `;
 
+const CartIconWrapper = styled.div`
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+`;
+
+const CartIcon = styled(FaShoppingCart)`
+  font-size: 24px;
+  color: #c7d5e0;
+`;
+
+const CartCount = styled.span`
+  position: absolute;
+  top: -8px;
+  right: -7px;
+  background-color: #e74c3c;
+  color: white;
+  font-size: 10px;  /* Even smaller font size */
+  font-weight: bold;
+  border-radius: 50%;
+  padding: 2px 6px;  /* Smaller padding */
+`;
+
 const Navbar = () => {
-  // Dropdown States
   const [isMarketDropdownOpen, setMarketDropdownOpen] = useState(false);
   const [isLibraryDropdownOpen, setLibraryDropdownOpen] = useState(false);
   const [isProfileDropdownOpen, setProfileDropdownOpen] = useState(false);
+  const [cartCount, setCartCount] = useState(0); // State to hold the cart count
 
-  // Refs for Dropdowns
   const marketRef = useRef(null);
   const libraryRef = useRef(null);
   const profileRef = useRef(null);
+
+  const navigate = useNavigate(); // To navigate to the cart page
 
   // Close dropdowns when clicking outside
   useEffect(() => {
@@ -116,6 +141,12 @@ const Navbar = () => {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
+  }, []);
+
+  // Update cart count from localStorage
+  useEffect(() => {
+    const storedCart = JSON.parse(localStorage.getItem('Cart')) || [];
+    setCartCount(storedCart.length); // Set cart count based on localStorage
   }, []);
 
   return (
@@ -178,6 +209,11 @@ const Navbar = () => {
           )}
         </Dropdown>
 
+        {/* Cart Icon */}
+        <CartIconWrapper onClick={() => navigate("/CartPage")}>
+          <CartIcon />
+          {cartCount > 0 && <CartCount>{cartCount}</CartCount>}
+        </CartIconWrapper>
       </NavLinks>
     </NavbarContainer>
   );

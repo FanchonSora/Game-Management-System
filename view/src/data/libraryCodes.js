@@ -1,6 +1,4 @@
-// src/data/codeData.js
-
-const codeData = [
+const libraryCodes = [
     {
       id: 1,
       title: "Random Number Generation",
@@ -244,5 +242,5 @@ const codeData = [
     // Thêm các đoạn mã khác nếu cần
   ];
   
-  export default codeData;
+  export default libraryCodes;
   

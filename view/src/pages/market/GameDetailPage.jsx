@@ -1,11 +1,9 @@
-// src/pages/GameDetailPage.jsx
-
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 import gameData from "../../data/gameData"; 
 import HoverCard from "../../components/HoverCard";
-import Navbar from "../../components/Navbar"; // Import Navbar component
+import Navbar from "../../components/Navbar";
 
 // Keyframes for Animations
 const fadeIn = keyframes`
@@ -14,8 +12,6 @@ const fadeIn = keyframes`
 `;
 
 // Styled Components
-
-// Container
 const Container = styled.div`
   font-family: 'Roboto', sans-serif;
   background-color: #f6f8fa;
@@ -26,13 +22,11 @@ const Container = styled.div`
   overflow: hidden;
 `;
 
-// Content Wrapper
 const ContentWrapper = styled.div`
   max-width: 1200px;
   margin: 0 auto;
 `;
 
-// SectionTitle
 const SectionTitle = styled.h2`
   font-size: 24px;
   margin-bottom: 20px;
@@ -40,7 +34,6 @@ const SectionTitle = styled.h2`
   text-align: center;
 `;
 
-// Game Detail Section
 const GameDetailContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -48,7 +41,6 @@ const GameDetailContainer = styled.div`
   animation: ${fadeIn} 1s ease-out;
 `;
 
-// Game Header
 const GameHeader = styled.div`
   display: flex;
   flex-direction: column;
@@ -56,7 +48,6 @@ const GameHeader = styled.div`
   gap: 15px;
 `;
 
-// Game Image Wrapper
 const GameImageWrapper = styled.div`
   width: 300px;
   height: 300px;
@@ -65,26 +56,22 @@ const GameImageWrapper = styled.div`
   box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 `;
 
-// Game Image
 const GameImage = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
 `;
 
-// Game Title
 const GameTitle = styled.h1`
   font-size: 32px;
   color: #24292e;
 `;
 
-// Buttons
 const Buttons = styled.div`
   display: flex;
   gap: 20px;
 `;
 
-// Add to Library Button
 const AddButton = styled.button`
   background-color: #2ecc71;
   border: none;
@@ -101,7 +88,6 @@ const AddButton = styled.button`
   }
 `;
 
-// Purchase Button
 const PurchaseButton = styled.button`
   background-color: #e74c3c;
   border: none;
@@ -118,7 +104,6 @@ const PurchaseButton = styled.button`
   }
 `;
 
-// Back Button
 const BackButton = styled(Link)`
   background-color: #3498db;
   border: none;
@@ -136,7 +121,6 @@ const BackButton = styled(Link)`
   }
 `;
 
-// Tags
 const Tags = styled.div`
   display: flex;
   gap: 10px;
@@ -152,7 +136,6 @@ const Tag = styled.span`
   font-size: 14px;
 `;
 
-// Game Information
 const InfoBox = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -179,7 +162,6 @@ const InfoText = styled.span`
   color: #34495e;
 `;
 
-// Description
 const DescriptionBox = styled.div`
   background-color: #ecf0f1;
   padding: 20px;
@@ -191,7 +173,6 @@ const DescriptionText = styled.p`
   color: #2c3e50;
 `;
 
-// Screenshots
 const Screenshots = styled.div`
   display: flex;
   gap: 20px;
@@ -207,7 +188,6 @@ const Screenshot = styled.img`
   box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 `;
 
-// Featured Games Section
 const FeaturedGamesSection = styled.div`
   margin-top: 40px;
 `;
@@ -219,7 +199,6 @@ const FeaturedGamesTitle = styled.h2`
   text-align: center;
 `;
 
-// Categorized Games Section
 const CategorizedGamesSection = styled.div`
   margin-top: 40px;
 `;
@@ -231,7 +210,6 @@ const CategorizedGamesTitle = styled.h2`
   text-align: center;
 `;
 
-// Games Grid
 const GamesGridStyled = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -246,53 +224,52 @@ const GameDetailPage = () => {
 
   useEffect(() => {
     const numericId = Number(id);
-    console.log("Searching for game with id:", numericId);
     if (isNaN(numericId)) {
       alert("Invalid game ID.");
       navigate("/library-game");
       return;
     }
     const foundGame = gameData.find((item) => item.id === numericId);
-    console.log("Found game:", foundGame);
     if (foundGame) {
       setGame(foundGame);
     } else {
-      // Redirect to Library page if game not found
       alert("Game not found. Redirecting to Library.");
       navigate("/library-game");
     }
   }, [id, navigate]);
 
-  // Add to library function
   const handleAddToLibrary = () => {
     if (game.price === 'Free') {
       const storedGames = JSON.parse(localStorage.getItem('libraryGames')) || [];
-      // Thêm trò chơi mới nếu chưa có
       if (!storedGames.find((g) => g.id === game.id)) {
         storedGames.push({ id: game.id, name: game.title });
         localStorage.setItem('libraryGames', JSON.stringify(storedGames));
-        // logActivity('add', game); // Nếu bạn có hàm này, hãy dùng hoặc bỏ dòng này
-        alert(`${game.title} đã được thêm vào Thư viện của bạn!`);
+        alert(`${game.title} has been added to your library!`);
       } else {
-        alert(`${game.title} đã có trong Thư viện của bạn.`);
+        alert(`${game.title} is already in your library.`);
       }
     }
   };
 
-  // Purchase function
   const handlePurchase = () => {
-    // Implement purchase functionality here, e.g., redirect to payment gateway
-    // For demo purposes, we'll just show an alert
-    alert(`Bạn đã chọn mua ${game.title} với giá ${game.price}.`);
-    // Sau khi mua thành công, bạn có thể thêm game vào thư viện hoặc thực hiện các bước tiếp theo
+    if (!game) return;
+
+    const storedCart = JSON.parse(localStorage.getItem("Cart")) || [];
+    const alreadyInCart = storedCart.find((g) => g.id === game.id);
+
+    if (alreadyInCart) {
+      alert(`${game.title} is already in your cart.`);
+    } else {
+      storedCart.push(game);
+      localStorage.setItem("Cart", JSON.stringify(storedCart));
+      alert(`${game.title} has been added to your cart.`);
+    }
   };
 
   return (
     <Container>
-      <Navbar /> {/* Sử dụng component Navbar từ src/components/Navbar.jsx */}
-
+      <Navbar />
       <ContentWrapper>
-        {/* Game Detail Section */}
         {game ? (
           <GameDetailContainer>
             <GameHeader>
@@ -309,15 +286,11 @@ const GameDetailPage = () => {
                 <BackButton to="/market-game">Back</BackButton>
               </Buttons>
             </GameHeader>
-
-            {/* Tags */}
             <Tags>
               {game.tags.map((tag) => (
                 <Tag key={tag}>{tag}</Tag>
               ))}
             </Tags>
-
-            {/* Game Information */}
             <InfoBox>
               <InfoItem>
                 <InfoTitle>Genre</InfoTitle>
@@ -336,14 +309,10 @@ const GameDetailPage = () => {
                 <InfoText>{game.rating}</InfoText>
               </InfoItem>
             </InfoBox>
-
-            {/* Description */}
             <DescriptionBox>
               <SectionTitle>About This Game</SectionTitle>
               <DescriptionText>{game.description}</DescriptionText>
             </DescriptionBox>
-
-            {/* Screenshots */}
             {game.screenshots && game.screenshots.length > 0 && (
               <div>
                 <SectionTitle>Screenshots</SectionTitle>
@@ -358,16 +327,12 @@ const GameDetailPage = () => {
                 </Screenshots>
               </div>
             )}
-
-            {/* Featured Games Section */}
             <FeaturedGamesSection>
               <FeaturedGamesTitle>Featured Games</FeaturedGamesTitle>
               <GamesGridStyled>
                 {gameData
-                  .filter(
-                    (featuredGame) =>
-                      featuredGame.tags.includes("Featured") &&
-                      featuredGame.id !== game.id
+                  .filter((featuredGame) =>
+                    featuredGame.tags.includes("Featured") && featuredGame.id !== game.id
                   )
                   .map((featuredGame) => (
                     <HoverCard
@@ -379,16 +344,12 @@ const GameDetailPage = () => {
                   ))}
               </GamesGridStyled>
             </FeaturedGamesSection>
-
-            {/* Casual Games Section */}
             <CategorizedGamesSection>
               <CategorizedGamesTitle>Casual Games</CategorizedGamesTitle>
               <GamesGridStyled>
                 {gameData
-                  .filter(
-                    (casualGame) =>
-                      casualGame.tags.includes("Casual") &&
-                      casualGame.id !== game.id
+                  .filter((casualGame) =>
+                    casualGame.tags.includes("Casual") && casualGame.id !== game.id
                   )
                   .map((casualGame) => (
                     <HoverCard

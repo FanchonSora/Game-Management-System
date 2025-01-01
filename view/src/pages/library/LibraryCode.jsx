@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
-import codeData from "../../data/codeData"; // Import codeData từ file mới tạo
+import libraryCodes from "../../data/libraryCodes"; // Import codeData từ file mới tạo
 import CodeCard from "../../components/CodeCard"; // Import CodeCard component
 import Navbar from "../../components/Navbar"; // Import Navbar component
 
@@ -148,6 +148,8 @@ const LibraryCode = () => {
 
   // Load added codes from localStorage on mount
   useEffect(() => {
+    localStorage.setItem("libraryCodes", JSON.stringify(libraryCodes));
+
     const storedCodes = JSON.parse(localStorage.getItem("libraryCodes")) || [];
     setAddedCodes(storedCodes);
   }, []);
@@ -174,7 +176,7 @@ const LibraryCode = () => {
   }, [searchQuery]);
 
   // Filtering codes based on active tab and debounced search query
-  const filteredCodes = codeData.filter((code) => {
+  const filteredCodes = libraryCodes.filter((code) => {
     const matchesCategory =
       activeTab === "All" || code.category === activeTab;
     const query = debouncedSearchQuery.toLowerCase();

@@ -404,6 +404,7 @@ const renderCodeCards = (codes, handleAdd, handleView, handleBuy) => {
 
 const MarketCodePage = () => {
   const navigate = useNavigate();
+  const [addedGames, setAddedGames] = useState([]);
 
   // State for Carousel
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -471,11 +472,11 @@ const MarketCodePage = () => {
   // Function to handle adding free codes to library
   const handleAdd = (code) => {
     if (code.price === "Free") {
-      const storedCodes = JSON.parse(localStorage.getItem("codeData")) || [];
+      const storedCodes = JSON.parse(localStorage.getItem("libraryCodes")) || [];
       // Add the new code if not already present
-      if (!storedCodes.find((c) => c.id === code.id)) {
-        storedCodes.push({ id: code.id, name: code.title });
-        localStorage.setItem("codeData", JSON.stringify(storedCodes));
+      if (!storedCodes.some((c) => c.id === code.id)) {
+        storedCodes.push(code);
+        localStorage.setItem("libraryCodes", JSON.stringify(storedCodes));
         alert(`${code.title} đã được thêm vào thư viện của bạn!`);
       } else {
         alert(`${code.title} đã có trong thư viện của bạn.`);

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { FaTrashAlt } from "react-icons/fa";
@@ -126,7 +126,7 @@ const RemoveButton = styled.button`
 
 // Continue Shopping Button
 const ContinueShoppingButton = styled.button`
-  background-color: #66c0f4;
+  background-color: #696969;
   border: none;
   border-radius: 5px;
   color: #000;
@@ -135,7 +135,8 @@ const ContinueShoppingButton = styled.button`
   cursor: pointer;
   transition: background 0.3s ease, transform 0.2s;
   width: 20%; 
-  align-self: flex-start; 
+  align-self: flex-start;
+  color: #FFFAFA;
   
   &:hover {
     background-color: #5aa8e6;
@@ -176,35 +177,25 @@ const CartPage = () => {
   const navigate = useNavigate();
 
   // Sample Cart Data (In real-world, this would come from a global state or API)
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      title: "Asterigos: Curse of the Stars",
-      price: 39.99,
-      image: "/game/Asterigos.jpg",
-    },
-    {
-      id: 2,
-      title: "Elden Ring",
-      price: 59.99,
-      image: "/game/Elden Ring.jpg",
-    },
-    {
-      id: 3,
-      title: "Cyberpunk 2077",
-      price: 49.99,
-      image: "/game/Cyberpunk 2077.jpg",
-    },
-  ]);
+  const [cartItems, setCartItems] = useState([]);
+
+  useEffect(() => {
+    const storedCart = JSON.parse(localStorage.getItem("Cart")) || [];
+    setCartItems(storedCart);
+  }, []);
 
   // Remove Item from Cart
   const removeItem = (id) => {
-    setCartItems((prev) => prev.filter((item) => item.id !== id));
+    const updatedCart = cartItems.filter((item) => item.id !== id);
+    setCartItems(updatedCart);
+    localStorage.setItem("Cart", JSON.stringify(updatedCart));
   };
 
   // Calculate Total Price
   const calculateTotal = () => {
-    return cartItems.reduce((total, item) => total + item.price, 0).toFixed(2);
+    return cartItems
+    .reduce((total, item) => total + parseFloat(item.price || 0), 0)
+    .toFixed(2);
   };
 
   // Checkout Handler (navigate to checkout page or handle logic)
@@ -228,13 +219,15 @@ const CartPage = () => {
       </Breadcrumbs>
 
       <CartContainer>
-        <CartItemsSection>
+      <CartItemsSection>
           {cartItems.map((item) => (
             <CartItem key={item.id}>
               <CartItemImage src={item.image} alt={item.title} />
               <CartItemDetails>
                 <CartItemTitle>{item.title}</CartItemTitle>
-                <CartItemPrice>${item.price.toFixed(2)}</CartItemPrice>
+                <CartItemPrice>
+                  ${parseFloat(item.price || 0).toFixed(2)}
+                </CartItemPrice>
               </CartItemDetails>
               <RemoveButton onClick={() => removeItem(item.id)}>
                 <FaTrashAlt />

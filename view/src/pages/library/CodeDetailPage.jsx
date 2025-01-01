@@ -7,7 +7,7 @@ import { Light as SyntaxHighlighter } from "react-syntax-highlighter";
 import { github } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import python from "react-syntax-highlighter/dist/esm/languages/hljs/python";
 import cpp from "react-syntax-highlighter/dist/esm/languages/hljs/cpp";
-import codeData from "../../data/codeData"; // Import codeData từ file mới tạo
+import libraryCodes from "../../data/libraryCodes"; // Import codeData từ file mới tạo
 import CodeCard from "../../components/CodeCard"; // Import CodeCard component
 
 SyntaxHighlighter.registerLanguage("python", python);
@@ -243,7 +243,7 @@ const CodeDetailPage = () => {
       navigate("/library-code");
       return;
     }
-    const foundCode = codeData.find((item) => item.id === numericId);
+    const foundCode = libraryCodes.find((item) => item.id === numericId);
     if (foundCode) {
       setCode(foundCode);
       const languages = Object.keys(foundCode.codeSnippets);
@@ -344,7 +344,7 @@ const CodeDetailPage = () => {
           <RelatedCodesSection>
             <RelatedCodesTitle>Related Code Snippets</RelatedCodesTitle>
             <CardsGrid>
-              {codeData
+              {libraryCodes
                 .filter(
                   (relatedCode) =>
                     relatedCode.id !== code.id &&
