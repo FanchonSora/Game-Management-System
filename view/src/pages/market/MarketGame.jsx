@@ -3,7 +3,6 @@ import { useNavigate, Link } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 import gameData from '../../data/gameData';
 import Card from '../../components/GameCard';
-import libraryGames from '../../data/libraryGames';
 
 // Keyframes
 const fadeIn = keyframes`
@@ -436,6 +435,8 @@ const FeaturedMarketGamePage = () => {
 
   const handleFree = (game) => {
     if (game.price === 'Free') {
+
+      const libraryGames = JSON.parse(localStorage.getItem("libraryGames")) || [];
       const found = libraryGames.find((g) => g.id === game.id);
   
       if (!found) {
@@ -453,7 +454,7 @@ const FeaturedMarketGamePage = () => {
         libraryGames.push(newGame);
   
         // Save updated libraryGames to localStorage
-        localStorage.setItem('libraryGames', JSON.stringify(libraryGames));
+        localStorage.setItem("libraryGames", JSON.stringify(libraryGames));
   
         console.log("LibraryGames after adding:", libraryGames);
         alert(`${game.title} đã được thêm vào Thư viện của bạn!`);

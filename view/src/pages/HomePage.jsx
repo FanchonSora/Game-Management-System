@@ -671,7 +671,6 @@ const HomePage = () => {
             </NavButton>
             {isProfileDropdownOpen && (
               <DropdownMenu>
-                <DropdownItem href="/activity">Activity</DropdownItem>
                 <DropdownItem href="/profile">Profile</DropdownItem>
                 <DropdownItem href="/friends">Friends</DropdownItem>
                 <DropdownItem href="/badges">Badges</DropdownItem>

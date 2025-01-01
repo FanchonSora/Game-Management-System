@@ -27,8 +27,8 @@ const FriendsPage = () => {
   ]);
 
   const [receivedInvites, setReceivedInvites] = useState([
-    { id: 101, name: "Alice", avatar: "avatar7.jpg" },
-    { id: 102, name: "Bob", avatar: "avatar8.jpg" },
+    { id: 101, name: "alexzz12", avatar: "avatar7.jpg" },
+    { id: 102, name: "bobtheghost", avatar: "avatar8.jpg" },
   ]);
 
   const [sentInvites, setSentInvites] = useState([]);
@@ -36,14 +36,15 @@ const FriendsPage = () => {
   const [isViewingReceived, setIsViewingReceived] = useState(true);
   const [isAddFriendVisible, setIsAddFriendVisible] = useState(false);
   const [newFriendName, setNewFriendName] = useState("");
+  const [notification, setNotification] = useState("");
 
   const handleAddFriend = () => {
     if (!newFriendName.trim()) {
-      alert("Name cannot be empty!");
+      setNotification("Name cannot be empty!");
       return;
     }
 
-    const randomAvatar = `avatar${Math.floor(Math.random() * 10) + 1}.jpg`;
+    const randomAvatar = `avatar${Math.floor(Math.random() * 11) + 1}.jpg`;
 
     setSentInvites((prev) => [
       ...prev,
@@ -54,7 +55,7 @@ const FriendsPage = () => {
       },
     ]);
 
-    alert(`Friend request sent to ${newFriendName}!`);
+    setNotification(`Friend request sent to ${newFriendName}!`);
     setNewFriendName("");
     setIsAddFriendVisible(false);
   };
@@ -74,13 +75,13 @@ const FriendsPage = () => {
         },
       ]);
       setReceivedInvites((prev) => prev.filter((i) => i.id !== id));
-      alert(`${invite.name} has been added to your friends list!`);
+      setNotification(`${invite.name} has been added to your friends list!`);
     }
   };
 
   const handleIgnoreInvite = (id) => {
     setReceivedInvites((prev) => prev.filter((i) => i.id !== id));
-    alert("Invite ignored.");
+    setNotification("Invite ignored.");
   };
 
   const filteredFriends = friends.filter((friend) =>
@@ -154,6 +155,19 @@ const FriendsPage = () => {
               />
               <button onClick={handleAddFriend} style={styles.addFriendButton}>
                 Confirm Add
+              </button>
+            </div>
+          )}
+
+          {/* Notification */}
+          {notification && (
+            <div style={styles.notification}>
+              {notification}
+              <button
+                onClick={() => setNotification("")}
+                style={styles.closeButton}
+              >
+                X
               </button>
             </div>
           )}
@@ -363,6 +377,22 @@ const styles = {
   inviteActions: { display: "flex", gap: "10px" },
   acceptButton: { backgroundColor: "#4CAF50", color: "white", border: "none" },
   ignoreButton: { backgroundColor: "#f44336", color: "white", border: "none" },
+  notification: {
+    backgroundColor: "#2a475e",
+    color: "#c7d5e0",
+    padding: "10px",
+    borderRadius: "4px",
+    marginBottom: "20px",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  closeButton: {
+    backgroundColor: "transparent",
+    border: "none",
+    color: "#c7d5e0",
+    cursor: "pointer",
+  },
 };
 
 export default FriendsPage;

@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
-import libraryCodes from "../../data/libraryCodes"; // Import codeData từ file mới tạo
 import CodeCard from "../../components/CodeCard"; // Import CodeCard component
 import Navbar from "../../components/Navbar"; // Import Navbar component
 
@@ -145,13 +144,15 @@ const LibraryCode = () => {
   // State for search query
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
+  
+  const libraryCodes = JSON.parse(localStorage.getItem("libraryCodes")) || [];
 
   // Load added codes from localStorage on mount
   useEffect(() => {
+
     localStorage.setItem("libraryCodes", JSON.stringify(libraryCodes));
 
-    const storedCodes = JSON.parse(localStorage.getItem("libraryCodes")) || [];
-    setAddedCodes(storedCodes);
+    setAddedCodes(libraryCodes);
   }, []);
 
   // Hàm xóa code khỏi thư viện
