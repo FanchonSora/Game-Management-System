@@ -1,9 +1,11 @@
-import React, { useState, useEffect, useRef } from "react";
+// File: src/pages/HomePage.jsx
+
+import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 import ChatBox from "../components/ChatBox";
-import { FaShoppingCart } from "react-icons/fa";
-import gameData from "../data/gameData";
+import Navbar from "../components/Navbar";
+
 // Keyframes for Animations
 const fadeIn = keyframes`
   from {
@@ -59,86 +61,6 @@ const Container = styled.div`
   > * {
     position: relative;
     z-index: 1;
-  }
-`;
-
-// Navbar Styles
-const Navbar = styled.nav`
-  width: 100%;
-  background-color: #2a2a3d;
-  padding: 1rem 2rem;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  margin-bottom: 2rem;
-  z-index: 1000; /* Đảm bảo Navbar luôn ở trên cùng */
-  position: relative;
-`;
-
-const NavLinks = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  flex-wrap: wrap;
-`;
-
-const Dropdown = styled.div`
-  position: relative;
-`;
-
-const NavButton = styled.button`
-  background: none;
-  border: none;
-  color: #c7d5e0;
-  font-size: 1rem;
-  cursor: pointer;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  transition: background 0.3s ease;
-
-  &:hover {
-    background-color: #3a3a5e;
-  }
-
-  &:focus {
-    outline: none;
-    background-color: #3a3a5e;
-  }
-`;
-
-const DropdownMenu = styled.div`
-  position: absolute;
-  top: 110%;
-  left: 0;
-  background-color: #2a2a3d;
-  border: 1px solid #444;
-  border-radius: 4px;
-  min-width: 150px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  z-index: 10;
-`;
-
-const DropdownItem = styled.a`
-  display: block;
-  padding: 0.75rem 1rem;
-  color: #c7d5e0;
-  text-decoration: none;
-  transition: background 0.3s ease;
-
-  &:hover {
-    background-color: #3a3a5e;
-  }
-`;
-
-const NavLink = styled.a`
-  color: #c7d5e0;
-  text-decoration: none;
-  font-size: 1rem;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  transition: background 0.3s ease;
-
-  &:hover {
-    background-color: #3a3a5e;
   }
 `;
 
@@ -237,7 +159,7 @@ const HeroImage = styled.img`
   width: 45%;
   max-width: 400px;
   border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
   animation: ${fadeIn} 1s ease-out;
 
   @media (max-width: 768px) {
@@ -310,7 +232,7 @@ const CardImage = styled.img`
   object-fit: cover;
   border-radius: 8px;
   margin-bottom: 1rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
 `;
 
 const CardTitle = styled.h3`
@@ -318,14 +240,14 @@ const CardTitle = styled.h3`
   font-weight: 600;
   margin: 5px 0;
   color: #ffffff;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.6);
 `;
 
 const CardCategory = styled.p`
   font-size: 0.875rem;
   margin-bottom: 0.5rem;
   color: #aaaaaa;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
 `;
 
 const CardPrice = styled.p`
@@ -429,16 +351,6 @@ const HeroSection = ({ navigate }) => {
 const HomePage = () => {
   const navigate = useNavigate();
 
-  // Refs for Dropdowns
-  const marketRef = useRef(null);
-  const libraryRef = useRef(null);
-  const profileRef = useRef(null);
-
-  // Dropdown States
-  const [isMarketDropdownOpen, setMarketDropdownOpen] = useState(false);
-  const [isLibraryDropdownOpen, setLibraryDropdownOpen] = useState(false);
-  const [isProfileDropdownOpen, setProfileDropdownOpen] = useState(false);
-
   // Initialize favorites from localStorage
   const [favorites, setFavorites] = useState(() => {
     try {
@@ -459,31 +371,23 @@ const HomePage = () => {
     }
   }, [favorites]);
 
-  // Close dropdowns when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        marketRef.current && !marketRef.current.contains(event.target)
-      ) {
-        setMarketDropdownOpen(false);
+  // Toggle Favorite Function
+  const toggleFavorite = (id) => {
+    setFavorites((prev) => {
+      const newFavorites = new Set(prev);
+      if (newFavorites.has(id)) {
+        newFavorites.delete(id);
+      } else {
+        newFavorites.add(id);
       }
-      if (
-        libraryRef.current && !libraryRef.current.contains(event.target)
-      ) {
-        setLibraryDropdownOpen(false);
-      }
-      if (
-        profileRef.current && !profileRef.current.contains(event.target)
-      ) {
-        setProfileDropdownOpen(false);
-      }
-    };
+      return newFavorites;
+    });
+  };
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+  // View Details Function
+  const viewDetails = (id) => {
+    navigate(`/market-game/${id}`);
+  };
 
   // Sample Products Data
   const products = [
@@ -599,92 +503,10 @@ const HomePage = () => {
     // Add more games as needed
   ];
 
-  // Toggle Favorite Function
-  const toggleFavorite = (id) => {
-    setFavorites((prev) => {
-      const newFavorites = new Set(prev);
-      if (newFavorites.has(id)) {
-        newFavorites.delete(id);
-      } else {
-        newFavorites.add(id);
-      }
-      return newFavorites;
-    });
-  };
-
-  // View Details Function
-  const viewDetails = (id) => {
-    navigate(`/market-game/${id}`);
-  };
-
   return (
     <Container>
       {/* Top Navigation Bar */}
-      <Navbar>
-        <NavLinks>
-          {/* Market Dropdown */}
-          <Dropdown ref={marketRef}>
-            <NavButton
-              onClick={() => setMarketDropdownOpen(!isMarketDropdownOpen)}
-              aria-haspopup="true"
-              aria-expanded={isMarketDropdownOpen}
-            >
-              Market
-            </NavButton>
-            {isMarketDropdownOpen && (
-              <DropdownMenu>
-                <DropdownItem href="/market-game">Market Game</DropdownItem>
-                <DropdownItem href="/market-code">Market Code</DropdownItem>
-              </DropdownMenu>
-            )}
-          </Dropdown>
-
-          {/* Community Link */}
-          <NavLink href="/community">Community</NavLink>
-
-          {/* Library Dropdown */}
-          <Dropdown ref={libraryRef}>
-            <NavButton
-              onClick={() => setLibraryDropdownOpen(!isLibraryDropdownOpen)}
-              aria-haspopup="true"
-              aria-expanded={isLibraryDropdownOpen}
-            >
-              Library
-            </NavButton>
-            {isLibraryDropdownOpen && (
-              <DropdownMenu>
-                <DropdownItem href="/home">Home</DropdownItem>
-                <DropdownItem href="/library-code">Library Code</DropdownItem>
-                <DropdownItem href="/library-game">Library Game</DropdownItem>
-              </DropdownMenu>
-            )}
-          </Dropdown>
-
-          {/* Profile Dropdown */}
-          <Dropdown ref={profileRef}>
-            <NavButton
-              onClick={() => setProfileDropdownOpen(!isProfileDropdownOpen)}
-              aria-haspopup="true"
-              aria-expanded={isProfileDropdownOpen}
-            >
-              Personal Profile
-            </NavButton>
-            {isProfileDropdownOpen && (
-              <DropdownMenu>
-                <DropdownItem href="/profile">Profile</DropdownItem>
-                <DropdownItem href="/friends">Friends</DropdownItem>
-                <DropdownItem href="/badges">Badges</DropdownItem>
-              </DropdownMenu>
-            )}
-          </Dropdown>
-
-          {/* Cart Icon */}
-          <NavButton onClick={() => navigate("/CartPage")} aria-label="Go to Cart">
-            <FaShoppingCart size={24} color="#c7d5e0" />
-          </NavButton>
-        </NavLinks>
-
-      </Navbar>
+      <Navbar />
 
       {/* Hero Section */}
       <HeroSection navigate={navigate} />

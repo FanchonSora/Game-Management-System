@@ -1,24 +1,24 @@
-// src/components/CodeCard.jsx
+// File: src/components/CodeCard.jsx
 
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
-// Styled Components
-
 const CardContainer = styled.div`
-  background-color: #fff;
-  border-radius: 12px;
+  background: #292e49;
+  border-radius: 10px;
+  padding: 15px;
+  color: #c7d5e0;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   max-width: 300px;
   display: flex;
   flex-direction: column;
+  cursor: pointer;
 
   &:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
   }
 `;
 
@@ -26,25 +26,19 @@ const CardImage = styled.img`
   width: 100%;
   height: 160px;
   object-fit: cover;
-`;
-
-const CardContent = styled.div`
-  padding: 1rem;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
+  border-radius: 5px;
+  margin-bottom: 10px;
 `;
 
 const CardTitle = styled.h3`
-  margin: 0;
-  font-size: 1.3rem;
-  color: #2c3e50;
+  font-size: 1.1rem;
+  color: #fff;
   margin-bottom: 0.5rem;
 `;
 
 const CardDescription = styled.p`
-  font-size: 0.95rem;
-  color: #7f8c8d;
+  font-size: 0.9rem;
+  color: #c7d5e0;
   flex: 1;
 `;
 
@@ -67,96 +61,92 @@ const CardButtons = styled.div`
   display: flex;
   gap: 0.5rem;
   margin-top: 0.5rem;
-  flex-wrap: wrap;
+  justify-content: center;
 `;
 
-// Nút "View"
-const ViewButton = styled(Link)`
-  flex: 1;
-  background-color: #0366d6;
+// Buttons
+const PrimaryButton = styled.button`
+  background-color: #66c0f4;
+  border: none;
+  border-radius: 5px;
+  color: #000;
+  padding: 8px 10px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: background 0.3s ease;
+
+  &:hover {
+    background-color: #5aa8e6;
+  }
+`;
+
+const DangerButton = styled.button`
+  background-color: #e74c3c;
+  border: none;
+  border-radius: 5px;
   color: #fff;
-  padding: 0.5rem 0;
-  border-radius: 6px;
-  text-align: center;
+  padding: 8px 10px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: background 0.3s ease;
+
+  &:hover {
+    background-color: #c0392b;
+  }
+`;
+
+const ViewLink = styled(Link)`
+  background-color: #2ecc71;
+  border: none;
+  border-radius: 5px;
+  color: #000;
+  padding: 8px 10px;
+  font-weight: bold;
+  font-size: 0.8rem;
+  cursor: pointer;
   text-decoration: none;
-  font-weight: bold;
+  display: flex; 
+  align-items: center;
+  justify-content: center;
   transition: background 0.3s ease;
 
   &:hover {
-    background-color: #0356b6;
+    background-color: #28b54a;
   }
 `;
 
-// Nút "Add to Library"
-const AddButton = styled.button`
-  flex: 1;
-  background-color: #28a745;
-  color: #fff;
-  padding: 0.5rem 0;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background 0.3s ease;
-
-  &:hover {
-    background-color: #218838;
-  }
-`;
-
-// Nút "Remove from Library"
-const RemoveButton = styled.button`
-  flex: 1;
-  background-color: #dc3545;
-  color: #fff;
-  padding: 0.5rem 0;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background 0.3s ease;
-
-  &:hover {
-    background-color: #c82333;
-  }
-`;
-
-// CodeCard Component
 const CodeCard = ({
   image,
   title,
   description,
-  tags,
-  buttonText,
-  buttonLink,
+  tags = [],
+  buttonLink = "#",
   isAdded,
   onAddToLibrary,
   onRemoveFromLibrary,
-  maxWidth,
-  height,
 }) => {
   return (
-    <CardContainer style={{ maxWidth: maxWidth || '300px', height: height || 'auto' }}>
-      <CardImage src={image} alt={title} />
-      <CardContent>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
+    <CardContainer>
+      {image && <CardImage src={image} alt={title} />}
+      <CardTitle>{title}</CardTitle>
+      <CardDescription>{description}</CardDescription>
+      {tags.length > 0 && (
         <CardTags>
-          {tags.map((tag, index) => (
-            <Tag key={index}>{tag}</Tag>
+          {tags.map((tag, i) => (
+            <Tag key={i}>{tag}</Tag>
           ))}
         </CardTags>
-        <CardButtons>
-          {/* Nút Thêm hoặc Xóa Dựa Trên Prop isAdded */}
-          {isAdded ? (
-            <RemoveButton onClick={onRemoveFromLibrary}>Remove</RemoveButton>
-          ) : (
-            <AddButton onClick={onAddToLibrary}>Add to Library</AddButton>
-          )}
-          {/* Nút "View" Luôn Luôn Hiển Thị */}
-          <ViewButton to={buttonLink}>{buttonText}</ViewButton>
-        </CardButtons>
-      </CardContent>
+      )}
+      <CardButtons>
+        {isAdded ? (
+          <DangerButton onClick={onRemoveFromLibrary}>Remove</DangerButton>
+        ) : (
+          <PrimaryButton onClick={onAddToLibrary}>Add</PrimaryButton>
+        )}
+        <ViewLink to={buttonLink}>View</ViewLink>
+      </CardButtons>
     </CardContainer>
   );
 };

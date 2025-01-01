@@ -1,8 +1,11 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
-import { FaShoppingCart } from 'react-icons/fa'; // Import Cart Icon
+// File: src/components/Navbar.jsx
 
+import React, { useState, useEffect, useRef } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import { FaShoppingCart } from 'react-icons/fa';
+
+// Styled Components
 const NavbarContainer = styled.nav`
   width: 100%;
   background-color: #2a2a3d;
@@ -10,9 +13,11 @@ const NavbarContainer = styled.nav`
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   margin-bottom: 2rem;
-  position: fixed;
-  top: 0;
   z-index: 1000;
+  position: relative; /* Đảm bảo DropdownMenu được định vị đúng */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 `;
 
 const NavLinks = styled.div`
@@ -20,6 +25,7 @@ const NavLinks = styled.div`
   align-items: center;
   gap: 1.5rem;
   flex-wrap: wrap;
+  position: relative; /* Đảm bảo DropdownMenu nằm trong phạm vi NavLinks */
 `;
 
 const Dropdown = styled.div`
@@ -54,8 +60,8 @@ const DropdownMenu = styled.div`
   border: 1px solid #444;
   border-radius: 4px;
   min-width: 150px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  z-index: 10;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  z-index: 1001; /* Tăng z-index để đảm bảo dropdown nằm trên */
 `;
 
 const DropdownItem = styled(Link)`
@@ -70,7 +76,7 @@ const DropdownItem = styled(Link)`
   }
 `;
 
-const StyledNavLink = styled(NavLink)`
+const StyledNavLink = styled(Link)`
   color: #c7d5e0;
   text-decoration: none;
   font-size: 1rem;
@@ -111,6 +117,7 @@ const CartCount = styled.span`
   padding: 2px 6px;  /* Smaller padding */
 `;
 
+// Navbar Component
 const Navbar = () => {
   const [isMarketDropdownOpen, setMarketDropdownOpen] = useState(false);
   const [isLibraryDropdownOpen, setLibraryDropdownOpen] = useState(false);
@@ -143,10 +150,22 @@ const Navbar = () => {
     };
   }, []);
 
-  // Update cart count from localStorage
-  useEffect(() => {
+  // Function to update cart count from localStorage
+  const updateCartCount = () => {
     const storedCart = JSON.parse(localStorage.getItem('Cart')) || [];
-    setCartCount(storedCart.length); // Set cart count based on localStorage
+    setCartCount(storedCart.length);
+  };
+
+  // Initialize cart count from localStorage
+  useEffect(() => {
+    updateCartCount();
+
+    // Listen for custom 'cartUpdated' event to update cart count
+    window.addEventListener('cartUpdated', updateCartCount);
+
+    return () => {
+      window.removeEventListener('cartUpdated', updateCartCount);
+    };
   }, []);
 
   return (
@@ -209,10 +228,10 @@ const Navbar = () => {
         </Dropdown>
 
         {/* Cart Icon */}
-        <CartIconWrapper onClick={() => navigate("/CartPage")}>
-          <CartIcon />
-          {cartCount > 0 && <CartCount>{cartCount}</CartCount>}
-        </CartIconWrapper>
+      <CartIconWrapper onClick={() => navigate("/CartPage")}>
+        <CartIcon />
+        {cartCount > 0 && <CartCount>{cartCount}</CartCount>}
+      </CartIconWrapper>
       </NavLinks>
     </NavbarContainer>
   );

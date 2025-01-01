@@ -29,7 +29,7 @@ const fadeIn = keyframes`
 
 const Container = styled.div`
   font-family: "Roboto", sans-serif;
-  background: linear-gradient(135deg, #182b3a 0%, #0d1c2e 100%);
+  background-color: #1e1e2e;
   color: #c7d5e0;
   min-height: 100vh;
   padding: 80px 20px 20px 20px;
@@ -37,7 +37,7 @@ const Container = styled.div`
 `;
 
 const CodeDetailContainer = styled.div`
-  background-color: #1e2a38;
+  background-color: #2a2a3d;
   border-radius: 12px;
   padding: 30px 40px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
@@ -60,7 +60,7 @@ const CodeHeader = styled.div`
 
 const CodeTitle = styled.h2`
   font-size: 28px;
-  color: #66c0f4;
+  color:rgb(249, 249, 249);
   margin: 0;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
 `;
@@ -88,17 +88,17 @@ const DownloadButton = styled.button`
 
 const AddButton = styled.button`
   padding: 12px 24px;
-  background-color: #28a745;
+  background-color:  #007bff;
   color: #fff;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   font-size: 16px;
   transition: background 0.3s ease;
-  box-shadow: 0 2px 5px rgba(40, 167, 69, 0.5);
+  box-shadow:  0 2px 5px rgba(0, 123, 255, 0.5);
 
   &:hover {
-    background-color: #1e7e34;
+    background-color: #0056b3;
   }
 
   &:disabled {
@@ -115,7 +115,7 @@ const Tags = styled.div`
 `;
 
 const Tag = styled.span`
-  background-color: #2ecc71;
+  background-color: #007bff;
   color: #fff;
   padding: 6px 12px;
   border-radius: 20px;
@@ -130,7 +130,7 @@ const Description = styled.p`
 `;
 
 const CodeBlock = styled.div`
-  background-color: #16202c;
+  background-color:#1e1e2e;
   padding: 20px;
   border-radius: 8px;
   overflow-x: auto;
@@ -142,22 +142,22 @@ const CodeBlock = styled.div`
 // Nút Implement
 const ImplementButton = styled.button`
   padding: 12px 24px;
-  background-color: #ff9800;
+  background-color: #007bff;
   color: #fff;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   font-size: 16px;
-  box-shadow: 0 2px 5px rgba(255, 152, 0, 0.5);
+  box-shadow:  0 2px 5px rgba(0, 123, 255, 0.5);
   margin-bottom: 20px;
 
   &:hover {
-    background-color: #e38c00;
+    background-color: #0056b3;
   }
 `;
 
 const ImplementationContainer = styled.div`
-  background-color: #24303f;
+  background-color: #1e1e2e;
   padding: 20px;
   border-radius: 8px;
   margin-bottom: 20px;
@@ -283,11 +283,13 @@ const CodeDetailMarket = () => {
           <CodeHeader>
             <CodeTitle>{code.title}</CodeTitle>
             <Buttons>
-              <DownloadButton onClick={handleDownload}>Tải xuống</DownloadButton>
               {code.price === "Free" && (
-                <AddButton onClick={handleAddToLibrary}>Thêm vào Thư Viện</AddButton>
+                <DownloadButton onClick={handleDownload}>Download</DownloadButton>
               )}
-              <AddButton onClick={() => navigate(-1)}>Quay lại</AddButton>
+              {code.price === "Free" && (
+                <AddButton onClick={handleAddToLibrary}>Add to Library</AddButton>
+              )}
+              <AddButton onClick={() => navigate(-1)}>Return</AddButton>
             </Buttons>
           </CodeHeader>
 
@@ -305,7 +307,7 @@ const CodeDetailMarket = () => {
           {code.howToImplement && (
             <>
               <ImplementButton onClick={() => setShowImplementation(!showImplementation)}>
-                {showImplementation ? "Ẩn hướng dẫn" : "Xem hướng dẫn triển khai"}
+                {showImplementation ? "Hide instructions" : "Declaration instructions"}
               </ImplementButton>
               {showImplementation && (
                 <ImplementationContainer>
