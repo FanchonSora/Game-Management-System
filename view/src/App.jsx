@@ -39,7 +39,6 @@ function App() {
         <Route path="/market-game/:id" element={<GameDetailPage />} />
         <Route path="/market-code/:id" element={<CodeDetailMarket />} />
         <Route path="/edit-profile" element={<EditProfile />} />
-        <Route path="/activity" element={<ActivityPage />} />
         <Route path="/CartPage" element={<CartPage />} />
         <Route path="*" element={<HomePage />} />
       </Routes>
