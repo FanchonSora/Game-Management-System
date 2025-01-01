@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
 const CardContainer = styled.div`
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(42, 71, 94, 0.8);
   border-radius: 10px;
   padding: 15px;
   text-align: center;
@@ -30,7 +30,7 @@ const GameImage = styled.img`
 `;
 
 const GameTitle = styled.h3`
-  font-size: 18px;
+  font-size: 20px;
   color: #ffffff;
   margin-bottom: 10px;
 `;
@@ -43,15 +43,16 @@ const GameDescription = styled.p`
 
 const Tags = styled.div`
   display: flex;
-  gap: 5px;
+  gap: 10px;
   flex-wrap: wrap;
+  justify-content: center;
   margin-bottom: 15px;
 `;
 
 const Tag = styled.span`
   background-color: #3498db;
   color: #fff;
-  padding: 4px 8px;
+  padding: 4px 10px;
   border-radius: 12px;
   font-size: 12px;
 `;
@@ -63,10 +64,10 @@ const ButtonGroup = styled.div`
 `;
 
 const AddButton = styled.button`
-  background: linear-gradient(45deg, #66c0f4, #5aa8e6);
+  background: linear-gradient(45deg, #2ecc71, #28b54a);
   border: none;
   border-radius: 5px;
-  color: #fff;
+  color: #000;
   padding: 7px 14px;
   font-weight: bold;
   cursor: pointer;
@@ -75,7 +76,7 @@ const AddButton = styled.button`
 
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(86, 168, 230, 0.4);
+    box-shadow: 0 4px 12px rgba(40, 181, 74, 0.4);
   }
 `;
 
@@ -146,7 +147,7 @@ const GameCard = ({
           <RemoveButtonStyled onClick={onRemoveFromLibrary}>Remove</RemoveButtonStyled>
         )}
         {onView && (
-          <AddButton onClick={onView}>View</AddButton>
+          <AddButton onClick={onView}>Details</AddButton>
         )}
       </ButtonGroup>
     </CardContainer>
