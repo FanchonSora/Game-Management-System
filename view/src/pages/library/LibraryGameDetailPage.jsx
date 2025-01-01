@@ -228,7 +228,7 @@ const LibraryGameDetailPage = () => {
     const updatedGames = storedGames.filter((g) => g.id !== game.id);
     localStorage.setItem("libraryGames", JSON.stringify(updatedGames));
     alert(`${game.title} đã được loại bỏ khỏi Thư viện của bạn.`);
-    navigate("/library-game");
+    navigate("/home");
   };
 
   return (
