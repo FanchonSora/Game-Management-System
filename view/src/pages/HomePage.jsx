@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 import ChatBox from "../components/ChatBox";
+import { FaShoppingCart } from "react-icons/fa";
 import gameData from "../data/gameData";
 // Keyframes for Animations
 const fadeIn = keyframes`
@@ -678,6 +679,10 @@ const HomePage = () => {
             )}
           </Dropdown>
         </NavLinks>
+        {/* Cart Icon */}
+        <NavButton onClick={() => navigate("/CartPage")} aria-label="Go to Cart">
+          <FaShoppingCart size={24} color="#c7d5e0" />
+        </NavButton>
       </Navbar>
 
       {/* Hero Section */}
