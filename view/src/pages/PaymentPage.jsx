@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { loadStripe } from "@stripe/stripe-js";
 import styled from "styled-components";
 
-// Styled Components (unchanged)
+// Styled Components
 const Container = styled.div`
   font-family: "Roboto", sans-serif;
   padding: 2rem;
@@ -12,7 +12,7 @@ const Container = styled.div`
   min-height: 100vh;
 `;
 
-// Title Section (Breadcrumbs)
+// Breadcrumbs
 const Breadcrumbs = styled.div`
   font-size: 1.2rem;
   color: #c7d5e0;
@@ -21,7 +21,7 @@ const Breadcrumbs = styled.div`
 
 const BreadcrumbLink = styled.span`
   cursor: pointer;
-  color: #66c0f4;
+  color: rgb(199, 90, 246);
   font-weight: bold;
 
   &:hover {
@@ -33,12 +33,12 @@ const BreadcrumbLink = styled.span`
   }
 `;
 
+// Form Styles
 const Form = styled.form`
-  position: relative;
   background-color: #292e49;
   padding: 2rem;
   border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
   max-width: 500px;
   margin: 0 auto;
   display: flex;
@@ -54,59 +54,57 @@ const Label = styled.label`
 const Input = styled.input`
   padding: 0.5rem;
   font-size: 1rem;
-  border: 1px solid #66c0f4;
+  border: 1px solid rgb(199, 90, 246);
   border-radius: 4px;
   background-color: #1e1e2e;
   color: #c7d5e0;
+
+  &:focus {
+    outline: none;
+    border-color: rgb(184, 81, 228);
+    box-shadow: 0 0 5px rgba(184, 81, 228, 0.6);
+  }
 `;
 
 const Select = styled.select`
   padding: 0.5rem;
   font-size: 1rem;
-  border: 1px solid #66c0f4;
+  border: 1px solid rgb(199, 90, 246);
   border-radius: 4px;
   background-color: #1e1e2e;
   color: #c7d5e0;
-`;
 
-const SubmitButton = styled.button`
-  align-self: flex-end;
-  background-color: #4c9900;
-  border: none;
-  border-radius: 5px;
-  color: #ffff;
-  padding: 12px 24px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s;
-  position: absolute;
-  bottom: 33px;
-
-  &:hover {
-    background-color: #00cc00;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(102, 192, 244, 0.5);
+  &:focus {
+    outline: none;
+    border-color: rgb(184, 81, 228);
+    box-shadow: 0 0 5px rgba(184, 81, 228, 0.6);
   }
 `;
 
-const BackButton = styled.button`
-  align-self: flex-start;
-  background-color: #66c0f4;
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+`;
+
+// Buttons
+const Button = styled.button`
+  width: 45%;
+  background-color: rgb(199, 90, 246);
   border: none;
   border-radius: 5px;
-  color: #000;
-  padding: 12px 24px;
+  color: #fff;
+  padding: 12px;
   font-weight: bold;
   cursor: pointer;
   transition: background 0.3s ease, transform 0.2s;
 
   &:hover {
-    background-color: #5aa8e6;
+    background-color: rgb(184, 81, 228);
     transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(102, 192, 244, 0.5);
+    box-shadow: 0 4px 10px rgba(162, 68, 202, 0.5);
   }
 `;
-
 
 const ErrorMessage = styled.p`
   color: #ff4d6d;
@@ -126,18 +124,16 @@ const PaymentPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate form inputs
     if (!paymentMethod || !cardNumber || !expiryDate || !securityCode) {
       setError("All fields are required.");
       return;
     }
 
-    // Load Stripe
     const stripe = await stripePromise;
     const { token, error: stripeError } = await stripe.createToken({
       number: cardNumber,
       exp_month: expiryDate.split("/")[0],
-      exp_year: "20" + expiryDate.split("/")[1], // For MM/YY format
+      exp_year: "20" + expiryDate.split("/")[1],
       cvc: securityCode,
     });
 
@@ -166,8 +162,8 @@ const PaymentPage = () => {
     <Container>
       <Breadcrumbs>
         <BreadcrumbLink onClick={() => navigate("/home")}>Home</BreadcrumbLink>
-        <span> &gt; </span> {/* Use &gt; for ">" */}
-        <span>Your Shopping Cart</span>
+        <span> &gt; </span>
+        <span>Your Payment</span>
       </Breadcrumbs>
       <Form onSubmit={handleSubmit}>
         {error && <ErrorMessage>{error}</ErrorMessage>}
@@ -214,8 +210,10 @@ const PaymentPage = () => {
           required
         />
 
-        <BackButton onClick={() => navigate("/CartPage")}>Back</BackButton>
-        <SubmitButton type="submit">Pay Now</SubmitButton>
+        <ButtonContainer>
+          <Button type="button" onClick={() => navigate("/CartPage")}>Back</Button>
+          <Button type="submit">Pay Now</Button>
+        </ButtonContainer>
       </Form>
     </Container>
   );

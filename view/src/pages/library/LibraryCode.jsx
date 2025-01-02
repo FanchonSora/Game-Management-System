@@ -25,16 +25,35 @@ const fadeOut = keyframes`
 // Container
 const Container = styled.div`
   font-family: "Roboto", sans-serif;
-  background-color: #1e1e2e; /* Dark background */
+  background-color: #2a2a3d; /* Dark background */
   color: #c7d5e0; /* Light text color */
   min-height: 100vh;
   padding: 80px 20px 20px 20px; /* Padding top to avoid overlapping Navbar */
   animation: ${fadeIn} 0.5s ease-out;
+  /* Overlay for better text readability */
+  position: relative;
+  &:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 0;
+  }
+
+  /* Ensure content is above the overlay */
+  > * {
+    position: relative;
+    z-index: 1;
+  }
 `;
 
 // Header Section
 const Header = styled.div`
   display: flex;
+  margin-top:2rem;
   align-items: center;
   margin-bottom: 30px;
   flex-wrap: wrap;
@@ -48,7 +67,7 @@ const ProfilePicture = styled.img`
   border-radius: 50%;
   margin-right: 20px;
   object-fit: cover;
-  border: 3px solid #66c0f4; /* Light blue border */
+  border: 3px solid rgb(199, 90, 246);
 `;
 
 // Profile Information
@@ -57,13 +76,13 @@ const ProfileInfo = styled.div``;
 const ProfileName = styled.h2`
   margin: 0;
   font-size: 28px;
-  color: #66c0f4; /* Light blue color */
+  color:rgb(199, 90, 246);
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
 `;
 
 const ProfileUsername = styled.p`
   margin: 5px 0 0 0;
-  color: #aab2bd; /* Soft gray color */
+  color: rgb(255, 255, 255)gray color */
   font-size: 18px;
 `;
 
@@ -77,8 +96,8 @@ const Tabs = styled.div`
 
 const TabButton = styled.button`
   padding: 10px 20px;
-  background-color: ${(props) => (props.active ? "#66c0f4" : "#2d333b")}; /* Light blue active, dark inactive */
-  color: ${(props) => (props.active ? "#1e1e2e" : "#c7d5e0")}; /* Dark text for active, light text for inactive */
+  background-color: ${(props) => (props.active ? "rgb(199, 90, 246)" : "#2d333b")}; /* Light blue active, dark inactive */
+  color: ${(props) => (props.active ? "#fff" : "#c7d5e0")}; /* Dark text for active, light text for inactive */
   border: none;
   border-radius: 6px;
   cursor: pointer;
@@ -86,8 +105,9 @@ const TabButton = styled.button`
   transition: background 0.3s ease, color 0.3s ease;
 
   &:hover {
-    background-color: #5aa8e6; /* Slightly darker blue on hover */
-    color: #1e1e2e;
+    background-color:rgb(184, 81, 228);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgb(162, 68, 202);
   }
 `;
 
@@ -104,10 +124,10 @@ const SearchInput = styled.input`
   flex: 1;
   min-width: 200px;
   padding: 12px 20px;
-  border: 1px solid #66c0f4; /* Light blue border */
+  border: 1px solid rgb(199, 90, 246); /* Light blue border */
   border-radius: 6px;
   font-size: 16px;
-  background-color: #292e49; /* Darker blue background */
+  background-color: #2a2a3d; /* Darker blue background */
   color: #c7d5e0; /* Light text */
   outline: none;
 
@@ -116,8 +136,8 @@ const SearchInput = styled.input`
   }
 
   &:focus {
-    border-color: #5aa8e6; /* Slightly darker blue on focus */
-    box-shadow: 0 0 5px #66c0f4;
+    border-color:rgb(199, 90, 246); /* Slightly darker blue on focus */
+    box-shadow: 0 0 5px rgb(199, 90, 246);
   }
 `;
 
@@ -133,7 +153,7 @@ const Notification = styled.div`
   position: fixed;
   top: 20px;
   right: 20px;
-  background-color: #28a745; /* Green background for success */
+  background-color: rgb(199, 90, 246); /* Green background for success */
   color: #fff;
   padding: 15px 25px;
   border-radius: 6px;

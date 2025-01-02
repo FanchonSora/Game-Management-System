@@ -83,7 +83,7 @@ const SearchDropdown = styled.ul`
   margin: 0;
   padding: 0.5rem;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   max-height: 250px;
   overflow-y: auto;
   z-index: 999;
@@ -97,7 +97,7 @@ const SearchDropdownItem = styled.li`
   cursor: pointer;
 
   &:hover {
-    background-color:rgb(148, 64, 133);
+    background-color: rgb(148, 64, 133);
   }
 
   &:last-child {
@@ -360,103 +360,14 @@ const MarketCodePage = () => {
         <Grid>
           {featuredCodes.map((code) => (
             <Card key={code.id}>
-              {code.image && <CodeImage src={code.image} alt={code.title} />}
-              <CodeTitle>{code.title}</CodeTitle>
-              <TagContainer>
-                {code.tags.map((t) => (
-                  <Tag key={t}>{t}</Tag>
-                ))}
-              </TagContainer>
-              <CodePrice>{code.price === 0 || isNaN(parseFloat(code.price)) ? "Free" : `$${parseFloat(code.price).toFixed(2)}`}</CodePrice>
-              <ButtonGroup>
-                {code.price === "Free" && (
-                  <AddButton onClick={() => handleAdd(code)}>Add to Library</AddButton>
-                )}
-                {code.price !== "Free" && (
-                  <BuyButton onClick={() => handleBuy(code)}>Purchase</BuyButton>
-                )}
-                <ViewButton onClick={() => handleView(code)}>View</ViewButton>
-              </ButtonGroup>
-            </Card>
-          ))}
-        </Grid>
-
-        {/* Libraries */}
-        <SectionTitle style={{ marginTop: "40px" }}>Libraries</SectionTitle>
-        <Subtitle>Essential libraries to boost your projects</Subtitle>
-        <Grid>
-          {libraries.map((code) => (
-            <Card key={code.id}>
               <CodeImage src={code.image} alt={code.title} />
               <CodeTitle>{code.title}</CodeTitle>
-              <TagContainer>
-                {code.tags.map((t) => (
-                  <Tag key={t}>{t}</Tag>
-                ))}
-              </TagContainer>
               <CodePrice>{code.price === 0 || isNaN(parseFloat(code.price)) ? "Free" : `$${parseFloat(code.price).toFixed(2)}`}</CodePrice>
               <ButtonGroup>
                 {code.price === "Free" && (
                   <ActionButton onClick={() => handleAddToLibrary(code)}>Add</ActionButton>
                 )}
-                {code.price !== "Free" && (
-                  <BuyButton onClick={() => handleBuy(code)}>Purchase</BuyButton>
-                )}
-                <ViewButton onClick={() => handleView(code)}>View</ViewButton>
-              </ButtonGroup>
-            </Card>
-          ))}
-        </Grid>
-
-        {/* Snippets */}
-        <SectionTitle style={{ marginTop: "40px" }}>Snippets</SectionTitle>
-        <Subtitle>Reusable code snippets for common tasks</Subtitle>
-        <Grid>
-          {snippets.map((code) => (
-            <Card key={code.id}>
-              <CodeImage src={code.image} alt={code.title} />
-              <CodeTitle>{code.title}</CodeTitle>
-              <TagContainer>
-                {code.tags.map((t) => (
-                  <Tag key={t}>{t}</Tag>
-                ))}
-              </TagContainer>
-              <CodePrice>{code.price === 0 || isNaN(parseFloat(code.price)) ? "Free" : `$${parseFloat(code.price).toFixed(2)}`}</CodePrice>
-              <ButtonGroup>
-                {code.price === "Free" && (
-                  <AddButton onClick={() => handleAdd(code)}>Add to Library</AddButton>
-                )}
-                {code.price !== "Free" && (
-                  <BuyButton onClick={() => handleBuy(code)}>Purchase</BuyButton>
-                )}
-                <ViewButton onClick={() => handleView(code)}>View</ViewButton>
-              </ButtonGroup>
-            </Card>
-          ))}
-        </Grid>
-
-        {/* Tools */}
-        <SectionTitle style={{ marginTop: "40px" }}>Tools</SectionTitle>
-        <Subtitle>Tools to enhance your development workflow</Subtitle>
-        <Grid>
-          {tools.map((code) => (
-            <Card key={code.id}>
-              <CodeImage src={code.image} alt={code.title} />
-              <CodeTitle>{code.title}</CodeTitle>
-              <TagContainer>
-                {code.tags.map((t) => (
-                  <Tag key={t}>{t}</Tag>
-                ))}
-              </TagContainer>
-              <CodePrice>{code.price === 0 || isNaN(parseFloat(code.price)) ? "Free" : `$${parseFloat(code.price).toFixed(2)}`}</CodePrice>
-              <ButtonGroup>
-                {code.price === "Free" && (
-                  <AddButton onClick={() => handleAdd(code)}>Add to Library</AddButton>
-                )}
-                {code.price !== "Free" && (
-                  <BuyButton onClick={() => handleBuy(code)}>Add to Cart</BuyButton>
-                )}
-                <ViewButton onClick={() => handleView(code)}>View</ViewButton>
+                <ActionButton onClick={() => handleViewDetails(code)}>Details</ActionButton>
               </ButtonGroup>
             </Card>
           ))}

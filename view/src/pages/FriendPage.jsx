@@ -1,6 +1,13 @@
+// File: src/pages/FriendsPage.jsx
+
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import NavBar from "../components/Navbar";
+import { Trash2 } from "lucide-react"; // Importing the delete icon from lucide-react
 
 const FriendsPage = () => {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [friends, setFriends] = useState([
     {
@@ -23,6 +30,13 @@ const FriendsPage = () => {
       status: "offline",
       lastOnline: "8 hrs, 48 mins ago",
       avatar: "avatar3.jpg",
+    },
+    {
+      id: 4,
+      name: "SnowAce",
+      status: "offline",
+      lastOnline: "1 hrs ago",
+      avatar: "avatar4.jpg",
     },
   ]);
 
@@ -84,6 +98,14 @@ const FriendsPage = () => {
     setNotification("Invite ignored.");
   };
 
+  const handleRemoveFriend = (id) => {
+    const friend = friends.find((f) => f.id === id);
+    if (friend) {
+      setFriends((prev) => prev.filter((f) => f.id !== id));
+      setNotification(`${friend.name} has been removed from your friends list.`);
+    }
+  };
+
   const filteredFriends = friends.filter((friend) =>
     friend.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -97,302 +119,471 @@ const FriendsPage = () => {
   );
 
   return (
-    <div style={styles.container}>
+    <Body>
+      {/* Navigation Bar */}
+      <NavBar />
+
       {/* Header */}
-      <header style={styles.header}>
-        <div style={styles.profileSection}>
-          <img src="avatar.jpg" alt="Profile" style={styles.avatar} />
-          <h1 style={styles.username}>khanhngan1491</h1>
-        </div>
-      </header>
+      <Header>
+        <ProfileSection>
+          <Avatar src="avatar.jpg" alt="Profile" />
+          <Username>khanhngan1491</Username>
+        </ProfileSection>
+      </Header>
 
       {/* Main Content */}
-      <div style={styles.mainContent}>
+      <MainContent>
         {/* Sidebar */}
-        <nav style={styles.sidebar}>
-          <h2 style={styles.sectionTitle}>FRIENDS</h2>
-          <ul style={styles.sidebarList}>
-            <li
-              style={styles.sidebarItem}
-              onClick={() => setViewPendingInvites(false)}
-            >
+        <Sidebar>
+          <SectionTitle>FRIENDS</SectionTitle>
+          <SidebarList>
+            <SidebarItem onClick={() => setViewPendingInvites(false)}>
               Your Friends
-            </li>
-            <li
-              style={styles.sidebarItem}
-              onClick={() => setViewPendingInvites(true)}
-            >
+            </SidebarItem>
+            <SidebarItem onClick={() => setViewPendingInvites(true)}>
               Pending Invites
-            </li>
-          </ul>
-        </nav>
+            </SidebarItem>
+          </SidebarList>
+        </Sidebar>
 
         {/* Friends Section */}
-        <section style={styles.friendsSection}>
-          <div style={styles.topBar}>
-            <h2 style={styles.friendsTitle}>
+        <FriendsSection>
+          <TopBar>
+            <FriendsTitle>
               {viewPendingInvites
                 ? "PENDING INVITES"
                 : `YOUR FRIENDS ${friends.length} / 250`}
-            </h2>
-            <button
+            </FriendsTitle>
+            <AddFriendToggleButton
               onClick={() => setIsAddFriendVisible((prev) => !prev)}
-              style={styles.addFriendToggleButton}
             >
               {isAddFriendVisible ? "Cancel Add Friend" : "Add Friend"}
-            </button>
-          </div>
+            </AddFriendToggleButton>
+          </TopBar>
 
           {/* Add Friend Section */}
           {isAddFriendVisible && (
-            <div style={styles.addFriendSection}>
-              <input
+            <AddFriendSection>
+              <AddFriendInput
                 type="text"
                 placeholder="Enter friend's name"
                 value={newFriendName}
                 onChange={(e) => setNewFriendName(e.target.value)}
-                style={styles.addFriendInput}
               />
-              <button onClick={handleAddFriend} style={styles.addFriendButton}>
+              <AddFriendButton onClick={handleAddFriend}>
                 Confirm Add
-              </button>
-            </div>
+              </AddFriendButton>
+            </AddFriendSection>
           )}
 
           {/* Notification */}
           {notification && (
-            <div style={styles.notification}>
+            <Notification>
               {notification}
-              <button
-                onClick={() => setNotification("")}
-                style={styles.closeButton}
-              >
-                X
-              </button>
-            </div>
+              <CloseButton onClick={() => setNotification("")}>X</CloseButton>
+            </Notification>
           )}
 
           {/* Pending Invites Section */}
           {viewPendingInvites && (
             <>
-              <div style={styles.tabs}>
-                <button
-                  style={{
-                    ...styles.tabButton,
-                    backgroundColor: isViewingReceived ? "#2a475e" : "#171a21",
-                  }}
+              <Tabs>
+                <TabButton
+                  active={isViewingReceived}
                   onClick={() => setIsViewingReceived(true)}
                 >
                   Received Invites
-                </button>
-                <button
-                  style={{
-                    ...styles.tabButton,
-                    backgroundColor: !isViewingReceived ? "#2a475e" : "#171a21",
-                  }}
+                </TabButton>
+                <TabButton
+                  active={!isViewingReceived}
                   onClick={() => setIsViewingReceived(false)}
                 >
                   Sent Invites
-                </button>
-              </div>
-              <div style={styles.friendsList}>
+                </TabButton>
+              </Tabs>
+              <FriendsList>
                 {isViewingReceived
                   ? filteredReceivedInvites.map((invite) => (
-                      <div key={invite.id} style={styles.friendCard}>
-                        <img
-                          src={invite.avatar}
-                          alt={invite.name}
-                          style={styles.friendAvatar}
-                        />
-                        <div style={styles.friendInfo}>
-                          <p style={styles.friendName}>{invite.name}</p>
-                          <div style={styles.inviteActions}>
-                            <button
+                      <FriendCard key={invite.id}>
+                        <FriendAvatar src={invite.avatar} alt={invite.name} />
+                        <FriendInfo>
+                          <FriendName>{invite.name}</FriendName>
+                          <InviteActions>
+                            <AcceptButton
                               onClick={() => handleAcceptInvite(invite.id)}
-                              style={styles.acceptButton}
                             >
                               Accept
-                            </button>
-                            <button
+                            </AcceptButton>
+                            <IgnoreButton
                               onClick={() => handleIgnoreInvite(invite.id)}
-                              style={styles.ignoreButton}
                             >
                               Ignore
-                            </button>
-                          </div>
-                        </div>
-                      </div>
+                            </IgnoreButton>
+                          </InviteActions>
+                        </FriendInfo>
+                      </FriendCard>
                     ))
                   : filteredSentInvites.map((invite) => (
-                      <div key={invite.id} style={styles.friendCard}>
-                        <img
-                          src={invite.avatar}
-                          alt={invite.name}
-                          style={styles.friendAvatar}
-                        />
-                        <div style={styles.friendInfo}>
-                          <p style={styles.friendName}>{invite.name}</p>
-                          <p style={styles.statusText}>Invite Sent</p>
-                        </div>
-                      </div>
+                      <FriendCard key={invite.id}>
+                        <FriendAvatar src={invite.avatar} alt={invite.name} />
+                        <FriendInfo>
+                          <FriendName>{invite.name}</FriendName>
+                          <StatusText>Invite Sent</StatusText>
+                        </FriendInfo>
+                      </FriendCard>
                     ))}
-              </div>
+              </FriendsList>
             </>
           )}
 
           {/* Friends List */}
           {!viewPendingInvites && (
-            <div style={styles.friendsList}>
+            <FriendsList>
               {filteredFriends.map((friend) => (
-                <div key={friend.id} style={styles.friendCard}>
-                  <img
-                    src={friend.avatar}
-                    alt={friend.name}
-                    style={styles.friendAvatar}
-                  />
-                  <div style={styles.friendInfo}>
-                    <p style={styles.friendName}>{friend.name}</p>
-                    <p style={styles.lastOnline}>
-                      Last Online {friend.lastOnline}
-                    </p>
-                  </div>
-                </div>
+                <FriendCard key={friend.id}>
+                  <FriendAvatar src={friend.avatar} alt={friend.name} />
+                  <FriendInfo>
+                    <FriendName>{friend.name}</FriendName>
+                    <LastOnline>Last Online {friend.lastOnline}</LastOnline>
+                  </FriendInfo>
+                  <DeleteIcon onClick={() => handleRemoveFriend(friend.id)}>
+                    <Trash2 color="#ff4d4f" />
+                  </DeleteIcon>
+                </FriendCard>
               ))}
-            </div>
+              {filteredFriends.length === 0 && (
+                <NoFriendsMessage>No friends found.</NoFriendsMessage>
+              )}
+            </FriendsList>
           )}
-        </section>
-      </div>
-    </div>
+        </FriendsSection>
+      </MainContent>
+    </Body>
   );
 };
 
-const styles = {
-  container: {
-    fontFamily: "Arial, sans-serif",
-    backgroundColor: "#1b2838",
-    color: "#c7d5e0",
-    minHeight: "100vh",
-    display: "flex",
-    flexDirection: "column",
-  },
-  header: {
-    backgroundColor: "#171a21",
-    padding: "20px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    borderBottom: "2px solid #3a4756",
-  },
-  profileSection: { display: "flex", alignItems: "center", gap: "15px" },
-  avatar: {
-    width: "60px",
-    height: "60px",
-    borderRadius: "50%",
-    border: "2px solid white",
-  },
-  username: { fontSize: "24px", color: "#66c0f4" },
-  mainContent: { display: "flex", flexGrow: 1 },
-  sidebar: {
-    width: "250px",
-    backgroundColor: "#171a21",
-    padding: "20px",
-    borderRight: "2px solid #3a4756",
-  },
-  sectionTitle: { fontSize: "16px", color: "#66c0f4", marginBottom: "10px" },
-  sidebarList: { listStyle: "none", padding: 0 },
-  sidebarItem: { marginBottom: "10px", cursor: "pointer", color: "#c7d5e0" },
-  friendsSection: { flexGrow: 1, padding: "20px" },
-  topBar: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: "20px",
-  },
-  addFriendToggleButton: {
-    padding: "10px 15px",
-    backgroundColor: "#2a475e",
-    color: "#c7d5e0",
-    border: "none",
-    borderRadius: "4px",
-    cursor: "pointer",
-  },
-  addFriendSection: { display: "flex", gap: "10px", marginBottom: "20px" },
-  addFriendInput: {
-    flexGrow: 1,
-    padding: "10px",
-    borderRadius: "4px",
-    border: "2px solid #66c0f4",
-    backgroundColor: "#1b2838",
-    color: "#c7d5e0",
-  },
-  addFriendButton: {
-    padding: "10px 15px",
-    backgroundColor: "#2a475e",
-    color: "#c7d5e0",
-    border: "none",
-    borderRadius: "4px",
-    cursor: "pointer",
-  },
-  searchBar: { marginBottom: "20px" },
-  searchInput: {
-    width: "98%",
-    padding: "10px",
-    borderRadius: "4px",
-    border: "2px solid #66c0f4",
-    backgroundColor: "#1b2838",
-    color: "#c7d5e0",
-  },
-  friendsList: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-    gap: "20px",
-  },
-  friendCard: {
-    display: "flex",
-    alignItems: "center",
-    backgroundColor: "#171a21",
-    padding: "10px",
-    borderRadius: "8px",
-    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
-  },
-  friendAvatar: {
-    width: "50px",
-    height: "50px",
-    borderRadius: "50%",
-    marginRight: "15px",
-  },
-  friendInfo: { display: "flex", flexDirection: "column" },
-  friendName: { fontSize: "16px", fontWeight: "bold" },
-  lastOnline: { fontSize: "14px", color: "#a9a9a9" },
-  noFriendsMessage: { textAlign: "center", color: "#a9a9a9" },
-  tabs: { display: "flex", marginBottom: "20px" },
-  tabButton: {
-    flex: 1,
-    padding: "10px",
-    border: "none",
-    cursor: "pointer",
-    color: "#c7d5e0",
-  },
-  statusText: { fontSize: "14px", color: "#a9a9a9" },
-  inviteActions: { display: "flex", gap: "10px" },
-  acceptButton: { backgroundColor: "#4CAF50", color: "white", border: "none" },
-  ignoreButton: { backgroundColor: "#f44336", color: "white", border: "none" },
-  notification: {
-    backgroundColor: "#2a475e",
-    color: "#c7d5e0",
-    padding: "10px",
-    borderRadius: "4px",
-    marginBottom: "20px",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  closeButton: {
-    backgroundColor: "transparent",
-    border: "none",
-    color: "#c7d5e0",
-    cursor: "pointer",
-  },
-};
+// Styled-components
 
+const Body = styled.div`
+  font-family: "Roboto", sans-serif;
+  background-color: #1e1e2e;
+  color: #c7d5e0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+`;
+
+const Header = styled.header`
+  background-color: #171a21;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 2px solid #3a4756;
+`;
+
+const ProfileSection = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 15px;
+`;
+
+const Avatar = styled.img`
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 2px solid rgb(199, 90, 246);
+`;
+
+const Username = styled.h1`
+  font-size: 24px;
+  color: rgb(199, 90, 246);
+`;
+
+const MainContent = styled.div`
+  display: flex;
+  flex-grow: 1;
+  padding: 20px;
+  max-width: 1200px;
+  width: 90%;
+  margin: 0 auto;
+  gap: 20px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+`;
+
+const Sidebar = styled.nav`
+  width: 250px;
+  background-color: #2a2a3d;
+  padding: 20px;
+  border-right: 2px solidrgb(42, 42, 64);
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+
+  @media (max-width: 768px) {
+    width: 100%;
+    border-right: none;
+    border-bottom: 2px solid rgb(199, 90, 246);
+  }
+`;
+
+const SectionTitle = styled.h2`
+  font-size: 16px;
+  color: rgb(199, 90, 246);
+  margin-bottom: 10px;
+`;
+
+const SidebarList = styled.ul`
+  list-style: none;
+  padding: 0;
+`;
+
+const SidebarItem = styled.li`
+  margin-bottom: 10px;
+  cursor: pointer;
+  color:rgb(255, 255, 255);
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color:rgb(184, 81, 228);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgb(162, 68, 202);
+  }
+`;
+
+const FriendsSection = styled.section`
+  flex-grow: 1;
+  background-color: #2a2a3d;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+`;
+
+const TopBar = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+`;
+
+const FriendsTitle = styled.h2`
+  font-size: 22px;
+  color: #ffffff;
+`;
+
+const AddFriendToggleButton = styled.button`
+  padding: 10px 15px;
+  background-color: #c759f6;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s;
+  margin-top: 10px;
+
+  &:hover {
+    background-color: #b850e4;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(162, 68, 202, 0.7);
+  }
+`;
+
+const AddFriendSection = styled.div`
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+`;
+
+const AddFriendInput = styled.input`
+  flex-grow: 1;
+  padding: 10px;
+  border-radius: 4px;
+  border: 2px solidrgb(199, 89, 246);
+  background-color: #1e1e2e;
+  color:rgb(255, 255, 255);
+  font-size: 14px;
+
+  ::placeholder {
+    color: rgb(199, 90, 246);
+  }
+`;
+
+const AddFriendButton = styled.button`
+  padding: 10px 15px;
+  background-color: rgb(199, 90, 246);
+  color:rgb(255, 255, 255);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color:rgb(184, 81, 228);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgb(162, 68, 202);
+  }
+`;
+
+const Notification = styled.div`
+  background-color: rgb(199, 90, 246);
+  color:rgb(255, 255, 255);
+  padding: 10px 15px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const CloseButton = styled.button`
+  background-color: transparent;
+  border: none;
+  color:rgb(255, 255, 255);
+  cursor: pointer;
+  font-size: 16px;
+`;
+
+const Tabs = styled.div`
+  display: flex;
+  margin-bottom: 20px;
+  gap: 10px;
+  flex-wrap: wrap;
+`;
+
+const TabButton = styled.button`
+  flex: 1;
+  padding: 10px 15px;
+  background-color: ${(props) => (props.active ? "rgb(199, 90, 246)" : "#171a21")};
+  color:rgb(255, 255, 255);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color:rgb(184, 81, 228);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgb(162, 68, 202);
+  }
+`;
+
+const FriendsList = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+`;
+
+const FriendCard = styled.div`
+  display: flex;
+  align-items: center;
+  background-color: #1e1e2e;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(162, 68, 202, 0.4);
+  }
+`;
+
+const FriendAvatar = styled.img`
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 15px;
+  object-fit: cover;
+`;
+
+const FriendInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const FriendName = styled.p`
+  font-size: 16px;
+  font-weight: bold;
+  color: #ffffff;
+  margin: 0;
+`;
+
+const LastOnline = styled.p`
+  font-size: 14px;
+  color: #a9a9a9;
+  margin: 5px 0 0 0;
+`;
+
+const StatusText = styled.p`
+  font-size: 14px;
+  color: #a9a9a9;
+  margin: 5px 0 0 0;
+`;
+
+const InviteActions = styled.div`
+  display: flex;
+  gap: 10px;
+  margin-top: 5px;
+`;
+
+const AcceptButton = styled.button`
+  padding: 5px 10px;
+  background-color:rgb(199, 90, 246);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color:rgb(184, 81, 228);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgb(162, 68, 202);
+  }
+`;
+
+const IgnoreButton = styled.button`
+  padding: 5px 10px;
+  background-color:rgb(199, 90, 246);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color:rgb(184, 81, 228);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgb(162, 68, 202);
+  }
+`;
+
+const DeleteIcon = styled.div`
+  position: absolute;
+  right: 5px;
+  top: 25%;
+  transform: translateY(-50%);
+  cursor: pointer;
+
+  &:hover {
+    color: #ff4d4f;
+  }
+`;
+
+const NoFriendsMessage = styled.p`
+  text-align: center;
+  color: #a9a9a9;
+  grid-column: 1 / -1;
+`;
+
+// Exporting the component
 export default FriendsPage;

@@ -6,7 +6,7 @@ import { github } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import python from "react-syntax-highlighter/dist/esm/languages/hljs/python";
 import cpp from "react-syntax-highlighter/dist/esm/languages/hljs/cpp";
 import javascript from "react-syntax-highlighter/dist/esm/languages/hljs/javascript";
-import marketCodes from "../../data/marketCodes";
+import marketCodes from "../../data/marketCodes"; // Đảm bảo dữ liệu có sẵn trong file này
 import Navbar from "../../components/Navbar";
 
 // Đăng ký ngôn ngữ
@@ -26,6 +26,7 @@ const fadeIn = keyframes`
   }
 `;
 
+// Styled Components
 const Container = styled.div`
   font-family: "Roboto", sans-serif;
   background-color: #1e1e2e;
@@ -106,6 +107,23 @@ const AddButton = styled.button`
   }
 `;
 
+// New PurchaseButton styled
+const PurchaseButton = styled.button`
+  padding: 12px 24px;
+  background-color: rgb(255, 87, 34); /* Màu khác để phân biệt Purchase */
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s ease;
+  box-shadow: 0 2px 5px rgba(255, 87, 34, 0.5);
+
+  &:hover {
+    background-color: rgb(241, 76, 16);
+  }
+`;
+
 const Tags = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -166,6 +184,7 @@ const ImplementationContainer = styled.div`
   color: #fff;
 `;
 
+// Notification
 const Notification = styled.div`
   position: fixed;
   top: 20px;
@@ -273,11 +292,28 @@ const CodeDetailMarket = () => {
     }
   };
 
+  // Handle purchase
+  const handlePurchase = () => {
+    if (!code) return;
+
+    const storedCart = JSON.parse(localStorage.getItem("Cart")) || [];
+    const alreadyInCart = storedCart.find((g) => g.id === code.id && g.type === "code");
+
+    if (alreadyInCart) {
+      alert(`${code.title} is already in your cart.`);
+    } else {
+      storedCart.push({ ...code, type: "code" });
+      localStorage.setItem("Cart", JSON.stringify(storedCart));
+      setNotification(`${code.title} has been added to your cart.`);
+      setTimeout(() => setNotification(""), 3000);
+    }
+  };
+
   return (
     <Container>
       <Navbar />
 
-      {code && (
+      {code ? (
         <CodeDetailContainer>
           <CodeHeader>
             <CodeTitle>{code.title}</CodeTitle>
@@ -287,6 +323,9 @@ const CodeDetailMarket = () => {
               )}
               {code.price === "Free" && (
                 <AddButton onClick={handleAddToLibrary}>Add to Library</AddButton>
+              )}
+              {code.price !== "Free" && (
+                <PurchaseButton onClick={handlePurchase}>Purchase</PurchaseButton>
               )}
               <AddButton onClick={() => navigate(-1)}>Return</AddButton>
             </Buttons>
@@ -306,7 +345,7 @@ const CodeDetailMarket = () => {
           {code.howToImplement && (
             <>
               <ImplementButton onClick={() => setShowImplementation(!showImplementation)}>
-                {showImplementation ? "Hide instructions" : "Declaration instructions"}
+                {showImplementation ? "Hide Instructions" : "View Instructions"}
               </ImplementButton>
               {showImplementation && (
                 <ImplementationContainer>
@@ -343,6 +382,8 @@ const CodeDetailMarket = () => {
           {/* Thông báo */}
           {notification && <Notification>{notification}</Notification>}
         </CodeDetailContainer>
+      ) : (
+        <div>Loading code details...</div>
       )}
     </Container>
   );

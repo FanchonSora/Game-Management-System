@@ -10,7 +10,7 @@ const NavbarContainer = styled.nav`
   width: 100%;
   background-color: #2a2a3d;
   padding: 1rem 2rem;
-  border-radius: 0 0 8px 8px; /* Bo tròn chỉ ở góc dưới */
+  border-radius: 8px 8px 8px 8px; /* Bo tròn chỉ ở góc dưới */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   z-index: 1000; /* Đảm bảo Navbar nằm trên các thành phần khác */
   position: flex; /* Đặt Navbar cố định */

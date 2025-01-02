@@ -35,7 +35,7 @@ const pulse = keyframes`
 // Container with Background Image
 const Container = styled.div`
   font-family: "Roboto", sans-serif;
-  background-color: #1e1e2e; /* Replace with desired color */
+  background-color: #2a2a3d; /* Replace with desired color */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -222,8 +222,8 @@ const FavoriteButton = styled.button`
   animation: ${pulse} 2s infinite;
 
   &:hover svg {
-    fill: #ff4d6d;
-    stroke: #ff4d6d;
+    fill: rgb(199, 90, 246);
+    stroke: rgb(199, 90, 246);
   }
 `;
 

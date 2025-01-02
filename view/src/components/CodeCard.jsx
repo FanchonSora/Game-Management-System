@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
 const CardContainer = styled.div`
-  background: #292e49;
+  background: #2a2a3d;
   border-radius: 10px;
   padding: 15px;
   color: #c7d5e0;
@@ -15,10 +15,10 @@ const CardContainer = styled.div`
   display: flex;
   flex-direction: column;
   cursor: pointer;
-
+  position: relative;
   &:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
   }
 `;
 
@@ -50,7 +50,7 @@ const CardTags = styled.div`
 `;
 
 const Tag = styled.span`
-  background-color: #3498db;
+  background-color: rgb(199, 90, 246);
   color: #fff;
   padding: 0.3rem 0.6rem;
   border-radius: 12px;
@@ -66,23 +66,7 @@ const CardButtons = styled.div`
 
 // Buttons
 const PrimaryButton = styled.button`
-  background-color: #66c0f4;
-  border: none;
-  border-radius: 5px;
-  color: #000;
-  padding: 8px 10px;
-  font-weight: bold;
-  cursor: pointer;
-  font-size: 0.8rem;
-  transition: background 0.3s ease;
-
-  &:hover {
-    background-color: #5aa8e6;
-  }
-`;
-
-const DangerButton = styled.button`
-  background-color: #e74c3c;
+  background-color: rgb(199, 90, 246);
   border: none;
   border-radius: 5px;
   color: #fff;
@@ -93,15 +77,35 @@ const DangerButton = styled.button`
   transition: background 0.3s ease;
 
   &:hover {
-    background-color: #c0392b;
+    background-color:rgb(184, 81, 228);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgb(162, 68, 202);
+  }
+`;
+
+const DangerButton = styled.button`
+  background-color: rgb(199, 90, 246);
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  padding: 8px 10px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: background 0.3s ease;
+
+  &:hover {
+    background-color:rgb(184, 81, 228);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgb(162, 68, 202);
   }
 `;
 
 const ViewLink = styled(Link)`
-  background-color: #2ecc71;
+  background-color: rgb(199, 90, 246);
   border: none;
   border-radius: 5px;
-  color: #000;
+  color: #fff;
   padding: 8px 10px;
   font-weight: bold;
   font-size: 0.8rem;
@@ -113,7 +117,9 @@ const ViewLink = styled(Link)`
   transition: background 0.3s ease;
 
   &:hover {
-    background-color: #28b54a;
+    background-color:rgb(184, 81, 228);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgb(162, 68, 202);
   }
 `;
 

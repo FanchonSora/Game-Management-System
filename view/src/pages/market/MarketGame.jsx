@@ -72,7 +72,6 @@ const SearchInput = styled.input`
   }
 `;
 
-// Dropdown Search
 const SearchDropdown = styled.ul`
   position: absolute;
   top: 84%; /* Điều chỉnh để dropdown hiển thị bên phải thanh tìm kiếm */
@@ -83,7 +82,7 @@ const SearchDropdown = styled.ul`
   margin: 0;
   padding: 0.5rem;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   max-height: 250px;
   overflow-y: auto;
   z-index: 999;
@@ -97,7 +96,7 @@ const SearchDropdownItem = styled.li`
   cursor: pointer;
 
   &:hover {
-    background-color:rgb(148, 64, 133);
+    background-color: rgb(148, 64, 133);
   }
 
   &:last-child {
@@ -176,7 +175,7 @@ const FeaturedButton = styled.button`
 
 const FeaturedImage = styled.img`
   width: 45%;
-  max-width: 350px;
+  max-width: 300px;
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
   animation: ${fadeIn} 1s ease-out;
@@ -278,7 +277,7 @@ const MarketGamePage = () => {
   const featuredGames = gameData.filter((game) => game.tags.includes("Featured"));
 
   // Lọc theo search
-  const filteredGames = featuredGames.filter((game) =>
+  const filteredGames = gameData.filter((game) =>
     game.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     game.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()))
   );
@@ -336,28 +335,24 @@ const MarketGamePage = () => {
           )}
         </SearchBarContainer>
 
-        {/* Featured Games */}
-        <SectionTitle>Featured Games</SectionTitle>
-        <Subtitle>Don't miss out on our top picks!</Subtitle>
-        <Grid>
-          {featuredGames.map((game) => (
-            <Card key={game.id}>
-              <GameImage src={game.image} alt={game.title} />
-              <GameTitle>{game.title}</GameTitle>
-              <GamePrice>{game.price === 0 || isNaN(parseFloat(game.price)) ? "Free" : `$${parseFloat(game.price).toFixed(2)}`}</GamePrice>
-              <ButtonGroup>
-                {game.price === 'Free' && (
-                  <ActionButton onClick={() => handleAddToLibrary(game)}>
-                    Add to Library
-                  </ActionButton>
-                )}
-                <ViewButton onClick={() => handleViewDetails(game)}>
-                  View
-                </ViewButton>
-              </ButtonGroup>
-            </Card>
-          ))}
-        </Grid>
+        {/* Featured Games Section */}
+        {featuredGames.length > 0 && (
+          <FeaturedSection>
+            <FeaturedContent>
+              <FeaturedTitle>
+                {featuredGames[currentGameIndex]?.title || "Featured Game"}
+              </FeaturedTitle>
+              <FeaturedSubtitle>
+                {featuredGames[currentGameIndex]?.description ||
+                  "Don't miss out on this amazing game!"}
+              </FeaturedSubtitle>
+            </FeaturedContent>
+            <FeaturedImage
+              src={featuredGames[currentGameIndex]?.image || "placeholder.jpg"}
+              alt="Featured Game"
+            />
+          </FeaturedSection>
+        )}
 
         {/* All Games Section */}
         <SectionTitle>All Games</SectionTitle>

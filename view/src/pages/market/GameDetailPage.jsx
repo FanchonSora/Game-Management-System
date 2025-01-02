@@ -68,7 +68,7 @@ const GameHeader = styled.div`
 
 const GameImageWrapper = styled.div`
   margin-top: 3rem;
-  width: 300px;
+  width: 500px;
   height: 300px;
   overflow: hidden;
   border-radius: 10px;
@@ -493,6 +493,10 @@ const GameDetailPage = () => {
               <InfoItem>
                 <InfoTitle>Developer</InfoTitle>
                 <InfoText>{game.developer}</InfoText>
+              </InfoItem>
+              <InfoItem>
+                <InfoTitle>Developer</InfoTitle>
+                <InfoText>{game.publisher}</InfoText>
               </InfoItem>
               <InfoItem>
                 <InfoTitle>Release Date</InfoTitle>

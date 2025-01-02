@@ -31,6 +31,7 @@ const Container = styled.div`
 
 const Header = styled.div`
   text-align: center;
+  margin-top: 2rem;
   margin-bottom: 30px;
 `;
 
