@@ -10,14 +10,16 @@ const NavbarContainer = styled.nav`
   width: 100%;
   background-color: #2a2a3d;
   padding: 1rem 2rem;
-  border-radius: 8px;
+  border-radius: 0 0 8px 8px; /* Đặt border-radius chỉ ở góc dưới nếu cần */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  margin-bottom: 2rem;
-  z-index: 1000;
-  position: relative; /* Đảm bảo DropdownMenu được định vị đúng */
+  z-index: 1000; /* Đảm bảo z-index cao để nằm trên các thành phần khác */
+  position: fixed; /* Đặt vị trí cố định */
+  top: 0; /* Đặt ở đầu trang */
+  left: 0; /* Đặt từ bên trái */
   display: flex;
   align-items: center;
   justify-content: space-between;
+  width: 100%;
 `;
 
 const NavLinks = styled.div`
@@ -61,7 +63,7 @@ const DropdownMenu = styled.div`
   border-radius: 4px;
   min-width: 150px;
   box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-  z-index: 1001; /* Tăng z-index để đảm bảo dropdown nằm trên */
+  z-index: 1001; /* Tăng z-index để đảm bảo dropdown nằm trên Navbar */
 `;
 
 const DropdownItem = styled(Link)`
@@ -228,10 +230,10 @@ const Navbar = () => {
         </Dropdown>
 
         {/* Cart Icon */}
-      <CartIconWrapper onClick={() => navigate("/CartPage")}>
-        <CartIcon />
-        {cartCount > 0 && <CartCount>{cartCount}</CartCount>}
-      </CartIconWrapper>
+        <CartIconWrapper onClick={() => navigate("/CartPage")}>
+          <CartIcon />
+          {cartCount > 0 && <CartCount>{cartCount}</CartCount>}
+        </CartIconWrapper>
       </NavLinks>
     </NavbarContainer>
   );

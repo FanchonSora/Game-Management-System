@@ -1,4 +1,4 @@
-// src/pages/LibraryCode.jsx
+// File: src/pages/LibraryCode.jsx
 
 import React, { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
@@ -20,8 +20,8 @@ const fadeIn = keyframes`
 // Container
 const Container = styled.div`
   font-family: "Roboto", sans-serif;
-  background-color: #f6f8fa;
-  color: #24292e;
+  background-color: #1e1e2e; /* Thay đổi từ #f6f8fa sang #1e1e2e */
+  color: #c7d5e0; /* Thay đổi từ #24292e sang #c7d5e0 */
   min-height: 100vh;
   padding: 80px 20px 20px 20px; /* Padding top để không che Navbar fixed */
   animation: ${fadeIn} 0.5s ease-out;
@@ -40,7 +40,7 @@ const ProfilePicture = styled.img`
   border-radius: 50%;
   margin-right: 20px;
   object-fit: cover;
-  border: 3px solid #0366d6;
+  border: 3px solid #66c0f4; /* Thay đổi màu viền */
 `;
 
 const ProfileInfo = styled.div``;
@@ -48,12 +48,13 @@ const ProfileInfo = styled.div``;
 const ProfileName = styled.h2`
   margin: 0;
   font-size: 28px;
-  color: #0366d6;
+  color: #66c0f4;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
 `;
 
 const ProfileUsername = styled.p`
   margin: 5px 0 0 0;
-  color: #586069;
+  color: #aab2bd; /* Thay đổi màu sắc */
   font-size: 18px;
 `;
 
@@ -67,17 +68,17 @@ const Tabs = styled.div`
 
 const TabButton = styled.button`
   padding: 10px 20px;
-  background-color: ${(props) => (props.active ? "#0366d6" : "#fff")};
-  color: ${(props) => (props.active ? "#fff" : "#0366d6")};
-  border: 1px solid #d0d7de;
+  background-color: ${(props) => (props.active ? "#66c0f4" : "#2d333b")}; /* Thay đổi màu nền */
+  color: ${(props) => (props.active ? "#1e1e2e" : "#c7d5e0")}; /* Thay đổi màu chữ */
+  border: none;
   border-radius: 6px;
   cursor: pointer;
   font-size: 16px;
   transition: background 0.3s ease, color 0.3s ease;
 
   &:hover {
-    background-color: #0366d6;
-    color: #fff;
+    background-color: #66c0f4;
+    color: #1e1e2e;
   }
 `;
 
@@ -94,9 +95,20 @@ const SearchInput = styled.input`
   flex: 1;
   min-width: 200px;
   padding: 12px 20px;
-  border: 1px solid #d0d7de;
+  border: 1px solid #66c0f4; /* Thay đổi màu viền */
   border-radius: 6px;
   font-size: 16px;
+  background-color: #292e49; /* Thay đổi màu nền */
+  color: #c7d5e0; /* Thay đổi màu chữ */
+  outline: none;
+
+  &::placeholder {
+    color: #aab2bd;
+  }
+
+  &:focus {
+    border-color: #5aa8e6;
+  }
 `;
 
 // Code/List
@@ -144,16 +156,13 @@ const LibraryCode = () => {
   // State for search query
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
-  
+
   const libraryCodes = JSON.parse(localStorage.getItem("libraryCodes")) || [];
 
   // Load added codes from localStorage on mount
   useEffect(() => {
-
-    localStorage.setItem("libraryCodes", JSON.stringify(libraryCodes));
-
     setAddedCodes(libraryCodes);
-  }, []);
+  }, [libraryCodes]);
 
   // Hàm xóa code khỏi thư viện
   const handleRemoveCode = (code) => {
@@ -177,7 +186,7 @@ const LibraryCode = () => {
   }, [searchQuery]);
 
   // Filtering codes based on active tab and debounced search query
-  const filteredCodes = libraryCodes.filter((code) => {
+  const filteredCodes = addedCodes.filter((code) => {
     const matchesCategory =
       activeTab === "All" || code.category === activeTab;
     const query = debouncedSearchQuery.toLowerCase();
@@ -252,17 +261,17 @@ const LibraryCode = () => {
                 title={code.title}
                 description={code.description}
                 tags={code.tags}
-                buttonText="View"
+                buttonText={isAdded ? "Remove" : "View"} // Thay đổi text nút dựa trên trạng thái
                 buttonLink={`/library-code/${code.id}`}
                 isAdded={isAdded}
                 onAddToLibrary={() => handleAddCode(code)}
-                // Thêm onRemoveFromLibrary
+                // Thêm onRemoveFromLibrary nếu cần
                 onRemoveFromLibrary={() => handleRemoveCode(code)}
               />
             );
           })
         ) : (
-          <p>No repositories found matching your search.</p>
+          <p style={{ color: "#c7d5e0" }}>No repositories found matching your search.</p>
         )}
       </CodeList>
 

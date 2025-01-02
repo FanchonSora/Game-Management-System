@@ -1,3 +1,5 @@
+// File: src/pages/CartPage.jsx
+
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -12,19 +14,6 @@ const Container = styled.div`
   background-color: #1e1e2e;
   color: #c7d5e0;
   min-height: 100vh;
-`;
-
-const CartContainer = styled.div`
- font-family: "Roboto", sans-serif;
-  padding: 2rem;
-  background-color: #1e1e2e;
-  color: #c7d5e0;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: row;
-  gap: 2rem;
-  flex-grow: 1; 
-  margin-bottom: 1rem;
 `;
 
 // Title Section (Breadcrumbs)
@@ -48,6 +37,19 @@ const BreadcrumbLink = styled.span`
   }
 `;
 
+// Cart Container
+const CartContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  flex-grow: 1;
+  margin-bottom: 1rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+`;
+
 // Left Section for Cart Items
 const CartItemsSection = styled.div`
   flex: 2;
@@ -67,7 +69,7 @@ const CheckoutSection = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  max-height: 100px;
+  max-height: 150px;
   min-width: 250px;
   overflow-y: auto;
 `;
@@ -126,17 +128,16 @@ const RemoveButton = styled.button`
 
 // Continue Shopping Button
 const ContinueShoppingButton = styled.button`
-  background-color: #696969;
+  background-color: #66c0f4;
   border: none;
   border-radius: 5px;
-  color: #000;
+  color:rgb(5, 0, 0);
   padding: 12px 24px;
   font-weight: bold;
   cursor: pointer;
   transition: background 0.3s ease, transform 0.2s;
-  width: 20%; 
+  width: 100%; 
   align-self: flex-start;
-  color: #FFFAFA;
   
   &:hover {
     background-color: #5aa8e6;
@@ -156,7 +157,7 @@ const TotalSection = styled.div`
 
 // Checkout Button
 const CheckoutButton = styled.button`
-background-color: #66c0f4;
+  background-color: #66c0f4;
   border: none;
   border-radius: 5px;
   color: #000;
@@ -172,11 +173,21 @@ background-color: #66c0f4;
   }
 `;
 
+// Helper Function to Get Display Price
+const getDisplayPrice = (price) => {
+  if (typeof price === "string") {
+    return price.toLowerCase() === "free" ? "Free" : `$${parseFloat(price).toFixed(2)}`;
+  } else if (typeof price === "number") {
+    return price === 0 ? "Free" : `$${price.toFixed(2)}`;
+  }
+  return "Free";
+};
+
 // CartPage Component
 const CartPage = () => {
   const navigate = useNavigate();
 
-  // Sample Cart Data (In real-world, this would come from a global state or API)
+  // Cart Data from Local Storage
   const [cartItems, setCartItems] = useState([]);
 
   useEffect(() => {
@@ -194,8 +205,16 @@ const CartPage = () => {
   // Calculate Total Price
   const calculateTotal = () => {
     return cartItems
-    .reduce((total, item) => total + parseFloat(item.price || 0), 0)
-    .toFixed(2);
+      .reduce((total, item) => {
+        // Nếu price là "Free" hoặc 0, không cộng vào tổng
+        if (item.price === "Free" || item.price === 0) {
+          return total;
+        }
+        // Nếu price là số hoặc chuỗi số, chuyển đổi thành số
+        const priceNumber = typeof item.price === "string" ? parseFloat(item.price) : item.price;
+        return total + (isNaN(priceNumber) ? 0 : priceNumber);
+      }, 0)
+      .toFixed(2);
   };
 
   // Checkout Handler (navigate to checkout page or handle logic)
@@ -219,25 +238,31 @@ const CartPage = () => {
       </Breadcrumbs>
 
       <CartContainer>
-      <CartItemsSection>
-          {cartItems.map((item) => (
-            <CartItem key={item.id}>
-              <CartItemImage src={item.image} alt={item.title} />
-              <CartItemDetails>
-                <CartItemTitle>{item.title}</CartItemTitle>
-                <CartItemPrice>
-                  ${parseFloat(item.price || 0).toFixed(2)}
-                </CartItemPrice>
-              </CartItemDetails>
-              <RemoveButton onClick={() => removeItem(item.id)}>
-                <FaTrashAlt />
-              </RemoveButton>
-            </CartItem>
-          ))}
+        <CartItemsSection>
+          {cartItems.length === 0 ? (
+            <p style={{ color: "#c7d5e0" }}>Giỏ hàng của bạn đang trống.</p>
+          ) : (
+            cartItems.map((item) => (
+              <CartItem key={item.id}>
+                <CartItemImage src={item.image} alt={item.title} />
+                <CartItemDetails>
+                  <CartItemTitle>{item.title}</CartItemTitle>
+                  <CartItemPrice>
+                    {getDisplayPrice(item.price)}
+                  </CartItemPrice>
+                </CartItemDetails>
+                <RemoveButton onClick={() => removeItem(item.id)}>
+                  <FaTrashAlt />
+                </RemoveButton>
+              </CartItem>
+            ))
+          )}
 
-          <ContinueShoppingButton onClick={() => navigate("/HomePage")}>
-            Continue Shopping
-          </ContinueShoppingButton>
+          {cartItems.length > 0 && (
+            <ContinueShoppingButton onClick={() => navigate("/market-game")}>
+              Continue Shopping
+            </ContinueShoppingButton>
+          )}
         </CartItemsSection>
 
         <CheckoutSection>
