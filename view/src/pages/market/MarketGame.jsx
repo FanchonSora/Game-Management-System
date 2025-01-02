@@ -296,7 +296,7 @@ const MarketGamePage = () => {
             <Card key={game.id}>
               <GameImage src={game.image} alt={game.title} />
               <GameTitle>{game.title}</GameTitle>
-              <GamePrice>{game.price === 'Free' ? 'Free' : game.price}</GamePrice>
+              <GamePrice>{game.price === 0 || isNaN(parseFloat(game.price)) ? "Free" : `$${parseFloat(game.price).toFixed(2)}`}</GamePrice>
               <ButtonGroup>
                 {game.price === 'Free' && (
                   <ActionButton onClick={() => handleAddToLibrary(game)}>
@@ -319,7 +319,7 @@ const MarketGamePage = () => {
             <Card key={game.id}>
               <GameImage src={game.image} alt={game.title} />
               <GameTitle>{game.title}</GameTitle>
-              <GamePrice>{game.price === 'Free' ? 'Free' : game.price}</GamePrice>
+              <GamePrice>{game.price === 0 || isNaN(parseFloat(game.price)) ? "Free" : `$${parseFloat(game.price).toFixed(2)}`}</GamePrice>
               <ButtonGroup>
                 {game.price === 'Free' && (
                   <ActionButton onClick={() => handleAddToLibrary(game)}>

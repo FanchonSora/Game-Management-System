@@ -337,7 +337,7 @@ const MarketCodePage = () => {
                   <Tag key={t}>{t}</Tag>
                 ))}
               </TagContainer>
-              <CodePrice>{code.price === "Free" ? "Free" : code.price}</CodePrice>
+              <CodePrice>{code.price === 0 || isNaN(parseFloat(code.price)) ? "Free" : `$${parseFloat(code.price).toFixed(2)}`}</CodePrice>
               <ButtonGroup>
                 {code.price === "Free" && (
                   <AddButton onClick={() => handleAdd(code)}>Add to Library</AddButton>
@@ -364,7 +364,7 @@ const MarketCodePage = () => {
                   <Tag key={t}>{t}</Tag>
                 ))}
               </TagContainer>
-              <CodePrice>{code.price === "Free" ? "Free" : code.price}</CodePrice>
+              <CodePrice>{code.price === 0 || isNaN(parseFloat(code.price)) ? "Free" : `$${parseFloat(code.price).toFixed(2)}`}</CodePrice>
               <ButtonGroup>
                 {code.price === "Free" && (
                   <AddButton onClick={() => handleAdd(code)}>Add to Library</AddButton>
@@ -391,7 +391,7 @@ const MarketCodePage = () => {
                   <Tag key={t}>{t}</Tag>
                 ))}
               </TagContainer>
-              <CodePrice>{code.price === "Free" ? "Free" : code.price}</CodePrice>
+              <CodePrice>{code.price === 0 || isNaN(parseFloat(code.price)) ? "Free" : `$${parseFloat(code.price).toFixed(2)}`}</CodePrice>
               <ButtonGroup>
                 {code.price === "Free" && (
                   <AddButton onClick={() => handleAdd(code)}>Add to Library</AddButton>
@@ -418,7 +418,7 @@ const MarketCodePage = () => {
                   <Tag key={t}>{t}</Tag>
                 ))}
               </TagContainer>
-              <CodePrice>{code.price === "Free" ? "Free" : code.price}</CodePrice>
+              <CodePrice>{code.price === 0 || isNaN(parseFloat(code.price)) ? "Free" : `$${parseFloat(code.price).toFixed(2)}`}</CodePrice>
               <ButtonGroup>
                 {code.price === "Free" && (
                   <AddButton onClick={() => handleAdd(code)}>Add to Library</AddButton>

@@ -134,7 +134,7 @@ export default function HomePage() {
 `,
       image: "/code/nextjs.jpg",
       // Đổi thành trả phí
-      price: "$9.99",
+      price: "9.99",
     },
     {
       id: 5,
@@ -159,7 +159,7 @@ console.log(greet("World"));`,
 `,
       image: "/code/typescript.jpg",
       // Đổi thành trả phí
-      price: "$4.99",
+      price: "6.09",
     },
     {
       id: 6,
@@ -525,7 +525,7 @@ module.exports = {
 4. Biên dịch code: \`npx babel src --out-dir dist\`.
 `,
       image: "/code/babel.png",
-      price: "$5.67",
+      price: "5.67",
       discount: "-100%",
     },
     {
@@ -592,7 +592,7 @@ module.exports = {
 4. Chạy \`npm run format\` để tự động format code.
 `,
       image: "/code/prettier.jpg",
-      price: "$4.00",
+      price: "4.00",
       discount: "-100%",
     },
   ],
