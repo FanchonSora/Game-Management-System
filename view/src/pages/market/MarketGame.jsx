@@ -336,24 +336,28 @@ const MarketGamePage = () => {
           )}
         </SearchBarContainer>
 
-        {/* Featured Games Section */}
-        {featuredGames.length > 0 && (
-          <FeaturedSection>
-            <FeaturedContent>
-              <FeaturedTitle>
-                {featuredGames[currentGameIndex]?.title || "Featured Game"}
-              </FeaturedTitle>
-              <FeaturedSubtitle>
-                {featuredGames[currentGameIndex]?.description ||
-                  "Don't miss out on this amazing game!"}
-              </FeaturedSubtitle>
-            </FeaturedContent>
-            <FeaturedImage
-              src={featuredGames[currentGameIndex]?.image || "placeholder.jpg"}
-              alt="Featured Game"
-            />
-          </FeaturedSection>
-        )}
+        {/* Featured Games */}
+        <SectionTitle>Featured Games</SectionTitle>
+        <Subtitle>Don't miss out on our top picks!</Subtitle>
+        <Grid>
+          {featuredGames.map((game) => (
+            <Card key={game.id}>
+              <GameImage src={game.image} alt={game.title} />
+              <GameTitle>{game.title}</GameTitle>
+              <GamePrice>{game.price === 0 || isNaN(parseFloat(game.price)) ? "Free" : `$${parseFloat(game.price).toFixed(2)}`}</GamePrice>
+              <ButtonGroup>
+                {game.price === 'Free' && (
+                  <ActionButton onClick={() => handleAddToLibrary(game)}>
+                    Add to Library
+                  </ActionButton>
+                )}
+                <ViewButton onClick={() => handleViewDetails(game)}>
+                  View
+                </ViewButton>
+              </ButtonGroup>
+            </Card>
+          ))}
+        </Grid>
 
         {/* All Games Section */}
         <SectionTitle>All Games</SectionTitle>
@@ -362,7 +366,7 @@ const MarketGamePage = () => {
             <Card key={game.id}>
               <GameImage src={game.image} alt={game.title} />
               <GameTitle>{game.title}</GameTitle>
-              <GamePrice>{game.price === "Free" ? "Free" : game.price}</GamePrice>
+              <GamePrice>{game.price === 0 || isNaN(parseFloat(game.price)) ? "Free" : `$${parseFloat(game.price).toFixed(2)}`}</GamePrice>
               <ButtonGroup>
                 {game.price === "Free" && (
                   <ActionButton onClick={() => handleAddToLibrary(game)}>Add</ActionButton>

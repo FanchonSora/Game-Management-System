@@ -176,7 +176,7 @@ const LibraryCode = () => {
     const updatedCodes = addedCodes.filter((c) => c.id !== code.id);
     setAddedCodes(updatedCodes);
     localStorage.setItem("libraryCodes", JSON.stringify(updatedCodes));
-    setNotification(`${code.title} đã được xóa khỏi thư viện của bạn!`);
+    setNotification(`${code.title} is removed from your library!`);
     setTimeout(() => setNotification(""), 3000);
   };
 
@@ -209,7 +209,7 @@ const LibraryCode = () => {
       const updatedCodes = [...addedCodes, code];
       setAddedCodes(updatedCodes);
       localStorage.setItem("libraryCodes", JSON.stringify(updatedCodes));
-      setNotification(`${code.title} đã được thêm vào thư viện của bạn!`);
+      setNotification(`${code.title} is added to your library!`);
       // Hide notification after 3 seconds
       setTimeout(() => setNotification(""), 3000);
     }

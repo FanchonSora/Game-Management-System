@@ -5,7 +5,7 @@ const gameData = [
   {
     id: 1,
     title: "Foxhole",
-    price: "155.000đ",
+    price: "6.58",
     discount: "-38%",
     image: "/game/Foxhole.jpg",
     description:
@@ -24,7 +24,7 @@ const gameData = [
   {
     id: 2,
     title: "Hell Let Loose",
-    price: "591.500đ",
+    price: "19.64",
     discount: "-50%",
     image: "/game/Hell Let Loose.jpg",
     description:
@@ -43,7 +43,7 @@ const gameData = [
   {
     id: 3,
     title: "SCUM",
-    price: "282.500đ",
+    price: "11.10",
     discount: "-50%",
     image: "/game/SCUM.jpg",
     description:
@@ -62,7 +62,7 @@ const gameData = [
   {
     id: 4,
     title: "Test Drive Unlimited",
-    price: "469.000đ",
+    price: "18.42",
     discount: "-30%",
     image: "/game/Test Drive Unlimited.jpg",
     description:
@@ -81,7 +81,7 @@ const gameData = [
   {
     id: 5,
     title: "Goat Simulator 3",
-    price: "127.000đ",
+    price: "4.99",
     discount: "-67%",
     image: "/game/Goat Simulator 3.jpg",
     description:
@@ -100,7 +100,7 @@ const gameData = [
   {
     id: 6,
     title: "Luma Island",
-    price: "160.000đ",
+    price: "6.29",
     discount: "-20%",
     image: "/game/Luma Island.jpg",
     description:
@@ -119,7 +119,7 @@ const gameData = [
   {
     id: 7,
     title: "F1 24",
-    price: "436.000đ",
+    price: "17.13",
     discount: "-60%",
     image: "/game/F1 24.jpg",
     description:
@@ -138,7 +138,7 @@ const gameData = [
   {
     id: 8,
     title: "Dreamlight Valley",
-    price: "667.500đ",
+    price: "26.22",
     discount: "-25%",
     image: "/game/Dreamlight Valley.jpg",
     description:
@@ -159,7 +159,7 @@ const gameData = [
   {
     id: 9,
     title: "Lord of the Rings: Return to Moria",
-    price: "321.000đ",
+    price: "12.61",
     discount: "",
     image: "/game/Lord of the Rings.jpg",
     description:
@@ -179,7 +179,7 @@ const gameData = [
   {
     id: 10,
     title: "Ready or Not",
-    price: "399.000đ",
+    price: "15.67",
     discount: "",
     image: "/game/Ready or Not.jpg",
     description:
@@ -199,7 +199,7 @@ const gameData = [
   {
     id: 11,
     title: "Dead by Daylight",
-    price: "340.000đ",
+    price: "13.36",
     discount: "",
     image: "/game/Dead by Daylight.jpg",
     description:
@@ -219,7 +219,7 @@ const gameData = [
   {
     id: 12,
     title: "WWE 2K24",
-    price: "1.000.000đ",
+    price: "39.28",
     discount: "",
     image: "/game/WWE 2K24.jpg",
     description:
@@ -239,7 +239,7 @@ const gameData = [
   {
     id: 13,
     title: "Stellaris",
-    price: "664.000đ",
+    price: "26.08",
     discount: "",
     image: "/game/Stellaris.jpg",
     description:
@@ -409,7 +409,6 @@ const gameData = [
     tags: ["Featured", "ARPG"],
   },
 
-  // Thêm 3 game trước kia ở HomePage nhưng chưa có trong gameData
   {
     id: 22,
     title: "Asterigos: Curse of the Stars",

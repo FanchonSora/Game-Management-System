@@ -1,5 +1,3 @@
-// File: src/pages/CartPage.jsx
-
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -128,16 +126,17 @@ const RemoveButton = styled.button`
 
 // Continue Shopping Button
 const ContinueShoppingButton = styled.button`
-  background-color: #66c0f4;
+  background-color: #696969;
   border: none;
   border-radius: 5px;
-  color:rgb(5, 0, 0);
+  color: #000;
   padding: 12px 24px;
   font-weight: bold;
   cursor: pointer;
   transition: background 0.3s ease, transform 0.2s;
-  width: 100%; 
+  width: 20%; 
   align-self: flex-start;
+  color: #FFFAFA;
   
   &:hover {
     background-color: #5aa8e6;
@@ -202,25 +201,20 @@ const CartPage = () => {
     localStorage.setItem("Cart", JSON.stringify(updatedCart));
   };
 
-  // Calculate Total Price
   const calculateTotal = () => {
     return cartItems
       .reduce((total, item) => {
-        // Nếu price là "Free" hoặc 0, không cộng vào tổng
         if (item.price === "Free" || item.price === 0) {
           return total;
         }
-        // Nếu price là số hoặc chuỗi số, chuyển đổi thành số
         const priceNumber = typeof item.price === "string" ? parseFloat(item.price) : item.price;
         return total + (isNaN(priceNumber) ? 0 : priceNumber);
       }, 0)
       .toFixed(2);
   };
 
-  // Checkout Handler (navigate to checkout page or handle logic)
   const handleCheckout = () => {
-    // Navigate to checkout page (you can add a route for this)
-    navigate("/checkout");
+    navigate("/PaymentPage");
   };
 
   // Navigate to Home Page
@@ -240,7 +234,7 @@ const CartPage = () => {
       <CartContainer>
         <CartItemsSection>
           {cartItems.length === 0 ? (
-            <p style={{ color: "#c7d5e0" }}>Giỏ hàng của bạn đang trống.</p>
+            <p style={{ color: "#c7d5e0" }}>Your cart is empty</p>
           ) : (
             cartItems.map((item) => (
               <CartItem key={item.id}>
@@ -259,7 +253,7 @@ const CartPage = () => {
           )}
 
           {cartItems.length > 0 && (
-            <ContinueShoppingButton onClick={() => navigate("/market-game")}>
+            <ContinueShoppingButton onClick={() => navigate("/home")}>
               Continue Shopping
             </ContinueShoppingButton>
           )}
