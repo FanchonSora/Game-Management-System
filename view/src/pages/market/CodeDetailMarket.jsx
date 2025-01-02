@@ -1,4 +1,3 @@
-// src/pages/CodeDetailMarket.jsx
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
@@ -37,7 +36,7 @@ const Container = styled.div`
 `;
 
 const CodeDetailContainer = styled.div`
-  background-color: #2a2a3d;
+  background-color: #2a2a3d; /* Màu giống trang homepage */
   border-radius: 12px;
   padding: 30px 40px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
@@ -45,7 +44,7 @@ const CodeDetailContainer = styled.div`
   max-width: 1000px;
   margin: 0 auto;
   color: #fff;
-
+  margin-top: 3rem;
   @media (max-width: 768px) {
     padding: 20px;
   }
@@ -60,7 +59,7 @@ const CodeHeader = styled.div`
 
 const CodeTitle = styled.h2`
   font-size: 28px;
-  color:rgb(249, 249, 249);
+  color: #f9f9f9; /* Cập nhật màu cho tiêu đề */
   margin: 0;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
 `;
@@ -72,7 +71,7 @@ const Buttons = styled.div`
 
 const DownloadButton = styled.button`
   padding: 12px 24px;
-  background-color: #007bff;
+  background-color: rgb(199, 90, 246); /* Màu giống homepage */
   color: #fff;
   border: none;
   border-radius: 5px;
@@ -82,23 +81,23 @@ const DownloadButton = styled.button`
   box-shadow: 0 2px 5px rgba(0, 123, 255, 0.5);
 
   &:hover {
-    background-color: #0056b3;
+    background-color: rgb(184, 81, 228);
   }
 `;
 
 const AddButton = styled.button`
   padding: 12px 24px;
-  background-color:  #007bff;
+  background-color: rgb(199, 90, 246); /* Màu giống homepage */
   color: #fff;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   font-size: 16px;
   transition: background 0.3s ease;
-  box-shadow:  0 2px 5px rgba(0, 123, 255, 0.5);
+  box-shadow: 0 2px 5px rgba(0, 123, 255, 0.5);
 
   &:hover {
-    background-color: #0056b3;
+    background-color: rgb(184, 81, 228);
   }
 
   &:disabled {
@@ -115,7 +114,7 @@ const Tags = styled.div`
 `;
 
 const Tag = styled.span`
-  background-color: #007bff;
+  background-color: rgb(199, 90, 246); /* Màu giống homepage */
   color: #fff;
   padding: 6px 12px;
   border-radius: 20px;
@@ -130,7 +129,7 @@ const Description = styled.p`
 `;
 
 const CodeBlock = styled.div`
-  background-color:#1e1e2e;
+  background-color: #1e1e2e;
   padding: 20px;
   border-radius: 8px;
   overflow-x: auto;
@@ -142,17 +141,17 @@ const CodeBlock = styled.div`
 // Nút Implement
 const ImplementButton = styled.button`
   padding: 12px 24px;
-  background-color: #007bff;
+  background-color: rgb(199, 90, 246); /* Màu giống homepage */
   color: #fff;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   font-size: 16px;
-  box-shadow:  0 2px 5px rgba(0, 123, 255, 0.5);
+  box-shadow: 0 2px 5px rgba(0, 123, 255, 0.5);
   margin-bottom: 20px;
 
   &:hover {
-    background-color: #0056b3;
+    background-color: rgb(184, 81, 228);
   }
 `;
 
@@ -175,7 +174,7 @@ const Notification = styled.div`
   color: #fff;
   padding: 15px 25px;
   border-radius: 6px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   animation: ${fadeIn} 0.3s ease-out, fadeOut 0.3s ease-out 2.5s forwards;
   opacity: 0;
 

@@ -15,15 +15,20 @@ const fadeIn = keyframes`
   }
 `;
 
+const fadeOut = keyframes`
+  from { opacity: 1; }
+  to { opacity: 0; }
+`;
+
 // Styled Components
 
 // Container
 const Container = styled.div`
   font-family: "Roboto", sans-serif;
-  background-color: #1e1e2e; /* Thay đổi từ #f6f8fa sang #1e1e2e */
-  color: #c7d5e0; /* Thay đổi từ #24292e sang #c7d5e0 */
+  background-color: #1e1e2e; /* Dark background */
+  color: #c7d5e0; /* Light text color */
   min-height: 100vh;
-  padding: 80px 20px 20px 20px; /* Padding top để không che Navbar fixed */
+  padding: 80px 20px 20px 20px; /* Padding top to avoid overlapping Navbar */
   animation: ${fadeIn} 0.5s ease-out;
 `;
 
@@ -31,30 +36,34 @@ const Container = styled.div`
 const Header = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+  gap: 20px;
 `;
 
+// Profile Picture
 const ProfilePicture = styled.img`
   width: 100px;
   height: 100px;
   border-radius: 50%;
   margin-right: 20px;
   object-fit: cover;
-  border: 3px solid #66c0f4; /* Thay đổi màu viền */
+  border: 3px solid #66c0f4; /* Light blue border */
 `;
 
+// Profile Information
 const ProfileInfo = styled.div``;
 
 const ProfileName = styled.h2`
   margin: 0;
   font-size: 28px;
-  color: #66c0f4;
+  color: #66c0f4; /* Light blue color */
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
 `;
 
 const ProfileUsername = styled.p`
   margin: 5px 0 0 0;
-  color: #aab2bd; /* Thay đổi màu sắc */
+  color: #aab2bd; /* Soft gray color */
   font-size: 18px;
 `;
 
@@ -62,14 +71,14 @@ const ProfileUsername = styled.p`
 const Tabs = styled.div`
   display: flex;
   gap: 15px;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
   flex-wrap: wrap;
 `;
 
 const TabButton = styled.button`
   padding: 10px 20px;
-  background-color: ${(props) => (props.active ? "#66c0f4" : "#2d333b")}; /* Thay đổi màu nền */
-  color: ${(props) => (props.active ? "#1e1e2e" : "#c7d5e0")}; /* Thay đổi màu chữ */
+  background-color: ${(props) => (props.active ? "#66c0f4" : "#2d333b")}; /* Light blue active, dark inactive */
+  color: ${(props) => (props.active ? "#1e1e2e" : "#c7d5e0")}; /* Dark text for active, light text for inactive */
   border: none;
   border-radius: 6px;
   cursor: pointer;
@@ -77,7 +86,7 @@ const TabButton = styled.button`
   transition: background 0.3s ease, color 0.3s ease;
 
   &:hover {
-    background-color: #66c0f4;
+    background-color: #5aa8e6; /* Slightly darker blue on hover */
     color: #1e1e2e;
   }
 `;
@@ -95,11 +104,11 @@ const SearchInput = styled.input`
   flex: 1;
   min-width: 200px;
   padding: 12px 20px;
-  border: 1px solid #66c0f4; /* Thay đổi màu viền */
+  border: 1px solid #66c0f4; /* Light blue border */
   border-radius: 6px;
   font-size: 16px;
-  background-color: #292e49; /* Thay đổi màu nền */
-  color: #c7d5e0; /* Thay đổi màu chữ */
+  background-color: #292e49; /* Darker blue background */
+  color: #c7d5e0; /* Light text */
   outline: none;
 
   &::placeholder {
@@ -107,7 +116,8 @@ const SearchInput = styled.input`
   }
 
   &:focus {
-    border-color: #5aa8e6;
+    border-color: #5aa8e6; /* Slightly darker blue on focus */
+    box-shadow: 0 0 5px #66c0f4;
   }
 `;
 
@@ -118,28 +128,25 @@ const CodeList = styled.div`
   gap: 25px;
 `;
 
-// Notification (Optional)
+// Notification
 const Notification = styled.div`
   position: fixed;
   top: 20px;
   right: 20px;
-  background-color: #28a745;
+  background-color: #28a745; /* Green background for success */
   color: #fff;
   padding: 15px 25px;
   border-radius: 6px;
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  animation: ${fadeIn} 0.3s ease-out, fadeOut 0.3s ease-out 2.5s forwards;
-  opacity: 0;
+  animation: ${fadeIn} 0.3s ease-out, ${fadeOut} 0.3s ease-out 2.5s forwards;
+  opacity: 1;
+`;
 
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  @keyframes fadeOut {
-    from { opacity: 1; }
-    to { opacity: 0; }
-  }
+// Placeholder message
+const PlaceholderMessage = styled.p`
+  color: #c7d5e0;
+  text-align: center;
+  font-size: 1.2rem;
 `;
 
 // LibraryCode Component
@@ -164,7 +171,7 @@ const LibraryCode = () => {
     setAddedCodes(libraryCodes);
   }, [libraryCodes]);
 
-  // Hàm xóa code khỏi thư viện
+  // Function to remove code from library
   const handleRemoveCode = (code) => {
     const updatedCodes = addedCodes.filter((c) => c.id !== code.id);
     setAddedCodes(updatedCodes);
@@ -261,17 +268,16 @@ const LibraryCode = () => {
                 title={code.title}
                 description={code.description}
                 tags={code.tags}
-                buttonText={isAdded ? "Remove" : "View"} // Thay đổi text nút dựa trên trạng thái
+                buttonText={isAdded ? "Remove" : "View"} // Change button text based on state
                 buttonLink={`/library-code/${code.id}`}
                 isAdded={isAdded}
                 onAddToLibrary={() => handleAddCode(code)}
-                // Thêm onRemoveFromLibrary nếu cần
                 onRemoveFromLibrary={() => handleRemoveCode(code)}
               />
             );
           })
         ) : (
-          <p style={{ color: "#c7d5e0" }}>No repositories found matching your search.</p>
+          <PlaceholderMessage>No repositories found matching your search.</PlaceholderMessage>
         )}
       </CodeList>
 

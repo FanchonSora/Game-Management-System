@@ -66,15 +66,16 @@ const Container = styled.div`
 
 // Hero Section Styles
 const Hero = styled.section`
-  background: rgba(41, 46, 73, 0.8);
+  background: #2a2a3d;
   border-radius: 16px;
   padding: 3rem;
-  margin-bottom: 3rem;
+  margin-top: 5rem;
+  margin: 3rem 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
   overflow: hidden;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
   flex-wrap: wrap;
   animation: ${fadeIn} 1s ease-out;
   z-index: 1;
@@ -119,7 +120,7 @@ const ButtonGroup = styled.div`
 
 // Styled Buttons with Animations
 const FreeButton = styled.button`
-  background-color: #66c0f4;
+  background-color: rgb(199, 90, 246);
   border: none;
   border-radius: 5px;
   color: #000;
@@ -130,17 +131,17 @@ const FreeButton = styled.button`
   animation: ${fadeIn} 1s ease-out;
 
   &:hover {
-    background-color: #5aa8e6;
+    background-color:rgb(184, 81, 228);
     transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(102, 192, 244, 0.5);
+    box-shadow: 0 4px 10px rgb(162, 68, 202);
   }
 `;
 
 const ViewButton = styled.button`
-  background-color: #2ecc71;
+  background-color: rgb(199, 90, 246);
   border: none;
   border-radius: 5px;
-  color: #000;
+  color: #fff;
   padding: 10px 20px;
   font-weight: bold;
   cursor: pointer;
@@ -148,9 +149,9 @@ const ViewButton = styled.button`
   animation: ${fadeIn} 1s ease-out;
 
   &:hover {
-    background-color: #28b54a;
+    background-color:rgb(184, 81, 228);
     transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(46, 204, 113, 0.5);
+    box-shadow: 0 4px 10px rgb(162, 68, 202);
   }
 `;
 
@@ -192,11 +193,11 @@ const Grid = styled.div`
 
 // Product Card Styles with Hover Animation
 const Card = styled.div`
-  background: #292e49;
+  background:#2a2a3d;
   padding: 1.5rem;
   border-radius: 12px;
   color: #c7d5e0;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
   position: relative;
@@ -322,6 +323,19 @@ const ProductsSection = ({
 
 // HeroSection Component
 const HeroSection = ({ navigate }) => {
+  const images = ["test2.gif", "test4.gif","test3.gif", "test1.gif", "test5.gif"]; // Danh sách các ảnh
+  const [currentImageIndex, setCurrentImageIndex] = useState(0); // Chỉ số ảnh hiện tại
+
+  useEffect(() => {
+    // Thiết lập interval để chuyển ảnh mỗi 10 giây
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
+    }, 3000);
+
+    // Dọn dẹp interval khi component unmount
+    return () => clearInterval(interval);
+  }, [images.length]);
+
   return (
     <Hero>
       <HeroContent>
@@ -339,7 +353,7 @@ const HeroSection = ({ navigate }) => {
         </ButtonGroup>
       </HeroContent>
       <HeroImage
-        src="img3.jpg"
+        src={images[currentImageIndex]} // Ảnh thay đổi dựa trên chỉ số
         alt="Featured Game"
         loading="lazy"
       />

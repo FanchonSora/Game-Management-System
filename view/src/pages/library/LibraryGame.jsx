@@ -1,242 +1,37 @@
+// File: src/pages/LibraryPage.jsx
+
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
+import { FaPlus } from "react-icons/fa";
+import Navbar from "../../components/Navbar"; // Import Navbar component
 
-const LibraryPage = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [isMarketDropdownOpen, setMarketDropdownOpen] = useState(false);
-  const [isLibraryDropdownOpen, setLibraryDropdownOpen] = useState(false);
-  const [isProfileDropdownOpen, setProfileDropdownOpen] = useState(false);
-  const [allGames, setAllGames] = useState([]);
+// =============== Animation Keyframes ===============
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`;
 
-  const marketRef = useRef(null);
-  const libraryRef = useRef(null);
-  const profileRef = useRef(null);
-  const navigate = useNavigate();
+const fadeOut = keyframes`
+  from { opacity: 1; }
+  to { opacity: 0; }
+`;
 
-  // Đóng dropdown khi click ngoài
-  const handleClickOutside = (event) => {
-    if (marketRef.current && !marketRef.current.contains(event.target)) {
-      setMarketDropdownOpen(false);
-    }
-    if (libraryRef.current && !libraryRef.current.contains(event.target)) {
-      setLibraryDropdownOpen(false);
-    }
-    if (profileRef.current && !profileRef.current.contains(event.target)) {
-      setProfileDropdownOpen(false);
-    }
-  };
+// =============== Styled Components ===============
 
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-
-    const libraryGames = JSON.parse(localStorage.getItem("libraryGames")) || [];
-    localStorage.setItem("libraryGames", JSON.stringify(libraryGames));
-
-    setAllGames(libraryGames);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
-  // Filter the game list based on the search term
-  const filteredGames = allGames.filter((game) =>
-    game.title.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const handleGameClick = (gameId) => {
-    navigate(`/library-game/${gameId}`);
-  };
-
-  return (
-    <Container>
-      <Navbar>
-        <NavLinks>
-          {/* Market Dropdown */}
-          <Dropdown ref={marketRef}>
-            <NavButton
-              onClick={() => setMarketDropdownOpen(!isMarketDropdownOpen)}
-              style={{ color: "#c7d5e0" }}
-            >
-              Market
-            </NavButton>
-            {isMarketDropdownOpen && (
-              <DropdownMenu>
-                <DropdownItem to="/market-game">Market Game</DropdownItem>
-                <DropdownItem to="/market-code">Market Code</DropdownItem>
-              </DropdownMenu>
-            )}
-          </Dropdown>
-
-          {/* Community Link */}
-          <NavLinkStyled to="/community">Community</NavLinkStyled>
-
-          {/* Library Dropdown */}
-          <Dropdown ref={libraryRef}>
-            <NavButton
-              onClick={() => setLibraryDropdownOpen(!isLibraryDropdownOpen)}
-              style={{ color: "#c7d5e0" }}
-            >
-              Library
-            </NavButton>
-            {isLibraryDropdownOpen && (
-              <DropdownMenu>
-                <DropdownItem to="/home">Home</DropdownItem>
-                <DropdownItem to="/library-code">Library Code</DropdownItem>
-                <DropdownItem to="/library-game">Library Game</DropdownItem>
-              </DropdownMenu>
-            )}
-          </Dropdown>
-
-          {/* Profile Dropdown */}
-          <Dropdown ref={profileRef}>
-            <NavButton
-              onClick={() => setProfileDropdownOpen(!isProfileDropdownOpen)}
-              style={{ color: "#c7d5e0" }}
-            >
-              Personal Profile
-            </NavButton>
-            {isProfileDropdownOpen && (
-              <DropdownMenu>
-                <DropdownItem to="/profile">Profile</DropdownItem>
-                <DropdownItem to="/friends">Friends</DropdownItem>
-                <DropdownItem to="/badges">Badges</DropdownItem>
-              </DropdownMenu>
-            )}
-          </Dropdown>
-        </NavLinks>
-      </Navbar>
-
-      <Body>
-        <Sidebar>
-          <SidebarTitle>Your Library</SidebarTitle>
-          <SearchInput
-            type="text"
-            placeholder="Search games..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <SidebarList>
-            {filteredGames.map((game) => (
-              <SidebarItem key={game.id} onClick={() => handleGameClick(game.id)}>
-                <GameImage src={game.image} alt={game.title} />
-                <GameName>{game.title}</GameName>
-              </SidebarItem>
-            ))}
-          </SidebarList>
-        </Sidebar>
-
-        <MainContent>
-          <Section>
-            <SectionTitle>Recent Games</SectionTitle>
-            <GameGrid>
-              {filteredGames.map((game) => (
-                <GameCard key={game.id} onClick={() => handleGameClick(game.id)}>
-                  <GameInfo>
-                    <GameTitle>{game.title}</GameTitle>
-                    <GameImageStyled src={game.image} alt={game.title} />
-                  </GameInfo>
-                </GameCard>
-              ))}
-            </GameGrid>
-          </Section>
-        </MainContent>
-      </Body>
-    </Container>
-  );
-};
-
-
-// Styled Components
-
+// Container
 const Container = styled.div`
   font-family: "Roboto", sans-serif;
-  background-color:rgb(7, 21, 34);
-  color: #24292e;
+  background-color: #1e1e2e; /* Nền xanh đậm */
+  color: #c7d5e0;           /* Màu chữ xám nhạt */
   min-height: 100vh;
   padding: 20px;
   position: relative;
   overflow: hidden;
-`;
-
-const Navbar = styled.nav`
-  width: 100%;
-  background-color: #2d333b;
-  padding: 15px 30px;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  margin-bottom: 30px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-`;
-
-const NavLinks = styled.div`
-  display: flex;
-  gap: 20px;
-  align-items: center;
-`;
-
-// Dropdown Components
-const Dropdown = styled.div`
-  position: relative;
-`;
-
-const NavButton = styled.button`
-  background: none;
-  border: none;
-  color: #c7d5e0;
-  font-size: 16px;
-  cursor: pointer;
-  padding: 8px 12px;
-  border-radius: 4px;
-  transition: background 0.3s ease;
-
-  &:hover, &:focus {
-    background-color: rgba(255, 255, 255, 0.1);
-    outline: none;
-  }
-`;
-
-const DropdownMenu = styled.div`
-  position: absolute;
-  top: 38px;
-  left: 0;
-  background-color: rgba(42, 71, 94, 0.95);
-  border-radius: 5px;
-  min-width: 150px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-  z-index: 100;
-`;
-
-const DropdownItem = styled(Link)`
-  display: block;
-  padding: 10px 15px;
-  color: #c7d5e0;
-  text-decoration: none;
-  transition: background 0.2s ease;
-
-  &:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-  }
-`;
-
-const NavLinkStyled = styled(Link)`
-  color: #c7d5e0;
-  text-decoration: none;
-  font-size: 16px;
-  padding: 8px 12px;
-  border-radius: 4px;
-  transition: background 0.3s ease;
-
-  &:hover, &:focus {
-    background-color: rgba(255, 255, 255, 0.1);
-    outline: none;
-  }
 `;
 
 // Body Container
@@ -247,12 +42,13 @@ const Body = styled.div`
 
 // Sidebar
 const Sidebar = styled.div`
-  width: 250px;
-  background: rgba(0, 0, 0, 0.3);
+  width: 300px;
+  background: #2a2a3d;
   backdrop-filter: blur(8px);
   padding: 20px;
   border-right: 1px solid #0f2b44;
-  box-shadow: 2px 0 8px rgba(0,0,0,0.5);
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   overflow-y: auto;
 `;
 
@@ -267,18 +63,18 @@ const SidebarTitle = styled.h2`
 
 // Search Input
 const SearchInput = styled.input`
-  width: 95%;
+  width: 90%;
   padding: 10px;
   margin-bottom: 20px;
   border-radius: 4px;
-  border: 1px solid #66c0f4;
+  border: 1px solidrgb(255, 255, 255);
   background-color: #0f1c2c;
   color: #c7d5e0;
   font-size: 14px;
   outline: none;
 
   &:focus {
-    border-color: #0366d6;
+    border-color:rgb(255, 255, 255);
   }
 `;
 
@@ -306,7 +102,7 @@ const SidebarItem = styled.li`
   }
 `;
 
-// Game Image in Sidebar
+// Game Image (sidebar)
 const GameImage = styled.img`
   width: 40px;
   height: 40px;
@@ -315,7 +111,7 @@ const GameImage = styled.img`
   margin-right: 10px;
 `;
 
-// Game Name in Sidebar
+// Game Name (sidebar)
 const GameName = styled.span`
   flex: 1;
   white-space: nowrap;
@@ -353,13 +149,13 @@ const GameGrid = styled.div`
 
 // Game Card
 const GameCard = styled.div`
-  background-color: rgba(15, 28, 44, 0.85);
+  background-color: #2a2a3d;
   border-radius: 10px;
   text-align: center;
   padding: 20px;
   cursor: pointer;
   border: 1px solid #0f2b44;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  box-shadow:  0 4px 15px rgba(0, 0, 0, 0.2);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 
   &:hover {
@@ -381,7 +177,7 @@ const GameTitle = styled.p`
   text-shadow: 0 1px 2px rgba(0,0,0,0.5);
 `;
 
-// Game Image in Main Content
+// Game Image (main content)
 const GameImageStyled = styled.img`
   width: 100%;
   height: 150px;
@@ -390,10 +186,363 @@ const GameImageStyled = styled.img`
   margin-top: 10px;
 `;
 
-// Additional Styles (if any)
-
-const LibraryPageStyled = styled.div`
-  /* Add any additional styles if necessary */
+// Sort & Add
+const ControlBar = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  gap: 10px;
 `;
+
+const SortSelect = styled.select`
+  background-color: #0f1c2c;
+  color: #c7d5e0;
+  border: 1px solidrgb(255, 255, 255);
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  outline: none;
+
+  &:hover, &:focus {
+    border-color:rgb(255, 255, 255);
+  }
+`;
+
+const AddGameButton = styled.button`
+  background-color:rgb(230, 229, 229);
+  color: #1e1e2e;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 15px;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.3s ease;
+
+  &:hover {
+    background-color: #28b54a;
+  }
+`;
+
+// Modal Overlay
+const ModalOverlay = styled.div`
+  display: ${(props) => (props.show ? "flex" : "none")};
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 999;
+`;
+
+// Modal Content
+const ModalContent = styled.div`
+  background-color: #2a2a3d;
+  padding: 30px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 500px;
+  color: #c7d5e0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+`;
+
+// Modal Title
+const ModalTitle = styled.h3`
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #66c0f4;
+`;
+
+// Modal Form
+const ModalForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+`;
+
+// Modal Input
+const ModalInput = styled.input`
+  background-color: #0f1c2c;
+  color: #c7d5e0;
+  border: 1px solid #66c0f4;
+  border-radius: 4px;
+  padding: 10px;
+  font-size: 14px;
+  outline: none;
+
+  &::placeholder {
+    color: #aab2bd;
+  }
+
+  &:focus {
+    border-color: #0366d6;
+  }
+`;
+
+// Modal Buttons
+const ModalButtons = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+`;
+
+// Button chung cho Modal
+const ModalButton = styled.button`
+  background-color: ${(props) => (props.primary ? "#2ecc71" : "#c0392b")};
+  color: ${(props) => (props.primary ? "#1e1e2e" : "#fff")};
+  border: none;
+  border-radius: 4px;
+  padding: 10px 15px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+
+  &:hover {
+    background-color: ${(props) => (props.primary ? "#28b54a" : "#a93226")};
+  }
+`;
+
+// Notification
+const Notification = styled.div`
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #28a745; /* màu xanh lá thông báo */
+  color: #fff;
+  padding: 15px 25px;
+  border-radius: 6px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  animation: ${fadeIn} 0.3s ease-out, ${fadeOut} 0.3s ease-out 2.5s forwards;
+  opacity: 1;
+  z-index: 1000;
+
+  @media (max-width: 600px) {
+    width: 90%;
+    right: 5%;
+  }
+`;
+
+// =============== Main Component ===============
+const LibraryPage = () => {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [isMarketDropdownOpen, setMarketDropdownOpen] = useState(false);
+  const [isLibraryDropdownOpen, setLibraryDropdownOpen] = useState(false);
+  const [isProfileDropdownOpen, setProfileDropdownOpen] = useState(false);
+  const [allGames, setAllGames] = useState([]);
+
+  // State cho sắp xếp
+  const [sortOption, setSortOption] = useState("title-asc");
+
+  // State cho modal
+  const [showModal, setShowModal] = useState(false);
+
+  // State cho thông tin game mới
+  const [newGame, setNewGame] = useState({
+    title: "",
+    image: "",
+  });
+
+  // State cho Notification
+  const [notification, setNotification] = useState("");
+
+  const marketRef = useRef(null);
+  const libraryRef = useRef(null);
+  const profileRef = useRef(null);
+  const navigate = useNavigate();
+
+  // Đóng dropdown khi click ngoài
+  const handleClickOutside = (event) => {
+    if (marketRef.current && !marketRef.current.contains(event.target)) {
+      setMarketDropdownOpen(false);
+    }
+    if (libraryRef.current && !libraryRef.current.contains(event.target)) {
+      setLibraryDropdownOpen(false);
+    }
+    if (profileRef.current && !profileRef.current.contains(event.target)) {
+      setProfileDropdownOpen(false);
+    }
+  };
+
+  // Lần đầu load trang
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+
+    const libraryGames = JSON.parse(localStorage.getItem("libraryGames")) || [];
+    // Nếu chưa có, lưu mảng trống vào localStorage
+    localStorage.setItem("libraryGames", JSON.stringify(libraryGames));
+
+    setAllGames(libraryGames);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  // Lọc game theo searchTerm
+  const filteredGames = allGames.filter((game) =>
+    game.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  // Sắp xếp game theo tùy chọn
+  const sortedGames = [...filteredGames].sort((a, b) => {
+    if (sortOption === "title-asc") {
+      return a.title.localeCompare(b.title);
+    } else if (sortOption === "title-desc") {
+      return b.title.localeCompare(a.title);
+    }
+    return 0;
+  });
+
+  const handleGameClick = (gameId) => {
+    navigate(`/library-game/${gameId}`);
+  };
+
+  // Thêm game mới
+  const handleAddGame = (e) => {
+    e.preventDefault();
+    if (!newGame.title.trim() || !newGame.image.trim()) {
+      setNotification("Vui lòng nhập đầy đủ thông tin game!");
+      setTimeout(() => setNotification(""), 3000);
+      return;
+    }
+
+    const newGameData = {
+      id: Date.now(),
+      title: newGame.title.trim(),
+      image: newGame.image.trim(),
+    };
+    const updatedGames = [newGameData, ...allGames];
+    setAllGames(updatedGames);
+    localStorage.setItem("libraryGames", JSON.stringify(updatedGames));
+    setNotification(`${newGameData.title} đã được thêm vào thư viện!`);
+    setNewGame({ title: "", image: "" });
+    setShowModal(false);
+    setTimeout(() => setNotification(""), 3000);
+  };
+
+  // Xóa game khỏi thư viện
+  const handleRemoveGame = (gameId) => {
+    const updatedGames = allGames.filter((g) => g.id !== gameId);
+    setAllGames(updatedGames);
+    localStorage.setItem("libraryGames", JSON.stringify(updatedGames));
+
+    setNotification("Game đã được xóa khỏi thư viện!");
+    setTimeout(() => setNotification(""), 3000);
+  };
+
+  return (
+    <Container>
+      {/* Top Navigation Bar */}
+      <Navbar />
+
+      {/* Body */}
+      <Body>
+        <Sidebar>
+          <SidebarTitle>Your Library</SidebarTitle>
+          {/* Tìm kiếm */}
+          <SearchInput
+            type="text"
+            placeholder="Search games..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          {/* Danh sách game ở Sidebar */}
+          <SidebarList>
+            {sortedGames.map((game) => (
+              <SidebarItem key={game.id}>
+                <GameImage src={game.image} alt={game.title} />
+                <GameName onClick={() => handleGameClick(game.id)}>
+                  {game.title}
+                </GameName>
+                {/* Nút Remove */}
+                <button
+                  style={{
+                    backgroundColor: "rgb(230, 229, 229)",
+                    color: "#000",
+                    border: "none",
+                    borderRadius: "4px",
+                    padding: "4px 8px",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => handleRemoveGame(game.id)}
+                >
+                  Remove
+                </button>
+              </SidebarItem>
+            ))}
+          </SidebarList>
+        </Sidebar>
+
+        <MainContent>
+          {/* ControlBar: Sắp xếp & Thêm game */}
+          <ControlBar>
+            <SortSelect
+              value={sortOption}
+              onChange={(e) => setSortOption(e.target.value)}
+            >
+              <option value="title-asc">Name (A-Z)</option>
+              <option value="title-desc">Name (Z-A)</option>
+            </SortSelect>
+            <AddGameButton onClick={() => setShowModal(true)}>
+              <FaPlus /> Add Game
+            </AddGameButton>
+          </ControlBar>
+
+          <Section>
+            <SectionTitle>Recent Games</SectionTitle>
+            <GameGrid>
+              {sortedGames.map((game) => (
+                <GameCard key={game.id}>
+                  <GameInfo onClick={() => handleGameClick(game.id)}>
+                    <GameTitle>{game.title}</GameTitle>
+                    <GameImageStyled src={game.image} alt={game.title} />
+                  </GameInfo>
+                </GameCard>
+              ))}
+            </GameGrid>
+          </Section>
+        </MainContent>
+      </Body>
+
+      {/* Modal thêm game */}
+      <ModalOverlay show={showModal}>
+        <ModalContent>
+          <ModalTitle>Thêm game mới</ModalTitle>
+          <ModalForm onSubmit={handleAddGame}>
+            <ModalInput
+              type="text"
+              placeholder="Tên game"
+              value={newGame.title}
+              onChange={(e) => setNewGame({ ...newGame, title: e.target.value })}
+              required
+            />
+            <ModalInput
+              type="text"
+              placeholder="URL ảnh game"
+              value={newGame.image}
+              onChange={(e) => setNewGame({ ...newGame, image: e.target.value })}
+              required
+            />
+            <ModalButtons>
+              <ModalButton primary type="submit">
+                Thêm
+              </ModalButton>
+              <ModalButton onClick={() => setShowModal(false)}>
+                Hủy
+              </ModalButton>
+            </ModalButtons>
+          </ModalForm>
+        </ModalContent>
+      </ModalOverlay>
+
+      {/* Notification */}
+      {notification && <Notification>{notification}</Notification>}
+    </Container>
+  );
+};
 
 export default LibraryPage;

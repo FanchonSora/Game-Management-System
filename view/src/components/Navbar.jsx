@@ -10,12 +10,12 @@ const NavbarContainer = styled.nav`
   width: 100%;
   background-color: #2a2a3d;
   padding: 1rem 2rem;
-  border-radius: 0 0 8px 8px; /* Đặt border-radius chỉ ở góc dưới nếu cần */
+  border-radius: 0 0 8px 8px; /* Bo tròn chỉ ở góc dưới */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  z-index: 1000; /* Đảm bảo z-index cao để nằm trên các thành phần khác */
-  position: fixed; /* Đặt vị trí cố định */
-  top: 0; /* Đặt ở đầu trang */
-  left: 0; /* Đặt từ bên trái */
+  z-index: 1000; /* Đảm bảo Navbar nằm trên các thành phần khác */
+  position: flex; /* Đặt Navbar cố định */
+  top: 0; /* Đặt Navbar ở đầu trang */
+  left: 0; /* Đảm bảo Navbar bắt đầu từ bên trái */
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -45,12 +45,12 @@ const NavButton = styled.button`
   transition: background 0.3s ease;
 
   &:hover {
-    background-color: #3a3a5e;
+    background-color: rgb(199, 90, 246);
   }
 
   &:focus {
     outline: none;
-    background-color: #3a3a5e;
+    background-color:rgb(184, 81, 228);
   }
 `;
 
@@ -63,7 +63,7 @@ const DropdownMenu = styled.div`
   border-radius: 4px;
   min-width: 150px;
   box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-  z-index: 1001; /* Tăng z-index để đảm bảo dropdown nằm trên Navbar */
+  z-index: 2000; /* Đảm bảo dropdown nằm trên Navbar */
 `;
 
 const DropdownItem = styled(Link)`
@@ -74,7 +74,7 @@ const DropdownItem = styled(Link)`
   transition: background 0.3s ease;
 
   &:hover {
-    background-color: #3a3a5e;
+    background-color: rgb(199, 90, 246);
   }
 `;
 
@@ -91,7 +91,7 @@ const StyledNavLink = styled(Link)`
   }
 
   &:hover {
-    background-color: #3a3a5e;
+    background-color: rgb(199, 90, 246);
   }
 `;
 
@@ -111,7 +111,7 @@ const CartCount = styled.span`
   position: absolute;
   top: -8px;
   right: -7px;
-  background-color: #e74c3c;
+  background-color: rgb(199, 90, 246);
   color: white;
   font-size: 10px;  /* Even smaller font size */
   font-weight: bold;
