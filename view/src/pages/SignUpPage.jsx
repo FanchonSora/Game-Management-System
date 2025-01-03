@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { Eye, EyeOff } from "lucide-react";
 
 const SignUpPage = () => {
   const navigate = useNavigate();
-
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleSignUp = async (e) => {
     e.preventDefault();
@@ -46,6 +50,16 @@ const SignUpPage = () => {
     }
   };
 
+    // Toggle password visibility
+    const togglePasswordVisibility = () => {
+      setPasswordVisible((prev) => !prev);
+    };
+  
+    // Toggle confirm password visibility
+    const toggleConfirmPasswordVisibility = () => {
+      setConfirmPasswordVisible((prev) => !prev);
+    };
+
   return (
     <Body>
       <Form onSubmit={handleSignUp}>
@@ -75,24 +89,40 @@ const SignUpPage = () => {
 
         <InputContainer>
           <Input
-            type="password"
+            type={passwordVisible ? "text" : "password"}
             placeholder="Enter your password"
             id="password"
             name="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <Icon className="fa fa-lock" />
+          {password && ( 
+            passwordVisible ? (
+              <EyeIcon onClick={togglePasswordVisibility} />
+            ) : (
+              <EyeOffIcon onClick={togglePasswordVisibility} />
+            )
+          )}
         </InputContainer>
 
         <InputContainer>
           <Input
-            type="password"
+            type={confirmPasswordVisible ? "text" : "password"}
             placeholder="Confirm your password"
             id="confirmPassword"
             name="confirmPassword"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)} 
             required
           />
-          <Icon className="fa fa-lock" />
+          {confirmPassword && (
+            confirmPasswordVisible ? (
+              <EyeIcon onClick={toggleConfirmPasswordVisibility} />
+            ) : (
+              <EyeOffIcon onClick={toggleConfirmPasswordVisibility} />
+            )
+          )}
         </InputContainer>
 
         <Button type="submit">Sign Up</Button>
@@ -164,6 +194,26 @@ const Input = styled.input`
     outline: none;
     border-color: rgb(199, 90, 246);
   }
+`;
+
+const EyeIcon = styled(Eye)`
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+  color: rgb(255, 255, 255);
+  font-size: 1rem;
+  cursor: pointer;
+`;
+
+const EyeOffIcon = styled(EyeOff)`
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+  color: rgb(255, 255, 255);
+  font-size: 1rem;
+  cursor: pointer;
 `;
 
 const Icon = styled.i`

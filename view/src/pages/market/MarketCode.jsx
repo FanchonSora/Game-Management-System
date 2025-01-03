@@ -286,6 +286,7 @@ const MarketCodePage = () => {
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const searchBarRef = useRef(null);
   const [currentCodeIndex, setCurrentCodeIndex] = useState(0);
+  const [isPlaceholderVisible, setIsPlaceholderVisible] = useState(true);
 
   const { featuredCodes } = marketCodes;
 
@@ -323,12 +324,16 @@ const MarketCodePage = () => {
       <ContentWrapper>
         {/* Search */}
         <SearchBarContainer ref={searchBarRef}>
-          <SearchInput
-            type="text"
-            placeholder="Tìm kiếm code..."
+        <SearchInput
+            type="search..."
+            placeholder={isPlaceholderVisible ? "search..." : ""}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            onFocus={() => setIsSearchFocused(true)}
+            onFocus={() => {
+              setIsPlaceholderVisible(false);
+              setIsSearchFocused(true);
+            }}
+            onBlur={() => setIsPlaceholderVisible(true)}
           />
           {isSearchFocused && searchQuery.trim().length > 0 && filteredCodes.length > 0 && (
             <SearchDropdown>

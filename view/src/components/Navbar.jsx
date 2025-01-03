@@ -225,6 +225,33 @@ const Navbar = () => {
               <DropdownItem to="/profile">Profile</DropdownItem>
               <DropdownItem to="/friends">Friends</DropdownItem>
               <DropdownItem to="/badges">Badges</DropdownItem>
+              <DropdownItem
+                onClick={async () => {
+                  try {
+                    const response = await fetch("http://127.0.0.1:8000/api/logout", {
+                      method: "PUT",
+                      headers: {
+                        "Content-Type": "application/json",
+                      },
+                    });
+
+                    if (response.ok) {
+                      localStorage.removeItem("username");
+                      localStorage.removeItem("authToken");
+                      sessionStorage.clear();
+                      navigate("/sign-in");
+                    } else {
+                      const errorData = await response.json();
+                      alert(`Logout failed: ${errorData.detail || "Unknown error"}`);
+                    }
+                  } catch (error) {
+                    console.error("Error during logout:", error);
+                    alert("An unexpected error occurred. Please try again later.");
+                  }
+                }}
+              >
+                Logout
+              </DropdownItem>
             </DropdownMenu>
           )}
         </Dropdown>

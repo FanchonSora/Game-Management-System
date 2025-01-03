@@ -313,6 +313,8 @@ const MarketGamePage = () => {
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const searchBarRef = useRef(null);
   const [currentGameIndex, setCurrentGameIndex] = useState(0);
+  const [isPlaceholderVisible, setIsPlaceholderVisible] = useState(true);
+
   const featuredGames = gameData.filter((game) => game.tags.includes("Featured"));
 
   const allTags = [...new Set(gameData.flatMap((game) => game.tags))]; // Get all unique tags
@@ -379,11 +381,15 @@ const MarketGamePage = () => {
             <FaSearch size={20} />
           </SearchIconWrapper>
           <SearchInput
-            type="text"
-            placeholder="Tìm kiếm game..."
+            type="search..."
+            placeholder={isPlaceholderVisible ? "search..." : ""}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            onFocus={() => setIsSearchFocused(true)}
+            onFocus={() => {
+              setIsPlaceholderVisible(false);
+              setIsSearchFocused(true);
+            }}
+            onBlur={() => setIsPlaceholderVisible(true)}
           />
           {isSearchFocused && searchQuery.trim().length > 0 && filteredGames.length > 0 && (
             <SearchDropdown>
