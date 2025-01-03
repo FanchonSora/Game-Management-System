@@ -1,5 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from .models import User, LoginData
 import json
 import os
@@ -81,3 +82,7 @@ async def update_profile(user_data: User):
     save_user(users)
     
     return {"message": "Profile updated successfully"}
+
+@app.put("/api/logout")
+async def log_out():
+    return JSONResponse(content={"message": "Logout successful"}, status_code=200)

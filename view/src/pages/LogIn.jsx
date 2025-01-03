@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { Lock, User } from "lucide-react"; // Assuming lucide-react is installed
+import { Eye, EyeOff } from "lucide-react"; // Assuming lucide-react is installed
 
 const LogInPage = () => {
   const navigate = useNavigate();
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [password, setPassword] = useState("");
 
   const handleLogIn = async (e) => {
     e.preventDefault();
@@ -39,6 +41,16 @@ const LogInPage = () => {
     }
   };
 
+  // Toggle password visibility
+  const togglePasswordVisibility = () => {
+    setPasswordVisible((prev) => !prev);
+  };
+
+  // Update password state when user types
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
+
   return (
     <Body>
       <Form onSubmit={handleLogIn}>
@@ -52,18 +64,25 @@ const LogInPage = () => {
             name="username"
             required
           />
-          <UserIcon />
         </InputContainer>
 
         <InputContainer>
           <Input
-            type="password"
+            type={passwordVisible ? "text" : "password"}
             placeholder="Enter your password"
             id="password"
             name="password"
+            value={password}
+            onChange={handlePasswordChange}
             required
           />
-          <LockIcon />
+          {password && (
+            passwordVisible ? (
+              <EyeIcon onClick={togglePasswordVisibility} />
+            ) : (
+              <EyeOffIcon onClick={togglePasswordVisibility} />
+            )
+          )}
         </InputContainer>
 
         <CheckBoxContainer>
@@ -144,22 +163,24 @@ const Input = styled.input`
   }
 `;
 
-const UserIcon = styled(User)`
+const EyeIcon = styled(Eye)`
   position: absolute;
   top: 50%;
   right: 15px;
   transform: translateY(-50%);
-  color:rgb(255, 255, 255);
+  color: rgb(255, 255, 255);
   font-size: 1rem;
+  cursor: pointer;
 `;
 
-const LockIcon = styled(Lock)`
+const EyeOffIcon = styled(EyeOff)`
   position: absolute;
   top: 50%;
   right: 15px;
   transform: translateY(-50%);
-  color:rgb(255, 255, 255);
+  color: rgb(255, 255, 255);
   font-size: 1rem;
+  cursor: pointer;
 `;
 
 const CheckBoxContainer = styled.div`
