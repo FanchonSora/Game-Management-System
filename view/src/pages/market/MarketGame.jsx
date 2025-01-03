@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 import gameData from "../../data/gameData"; // data game
 import Navbar from "../../components/Navbar";
-import { FaSearch } from "react-icons/fa"; // Import the FaSearch icon
+import { FaSearch, FaTags } from "react-icons/fa"; // Nhớ import thêm FaTags
 
 // Keyframes
 const fadeIn = keyframes`
@@ -47,10 +47,11 @@ const ContentWrapper = styled.div`
 const SearchBarWrapper = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between; /* Ensure space between search input and tag filter */
+  justify-content: flex-start; /* Chuyển thành flex-start, tuỳ chỉnh theo ý muốn */
   width: 100%;
-  max-width: 1500px; /* You can adjust this based on your design */
-  margin-right: 2rem; /* Add margin to the right to give some space */
+  max-width: 1500px;
+  margin-right: 2rem;
+  gap: 1rem; /* Tạo khoảng trống giữa các phần tử trong SearchBarWrapper */
 `;
 
 const SearchBarContainer = styled.div`
@@ -102,7 +103,7 @@ const SearchIconWrapper = styled.div`
   left: 12px;
   top: 50%;
   transform: translateY(-50%);
-  color:rgb(255, 255, 255);
+  color: rgb(255, 255, 255);
   display: flex;
   align-items: center;
   pointer-events: none;
@@ -133,18 +134,39 @@ const GameImage = styled.img`
   margin-right: 10px;
 `;
 
+/* Thêm styled-component cho icon tags (nếu muốn style riêng) */
+const TagFilterIconWrapper = styled.div`
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #2a2a3d;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+
+  &:hover {
+    background-color: rgb(148, 64, 133);
+  }
+`;
+
+/* Sửa lại để nhận prop show (nếu muốn toggle bằng CSS) */
 const TagsFilterContainer = styled.div`
   background-color: #2a2a3d;
   border-radius: 25px;
-  margin-top: 2rem;
-  margin-left: 5rem;
   padding: 5px 10px;
-  display: flex;
+  display: ${({ show }) => (show ? "flex" : "none")}; /* Toggle hiển thị */
   flex-wrap: wrap;
   gap: 5px;
   max-width: 500px;
   overflow: hidden;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+
+  /* Có thể thêm margin cho đẹp */
+  margin-left: 1rem;
 `;
 
 const TagButton = styled.button`
@@ -315,13 +337,17 @@ const MarketGamePage = () => {
   const [currentGameIndex, setCurrentGameIndex] = useState(0);
   const [isPlaceholderVisible, setIsPlaceholderVisible] = useState(true);
 
+  // Thêm state để toggle hiển thị TagsFilterContainer
+  const [showTagsFilter, setShowTagsFilter] = useState(false);
+
   const featuredGames = gameData.filter((game) => game.tags.includes("Featured"));
 
   const allTags = [...new Set(gameData.flatMap((game) => game.tags))]; // Get all unique tags
 
   // Filter games by search query and selected tag
   const filteredGames = gameData.filter((game) => {
-    const matchesQuery = game.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    const matchesQuery =
+      game.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       game.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()));
     const matchesTag = tagFilter ? game.tags.includes(tagFilter) : true;
 
@@ -359,72 +385,75 @@ const MarketGamePage = () => {
           <FeaturedSection>
             <FeaturedContent>
               <FeaturedTitle>
-                    {featuredGames[currentGameIndex]?.title || "Featured Game"}
-                  </FeaturedTitle>
-                  <FeaturedSubtitle>
-                    {featuredGames[currentGameIndex]?.description ||
-                      "Don't miss out on this amazing game!"}
-                  </FeaturedSubtitle>
-                </FeaturedContent>
-                <FeaturedImage
-                  src={featuredGames[currentGameIndex]?.image || "placeholder.jpg"}
-                  alt="Featured Game"
-                />
+                {featuredGames[currentGameIndex]?.title || "Featured Game"}
+              </FeaturedTitle>
+              <FeaturedSubtitle>
+                {featuredGames[currentGameIndex]?.description ||
+                  "Don't miss out on this amazing game!"}
+              </FeaturedSubtitle>
+            </FeaturedContent>
+            <FeaturedImage
+              src={featuredGames[currentGameIndex]?.image || "placeholder.jpg"}
+              alt="Featured Game"
+            />
           </FeaturedSection>
         )}
 
-        {/* Search */}
+        {/* Search + Icon + Tag Filter */}
         <SearchBarWrapper>
-        {/* Search Bar */}
-        <SearchBarContainer ref={searchBarRef}>
-          <SearchIconWrapper>
-            <FaSearch size={20} />
-          </SearchIconWrapper>
-          <SearchInput
-            type="search..."
-            placeholder={isPlaceholderVisible ? "search..." : ""}
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            onFocus={() => {
-              setIsPlaceholderVisible(false);
-              setIsSearchFocused(true);
-            }}
-            onBlur={() => setIsPlaceholderVisible(true)}
-          />
-          {isSearchFocused && searchQuery.trim().length > 0 && filteredGames.length > 0 && (
-            <SearchDropdown>
-              {filteredGames.slice(0, 8).map((game) => (
-                <SearchDropdownItem
-                  key={game.id}
-                  onClick={() => {
-                    setSearchQuery("");
-                    setIsSearchFocused(false);
-                    navigate(`/market-game/${game.id}`);
-                  }}
-                >
-                  <GameImage src={game.image} alt={game.title} />
-                  {game.title}
-                </SearchDropdownItem>
-              ))}
-            </SearchDropdown>
-          )}
-        </SearchBarContainer>
+          {/* Search Bar */}
+          <SearchBarContainer ref={searchBarRef}>
+            <SearchIconWrapper>
+              <FaSearch size={20} />
+            </SearchIconWrapper>
+            <SearchInput
+              type="search..."
+              placeholder={isPlaceholderVisible ? "search..." : ""}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onFocus={() => {
+                setIsPlaceholderVisible(false);
+                setIsSearchFocused(true);
+              }}
+              onBlur={() => setIsPlaceholderVisible(true)}
+            />
+            {isSearchFocused && searchQuery.trim().length > 0 && filteredGames.length > 0 && (
+              <SearchDropdown>
+                {filteredGames.slice(0, 8).map((game) => (
+                  <SearchDropdownItem
+                    key={game.id}
+                    onClick={() => {
+                      setSearchQuery("");
+                      setIsSearchFocused(false);
+                      navigate(`/market-game/${game.id}`);
+                    }}
+                  >
+                    <GameImage src={game.image} alt={game.title} />
+                    {game.title}
+                  </SearchDropdownItem>
+                ))}
+              </SearchDropdown>
+            )}
+          </SearchBarContainer>
 
-        {/* Tags filter on the right side */}
-        <TagsFilterContainer>
-          {allTags.map((tag) => (
-            <TagButton
-              key={tag}
-              className={tag === tagFilter ? "active" : ""}
-              onClick={() => setTagFilter(tag === tagFilter ? null : tag)}
-            >
-              {tag}
-            </TagButton>
-          ))}
-        </TagsFilterContainer>
-      </SearchBarWrapper>
+          {/* Icon để mở/tắt Tag Filter */}
+          <TagFilterIconWrapper onClick={() => setShowTagsFilter(!showTagsFilter)}>
+            <FaTags />
+          </TagFilterIconWrapper>
 
-        
+          {/* Tags filter container có show/ẩn */}
+          <TagsFilterContainer show={showTagsFilter}>
+            {allTags.map((tag) => (
+              <TagButton
+                key={tag}
+                className={tag === tagFilter ? "active" : ""}
+                onClick={() => setTagFilter(tag === tagFilter ? null : tag)}
+              >
+                {tag}
+              </TagButton>
+            ))}
+          </TagsFilterContainer>
+        </SearchBarWrapper>
 
         {/* All Games Section */}
         <SectionTitle>All Games</SectionTitle>
@@ -440,9 +469,13 @@ const MarketGamePage = () => {
               </GamePrice>
               <ButtonGroup>
                 {game.price === "Free" && (
-                  <ActionButton onClick={() => handleAddToLibrary(game)}>Add</ActionButton>
+                  <ActionButton onClick={() => handleAddToLibrary(game)}>
+                    Add
+                  </ActionButton>
                 )}
-                <ActionButton onClick={() => handleViewDetails(game)}>Details</ActionButton>
+                <ActionButton onClick={() => handleViewDetails(game)}>
+                  Details
+                </ActionButton>
               </ButtonGroup>
             </Card>
           ))}
