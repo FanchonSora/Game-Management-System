@@ -95,7 +95,9 @@ const SearchDropdownItem = styled.li`
   color: #c7d5e0;
   border-bottom: 1px solid #3e3e5a;
   cursor: pointer;
-
+  display: flex;
+  align-items: center;
+  
   &:hover {
     background-color: rgb(148, 64, 133);
   }
@@ -104,6 +106,16 @@ const SearchDropdownItem = styled.li`
     border-bottom: none;
   }
 `;
+
+const DropdownItemImage = styled.img`
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-right: 10px;
+`;
+
+
 
 const FeaturedCodeSection = styled.section`
   background: #2a2a3d;
@@ -329,6 +341,8 @@ const MarketCodePage = () => {
                     navigate(`/market-code/${code.id}`);
                   }}
                 >
+                  {/* Display Image */}
+                  <DropdownItemImage src={code.image || "placeholder.jpg"} alt={code.title} />
                   {code.title}
                 </SearchDropdownItem>
               ))}

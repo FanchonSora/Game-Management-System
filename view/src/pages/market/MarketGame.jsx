@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 import gameData from "../../data/gameData"; // data game
 import Navbar from "../../components/Navbar";
+import { FaSearch } from "react-icons/fa"; // Import the FaSearch icon
 
 // Keyframes
 const fadeIn = keyframes`
@@ -43,23 +44,31 @@ const ContentWrapper = styled.div`
 `;
 
 // Search
-const SearchBarContainer = styled.div`
-  position: relative;
-  margin-bottom: 30px;
+const SearchBarWrapper = styled.div`
   display: flex;
   align-items: center;
+  justify-content: space-between; /* Ensure space between search input and tag filter */
+  width: 100%;
+  max-width: 1500px; /* You can adjust this based on your design */
+  margin-right: 2rem; /* Add margin to the right to give some space */
+`;
+
+const SearchBarContainer = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 500px; /* Adjust the width of the search bar */
 `;
 
 const SearchInput = styled.input`
   width: 100%;
-  margin-top: 3rem;
-  max-width: 500px;
-  padding: 10px 15px;
+  padding: 10px 15px 10px 40px; /* Added left padding for the icon */
   border-radius: 25px;
   border: none;
   outline: none;
   font-size: 16px;
-  background-color: #2a2a3d; /* Đổi màu nền sang màu tối */
+  background-color: #2a2a3d;
   color: #c7d5e0;
   box-shadow: 0 2px 5px rgba(0,0,0,0.3);
 
@@ -74,10 +83,10 @@ const SearchInput = styled.input`
 
 const SearchDropdown = styled.ul`
   position: absolute;
-  top: 84%; /* Điều chỉnh để dropdown hiển thị bên phải thanh tìm kiếm */
-  left: 45%; /* Hiển thị dropdown ngay bên phải của thanh tìm kiếm */
-  width: 300px;
-  background-color: #2a2a3d; /* Đổi màu nền sang màu tối */
+  top: 110%;
+  left: 0;
+  width: 100%;
+  background-color: #2a2a3d; 
   list-style: none;
   margin: 0;
   padding: 0.5rem;
@@ -86,7 +95,17 @@ const SearchDropdown = styled.ul`
   max-height: 250px;
   overflow-y: auto;
   z-index: 999;
-  transform: translateY(-50%); /* Để dropdown căn giữa dọc với thanh tìm kiếm */
+`;
+
+const SearchIconWrapper = styled.div`
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color:rgb(255, 255, 255);
+  display: flex;
+  align-items: center;
+  pointer-events: none;
 `;
 
 const SearchDropdownItem = styled.li`
@@ -94,6 +113,8 @@ const SearchDropdownItem = styled.li`
   color: #c7d5e0;
   border-bottom: 1px solid #3e3e5a;
   cursor: pointer;
+  display: flex;
+  align-items: center;
 
   &:hover {
     background-color: rgb(148, 64, 133);
@@ -102,6 +123,56 @@ const SearchDropdownItem = styled.li`
   &:last-child {
     border-bottom: none;
   }
+`;
+
+const GameImage = styled.img`
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-right: 10px;
+`;
+
+const TagsFilterContainer = styled.div`
+  background-color: #2a2a3d;
+  border-radius: 25px;
+  margin-top: 2rem;
+  margin-left: 5rem;
+  padding: 5px 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  max-width: 500px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+`;
+
+const TagButton = styled.button`
+  background-color: #2a2a3d;
+  border: 1px solid #3e3e5a;
+  color: #c7d5e0;
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: rgb(148, 64, 133);
+  }
+
+  &.active {
+    background-color: rgb(199, 90, 246);
+  }
+`;
+
+const SectionTitle = styled.h2`
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: #ffffff;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+  text-align: center;
+  animation: ${fadeIn} 1s ease-out;
 `;
 
 const FeaturedSection = styled.section`
@@ -122,6 +193,19 @@ const FeaturedSection = styled.section`
   @media (max-width: 768px) {
     flex-direction: column;
     text-align: center;
+  }
+`;
+
+const FeaturedImage = styled.img`
+  width: 45%;
+  max-width: 300px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  animation: ${fadeIn} 1s ease-out;
+
+  @media (max-width: 768px) {
+    width: 60%;
+    margin-top: 2rem;
   }
 `;
 
@@ -150,51 +234,6 @@ const FeaturedSubtitle = styled.p`
   margin-bottom: 2rem;
 `;
 
-const FeaturedButtonGroup = styled.div`
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-`;
-
-const FeaturedButton = styled.button`
-  background-color: rgb(199, 90, 246);
-  border: none;
-  border-radius: 5px;
-  color: #000;
-  padding: 10px 20px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s;
-
-  &:hover {
-    background-color: rgb(184, 81, 228);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgb(162, 68, 202);
-  }
-`;
-
-const FeaturedImage = styled.img`
-  width: 45%;
-  max-width: 300px;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-  animation: ${fadeIn} 1s ease-out;
-
-  @media (max-width: 768px) {
-    width: 60%;
-    margin-top: 2rem;
-  }
-`;
-
-const SectionTitle = styled.h2`
-  font-size: 24px;
-  margin-bottom: 10px;
-  color: #ffffff;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
-  text-align: center;
-  animation: ${fadeIn} 1s ease-out;
-`;
-
 const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -220,7 +259,7 @@ const Card = styled.div`
   }
 `;
 
-const GameImage = styled.img`
+const GameImageCard = styled.img`
   width: 100%;
   height: 160px;
   object-fit: cover;
@@ -270,17 +309,22 @@ const ActionButton = styled.button`
 const MarketGamePage = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
+  const [tagFilter, setTagFilter] = useState(null); // New state for tag filter
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const searchBarRef = useRef(null);
   const [currentGameIndex, setCurrentGameIndex] = useState(0);
-
   const featuredGames = gameData.filter((game) => game.tags.includes("Featured"));
 
-  // Lọc theo search
-  const filteredGames = gameData.filter((game) =>
-    game.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    game.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()))
-  );
+  const allTags = [...new Set(gameData.flatMap((game) => game.tags))]; // Get all unique tags
+
+  // Filter games by search query and selected tag
+  const filteredGames = gameData.filter((game) => {
+    const matchesQuery = game.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      game.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()));
+    const matchesTag = tagFilter ? game.tags.includes(tagFilter) : true;
+
+    return matchesQuery && matchesTag;
+  });
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -308,8 +352,32 @@ const MarketGamePage = () => {
     <Container>
       <Navbar />
       <ContentWrapper>
+        {/* Featured Games Section */}
+        {featuredGames.length > 0 && (
+          <FeaturedSection>
+            <FeaturedContent>
+              <FeaturedTitle>
+                    {featuredGames[currentGameIndex]?.title || "Featured Game"}
+                  </FeaturedTitle>
+                  <FeaturedSubtitle>
+                    {featuredGames[currentGameIndex]?.description ||
+                      "Don't miss out on this amazing game!"}
+                  </FeaturedSubtitle>
+                </FeaturedContent>
+                <FeaturedImage
+                  src={featuredGames[currentGameIndex]?.image || "placeholder.jpg"}
+                  alt="Featured Game"
+                />
+          </FeaturedSection>
+        )}
+
         {/* Search */}
+        <SearchBarWrapper>
+        {/* Search Bar */}
         <SearchBarContainer ref={searchBarRef}>
+          <SearchIconWrapper>
+            <FaSearch size={20} />
+          </SearchIconWrapper>
           <SearchInput
             type="text"
             placeholder="Tìm kiếm game..."
@@ -328,6 +396,7 @@ const MarketGamePage = () => {
                     navigate(`/market-game/${game.id}`);
                   }}
                 >
+                  <GameImage src={game.image} alt={game.title} />
                   {game.title}
                 </SearchDropdownItem>
               ))}
@@ -335,33 +404,34 @@ const MarketGamePage = () => {
           )}
         </SearchBarContainer>
 
-        {/* Featured Games Section */}
-        {featuredGames.length > 0 && (
-          <FeaturedSection>
-            <FeaturedContent>
-              <FeaturedTitle>
-                {featuredGames[currentGameIndex]?.title || "Featured Game"}
-              </FeaturedTitle>
-              <FeaturedSubtitle>
-                {featuredGames[currentGameIndex]?.description ||
-                  "Don't miss out on this amazing game!"}
-              </FeaturedSubtitle>
-            </FeaturedContent>
-            <FeaturedImage
-              src={featuredGames[currentGameIndex]?.image || "placeholder.jpg"}
-              alt="Featured Game"
-            />
-          </FeaturedSection>
-        )}
+        {/* Tags filter on the right side */}
+        <TagsFilterContainer>
+          {allTags.map((tag) => (
+            <TagButton
+              key={tag}
+              className={tag === tagFilter ? "active" : ""}
+              onClick={() => setTagFilter(tag === tagFilter ? null : tag)}
+            >
+              {tag}
+            </TagButton>
+          ))}
+        </TagsFilterContainer>
+      </SearchBarWrapper>
+
+        
 
         {/* All Games Section */}
         <SectionTitle>All Games</SectionTitle>
         <Grid>
-          {gameData.map((game) => (
+          {filteredGames.map((game) => (
             <Card key={game.id}>
-              <GameImage src={game.image} alt={game.title} />
+              <GameImageCard src={game.image} alt={game.title} />
               <GameTitle>{game.title}</GameTitle>
-              <GamePrice>{game.price === 0 || isNaN(parseFloat(game.price)) ? "Free" : `$${parseFloat(game.price).toFixed(2)}`}</GamePrice>
+              <GamePrice>
+                {game.price === 0 || isNaN(parseFloat(game.price))
+                  ? "Free"
+                  : `$${parseFloat(game.price).toFixed(2)}`}
+              </GamePrice>
               <ButtonGroup>
                 {game.price === "Free" && (
                   <ActionButton onClick={() => handleAddToLibrary(game)}>Add</ActionButton>

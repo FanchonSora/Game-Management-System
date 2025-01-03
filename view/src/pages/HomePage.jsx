@@ -494,13 +494,6 @@ const HomePage = () => {
       image: "/game/Albion Online.jpg",
     },
     {
-      id: 16,
-      title: "Candy Crush Saga",
-      category: "Casual",
-      price: 0.0,
-      image: "/game/Candy Crush Saga.jpg",
-    },
-    {
       id: 17,
       title: "Among Us",
       category: "Casual",

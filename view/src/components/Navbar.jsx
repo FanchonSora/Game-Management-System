@@ -19,7 +19,7 @@ const NavbarContainer = styled.nav`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 100%;
+  width: 95%;
 `;
 
 const NavLinks = styled.div`

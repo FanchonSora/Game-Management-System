@@ -1,9 +1,8 @@
-// File: src/pages/LibraryCode.jsx
-
 import React, { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 import CodeCard from "../../components/CodeCard"; // Import CodeCard component
 import Navbar from "../../components/Navbar"; // Import Navbar component
+import { useNavigate } from "react-router-dom"; // Import useNavigate hook
 
 // Keyframes for Animations
 const fadeIn = keyframes`
@@ -171,6 +170,8 @@ const PlaceholderMessage = styled.p`
 
 // LibraryCode Component
 const LibraryCode = () => {
+  const navigate = useNavigate(); // Using the navigate hook for programmatic navigation
+  
   // State for active tab
   const [activeTab, setActiveTab] = useState("All");
 
@@ -235,6 +236,11 @@ const LibraryCode = () => {
     }
   };
 
+  // Navigate to CodeDetailPage when a code is clicked
+  const handleNavigateToDetail = (codeId) => {
+    navigate(`/library-code/${codeId}`);
+  };
+
   return (
     <Container>
       {/* Top Navigation Bar */}
@@ -293,6 +299,7 @@ const LibraryCode = () => {
                 isAdded={isAdded}
                 onAddToLibrary={() => handleAddCode(code)}
                 onRemoveFromLibrary={() => handleRemoveCode(code)}
+                onClick={() => handleNavigateToDetail(code.id)} // Navigate to the CodeDetailPage
               />
             );
           })

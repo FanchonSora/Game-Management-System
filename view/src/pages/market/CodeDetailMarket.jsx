@@ -342,7 +342,8 @@ const CodeDetailMarket = () => {
           {code.description && <Description>{code.description}</Description>}
 
           {/* Nút xem hướng dẫn triển khai */}
-          {code.howToImplement && (
+          
+          {code.price == "Free" && code.howToImplement && (
             <>
               <ImplementButton onClick={() => setShowImplementation(!showImplementation)}>
                 {showImplementation ? "Hide Instructions" : "View Instructions"}
