@@ -1,10 +1,8 @@
-// File: src/pages/MarketGamePage.jsx
-
-import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import styled, { keyframes } from 'styled-components';
-import gameData from '../../data/gameData'; // data game
-import Navbar from '../../components/Navbar';
+import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import styled, { keyframes } from "styled-components";
+import gameData from "../../data/gameData"; // data game
+import Navbar from "../../components/Navbar";
 
 // Keyframes
 const fadeIn = keyframes`
@@ -14,7 +12,7 @@ const fadeIn = keyframes`
 
 // Styled Components
 const Container = styled.div`
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   background-color: #1e1e2e;
   min-height: 100vh;
   padding: 20px;
@@ -25,7 +23,10 @@ const Container = styled.div`
   &:before {
     content: "";
     position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     background: rgba(0, 0, 0, 0.6);
     z-index: 0;
   }
@@ -41,42 +42,51 @@ const ContentWrapper = styled.div`
   margin: 0 auto;
 `;
 
-// Thanh tìm kiếm
+// Search
 const SearchBarContainer = styled.div`
+  position: relative;
   margin-bottom: 30px;
-  position: relative; /* để đặt dropdown */
+  display: flex;
+  align-items: center;
 `;
 
 const SearchInput = styled.input`
   width: 100%;
+  margin-top: 3rem;
   max-width: 500px;
   padding: 10px 15px;
+  border-radius: 25px;
   border: none;
-  border-radius: 20px;
-  font-size: 16px;
   outline: none;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  font-size: 16px;
+  background-color: #2a2a3d; /* Đổi màu nền sang màu tối */
+  color: #c7d5e0;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
 
   &::placeholder {
-    color: #aaa;
+    color: #a9a9a9;
+  }
+
+  &:focus {
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
   }
 `;
 
-// Dropdown Search
 const SearchDropdown = styled.ul`
   position: absolute;
-  top: 50px; /* ngay dưới SearchInput */
-  width: 100%;
-  max-width: 500px;
-  background-color: #292e49;
+  top: 84%; /* Điều chỉnh để dropdown hiển thị bên phải thanh tìm kiếm */
+  left: 45%; /* Hiển thị dropdown ngay bên phải của thanh tìm kiếm */
+  width: 300px;
+  background-color: #2a2a3d; /* Đổi màu nền sang màu tối */
   list-style: none;
   margin: 0;
   padding: 0.5rem;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   max-height: 250px;
   overflow-y: auto;
   z-index: 999;
+  transform: translateY(-50%); /* Để dropdown căn giữa dọc với thanh tìm kiếm */
 `;
 
 const SearchDropdownItem = styled.li`
@@ -84,15 +94,107 @@ const SearchDropdownItem = styled.li`
   color: #c7d5e0;
   border-bottom: 1px solid #3e3e5a;
   cursor: pointer;
+
   &:hover {
-    background-color: #3b4162;
+    background-color: rgb(148, 64, 133);
   }
+
   &:last-child {
     border-bottom: none;
   }
 `;
 
-// Grid hiển thị game
+const FeaturedSection = styled.section`
+  background: #2a2a3d;
+  border-radius: 16px;
+  padding: 3rem;
+  margin: 3rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  flex-wrap: wrap;
+  animation: ${fadeIn} 1s ease-out;
+  z-index: 1;
+  position: relative;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    text-align: center;
+  }
+`;
+
+const FeaturedContent = styled.div`
+  width: 50%;
+  min-width: 300px;
+  animation: ${fadeIn} 1s ease-out;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+`;
+
+const FeaturedTitle = styled.h1`
+  color: #ffffff;
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+  animation: ${fadeIn} 1s ease-out;
+`;
+
+const FeaturedSubtitle = styled.p`
+  color: #dddddd;
+  font-size: 1rem;
+  margin-bottom: 2rem;
+`;
+
+const FeaturedButtonGroup = styled.div`
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+`;
+
+const FeaturedButton = styled.button`
+  background-color: rgb(199, 90, 246);
+  border: none;
+  border-radius: 5px;
+  color: #000;
+  padding: 10px 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s;
+
+  &:hover {
+    background-color: rgb(184, 81, 228);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgb(162, 68, 202);
+  }
+`;
+
+const FeaturedImage = styled.img`
+  width: 45%;
+  max-width: 300px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  animation: ${fadeIn} 1s ease-out;
+
+  @media (max-width: 768px) {
+    width: 60%;
+    margin-top: 2rem;
+  }
+`;
+
+const SectionTitle = styled.h2`
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: #ffffff;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+  text-align: center;
+  animation: ${fadeIn} 1s ease-out;
+`;
+
 const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -100,30 +202,12 @@ const Grid = styled.div`
   animation: ${fadeIn} 0.5s ease-out;
 `;
 
-const SectionTitle = styled.h2`
-  font-size: 24px;
-  margin-bottom: 10px;
-  color: #ffffff;
-  text-shadow: 0 1px 1px rgba(0,0,0,0.5);
-  text-align: center;
-  animation: ${fadeIn} 1s ease-out;
-`;
-
-const Subtitle = styled.p`
-  font-size: 14px;
-  color: #aaa;
-  margin-bottom: 20px;
-  text-align: center;
-  animation: ${fadeIn} 1s ease-out;
-`;
-
-// Card (theo style Home Page)
 const Card = styled.div`
-  background: #292e49;
+  background: #2a2a3d;
   padding: 1rem;
   border-radius: 12px;
   color: #c7d5e0;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
   display: flex;
@@ -132,7 +216,7 @@ const Card = styled.div`
 
   &:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
   }
 `;
 
@@ -166,10 +250,10 @@ const ButtonGroup = styled.div`
 `;
 
 const ActionButton = styled.button`
-  background-color: #66c0f4;
+  background-color: rgb(199, 90, 246);
   border: none;
   border-radius: 5px;
-  color: #000;
+  color: #fff;
   padding: 8px 10px;
   font-weight: bold;
   cursor: pointer;
@@ -177,85 +261,48 @@ const ActionButton = styled.button`
   transition: background 0.3s ease, transform 0.2s;
 
   &:hover {
-    background-color: #5aa8e6;
+    background-color: rgb(184, 81, 228);
     transform: translateY(-2px);
-  }
-`;
-
-const ViewButton = styled.button`
-  background-color: #2ecc71;
-  border: none;
-  border-radius: 5px;
-  color: #000;
-  padding: 8px 10px;
-  font-weight: bold;
-  cursor: pointer;
-  font-size: 0.8rem;
-  transition: background 0.3s ease, transform 0.2s;
-
-  &:hover {
-    background-color: #28b54a;
-    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgb(162, 68, 202);
   }
 `;
 
 const MarketGamePage = () => {
   const navigate = useNavigate();
-
-  // State search
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
-
-  // Ref để đóng dropdown khi click ngoài
   const searchBarRef = useRef(null);
+  const [currentGameIndex, setCurrentGameIndex] = useState(0);
 
-  // Lọc game theo search query
+  const featuredGames = gameData.filter((game) => game.tags.includes("Featured"));
+
+  // Lọc theo search
   const filteredGames = gameData.filter((game) =>
-    game.title.toLowerCase().includes(searchQuery.toLowerCase())
+    game.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    game.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
-  // Bên dưới tuỳ ý chia category "Featured", "Action", ... tuỳ logic
-  // Ở đây ta chỉ demo "Featured" + "All Games" 
-  const featuredGames = gameData.filter((game) =>
-    game.tags.includes("Featured")
-  );
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentGameIndex((prevIndex) => (prevIndex + 1) % featuredGames.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [featuredGames.length]);
 
-  // Thêm game free vào library
   const handleAddToLibrary = (game) => {
-    if (game.price === 'Free') {
-      let libraryGames = JSON.parse(localStorage.getItem("libraryGames")) || [];
-      if (!libraryGames.some(g => g.id === game.id)) {
-        libraryGames.push(game);
-        localStorage.setItem("libraryGames", JSON.stringify(libraryGames));
-        alert(`${game.title} đã được thêm vào thư viện!`);
-      } else {
-        alert(`${game.title} đã có trong thư viện.`);
-      }
+    const libraryGames = JSON.parse(localStorage.getItem("libraryGames")) || [];
+    if (!libraryGames.some((g) => g.id === game.id)) {
+      libraryGames.push(game);
+      localStorage.setItem("libraryGames", JSON.stringify(libraryGames));
+      alert(`${game.title} has been added to your library!`);
     } else {
-      alert(`Không thể thêm ${game.title} (không phải Free).`);
+      alert(`${game.title} is already in your library.`);
     }
   };
 
-  // Xem chi tiết
   const handleViewDetails = (game) => {
     navigate(`/market-game/${game.id}`);
   };
-
-  // Đóng dropdown nếu click ngoài
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (
-        searchBarRef.current && 
-        !searchBarRef.current.contains(e.target)
-      ) {
-        setIsSearchFocused(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
 
   return (
     <Container>
@@ -265,7 +312,7 @@ const MarketGamePage = () => {
         <SearchBarContainer ref={searchBarRef}>
           <SearchInput
             type="text"
-            placeholder="Search game..."
+            placeholder="Tìm kiếm game..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onFocus={() => setIsSearchFocused(true)}
@@ -276,7 +323,7 @@ const MarketGamePage = () => {
                 <SearchDropdownItem
                   key={game.id}
                   onClick={() => {
-                    setSearchQuery('');
+                    setSearchQuery("");
                     setIsSearchFocused(false);
                     navigate(`/market-game/${game.id}`);
                   }}
@@ -288,32 +335,27 @@ const MarketGamePage = () => {
           )}
         </SearchBarContainer>
 
-        {/* Featured Games */}
-        <SectionTitle>Featured Games</SectionTitle>
-        <Subtitle>Don't miss out on our top picks!</Subtitle>
-        <Grid>
-          {featuredGames.map((game) => (
-            <Card key={game.id}>
-              <GameImage src={game.image} alt={game.title} />
-              <GameTitle>{game.title}</GameTitle>
-              <GamePrice>{game.price === 0 || isNaN(parseFloat(game.price)) ? "Free" : `$${parseFloat(game.price).toFixed(2)}`}</GamePrice>
-              <ButtonGroup>
-                {game.price === 'Free' && (
-                  <ActionButton onClick={() => handleAddToLibrary(game)}>
-                    Add to Library
-                  </ActionButton>
-                )}
-                <ViewButton onClick={() => handleViewDetails(game)}>
-                  View
-                </ViewButton>
-              </ButtonGroup>
-            </Card>
-          ))}
-        </Grid>
+        {/* Featured Games Section */}
+        {featuredGames.length > 0 && (
+          <FeaturedSection>
+            <FeaturedContent>
+              <FeaturedTitle>
+                {featuredGames[currentGameIndex]?.title || "Featured Game"}
+              </FeaturedTitle>
+              <FeaturedSubtitle>
+                {featuredGames[currentGameIndex]?.description ||
+                  "Don't miss out on this amazing game!"}
+              </FeaturedSubtitle>
+            </FeaturedContent>
+            <FeaturedImage
+              src={featuredGames[currentGameIndex]?.image || "placeholder.jpg"}
+              alt="Featured Game"
+            />
+          </FeaturedSection>
+        )}
 
-        {/* Tất cả game (hoặc chia category) */}
-        <SectionTitle style={{ marginTop: "40px" }}>All Games</SectionTitle>
-        <Subtitle>Browse the collection</Subtitle>
+        {/* All Games Section */}
+        <SectionTitle>All Games</SectionTitle>
         <Grid>
           {gameData.map((game) => (
             <Card key={game.id}>
@@ -321,14 +363,10 @@ const MarketGamePage = () => {
               <GameTitle>{game.title}</GameTitle>
               <GamePrice>{game.price === 0 || isNaN(parseFloat(game.price)) ? "Free" : `$${parseFloat(game.price).toFixed(2)}`}</GamePrice>
               <ButtonGroup>
-                {game.price === 'Free' && (
-                  <ActionButton onClick={() => handleAddToLibrary(game)}>
-                    Add
-                  </ActionButton>
+                {game.price === "Free" && (
+                  <ActionButton onClick={() => handleAddToLibrary(game)}>Add</ActionButton>
                 )}
-                <ViewButton onClick={() => handleViewDetails(game)}>
-                  Details
-                </ViewButton>
+                <ActionButton onClick={() => handleViewDetails(game)}>Details</ActionButton>
               </ButtonGroup>
             </Card>
           ))}

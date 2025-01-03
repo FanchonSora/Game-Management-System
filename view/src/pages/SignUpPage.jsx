@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 const SignUpPage = () => {
   const navigate = useNavigate();
 
+
   const handleSignUp = async (e) => {
     e.preventDefault();
 
@@ -97,8 +98,8 @@ const SignUpPage = () => {
         <Button type="submit">Sign Up</Button>
 
         <Paragraph>
-          Already have an account?{" "}
-          <a onClick={() => navigate("/sign-in")}>Log In</a>
+          Already have an account?{" "} 
+          <a onClick={() => navigate("/sign-in")}>Sign In</a>
         </Paragraph>
       </Form>
     </Body>
@@ -109,23 +110,23 @@ export default SignUpPage;
 
 // Styled Components
 const Body = styled.div`
-  color: #fff;
-  font-family: "Roboto", sans-serif;
   width: 100%;
   height: 100vh;
-  background: linear-gradient(to bottom, #1b2838, #0f171e);
+  background: linear-gradient(to bottom, #2a2a3d, #0f171e);
   display: flex;
   justify-content: center;
   align-items: center;
+  color: #c7d5e0;
+  font-family: "Roboto", sans-serif;
 `;
 
 const Form = styled.form`
   width: 100%;
   max-width: 400px;
   padding: 30px;
-  background: rgba(27, 40, 56, 0.9);
+  background: #2a2a3d;
   backdrop-filter: blur(10px);
-  border-radius: 12px;
+  border-radius: 15px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
   display: flex;
   flex-direction: column;
@@ -134,7 +135,7 @@ const Form = styled.form`
 
 const Heading = styled.h1`
   font-size: 24px;
-  color: #66c0f4;
+  color: rgb(199, 90, 246);
   margin-bottom: 20px;
 `;
 
@@ -147,21 +148,21 @@ const InputContainer = styled.div`
 const Input = styled.input`
   width: 100%;
   padding: 10px 15px;
-  margin: 5px 0;
-  border: 1px solid #66c0f4;
+  margin: 10px 0;
+  border: 1px solid rgb(199, 90, 246);
   border-radius: 5px;
-  background-color: #1b2838;
-  color: #c7d5e0;
+  background-color: #1e1e2e;
+  color:rgb(255, 255, 255);
   font-size: 14px;
   box-sizing: border-box;
 
   ::placeholder {
-    color: #a9a9a9;
+    color:rgb(255, 255, 255);
   }
 
   &:focus {
     outline: none;
-    border-color: #4a90e2;
+    border-color: rgb(199, 90, 246);
   }
 `;
 
@@ -170,7 +171,7 @@ const Icon = styled.i`
   top: 50%;
   right: 15px;
   transform: translateY(-50%);
-  color: rgba(255, 255, 255, 0.6);
+  color: rgb(255, 255, 255);
 `;
 
 const Button = styled.button`
@@ -179,7 +180,7 @@ const Button = styled.button`
   margin-top: 20px;
   border: none;
   border-radius: 8px;
-  background-color: #4a90e2;
+  background-color:rgb(199, 90, 246);
   color: #fff;
   font-size: 1rem;
   font-weight: bold;
@@ -187,7 +188,9 @@ const Button = styled.button`
   transition: background-color 0.3s;
 
   &:hover {
-    background-color: #357ab8;
+    background-color:rgb(184, 81, 228);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgb(162, 68, 202);
   }
 `;
 
@@ -197,13 +200,13 @@ const Paragraph = styled.p`
   color: #c7d5e0;
 
   a {
-    color: #4a90e2;
+    color: rgb(199, 90, 246);
     text-decoration: none;
     font-weight: bold;
     cursor: pointer;
 
     &:hover {
-      text-decoration: underline;
+     transform: translateY(-4px);
     }
   }
 `;

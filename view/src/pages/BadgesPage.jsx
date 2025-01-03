@@ -1,7 +1,12 @@
-import React from "react";
+// File: src/pages/BadgesPage.jsx
+
+import React, { useState } from "react";
+import styled from "styled-components";
+import NavBar from "../components/Navbar";
 
 const BadgesPage = () => {
-  const badges = [
+  const [sortOption, setSortOption] = useState("A-Z");
+  const [badges, setBadges] = useState([
     {
       id: 1,
       title: "Summer Sale 2024",
@@ -9,7 +14,9 @@ const BadgesPage = () => {
       xp: 100,
       description: "0 of 10 cards collected",
       tasksRemaining: "No card drops remaining",
-      cards: Array(5).fill("card-placeholder.png"),
+      rarity: "Common",
+      cards: ["card-placeholder1.jpg"],
+      completed: false,
     },
     {
       id: 2,
@@ -18,7 +25,9 @@ const BadgesPage = () => {
       xp: 0,
       description: "7 of 28 tasks completed",
       tasksRemaining: "21 tasks remaining",
-      cards: [],
+      rarity: "Rare",
+      cards: ["card-placeholder2.jpg"],
+      completed: false,
     },
     {
       id: 3,
@@ -27,169 +36,282 @@ const BadgesPage = () => {
       xp: 0,
       description: "0 of 4 tasks completed",
       tasksRemaining: "4 tasks remaining",
+      rarity: "Epic",
       cards: [],
+      completed: false,
     },
-  ];
+    // Add more badges as needed
+  ]);
 
-  const renderBadge = (badge) => (
-    <div key={badge.id} style={styles.badgeCard}>
-      <div style={styles.badgeHeader}>
-        <div>
-          <h3 style={styles.badgeTitle}>{badge.title}</h3>
-          <p style={styles.badgeLevel}>
-            Level {badge.level} - {badge.xp} XP
-          </p>
-          <p style={styles.badgeDescription}>{badge.description}</p>
-          <p style={styles.badgeTasks}>{badge.tasksRemaining}</p>
-        </div>
-        <div style={styles.badgeIcon}>🏆</div>
-      </div>
-      {badge.cards.length > 0 && (
-        <div style={styles.cardContainer}>
-          {badge.cards.map((card, index) => (
-            <img key={index} src={card} alt="Card" style={styles.cardImage} />
-          ))}
-        </div>
-      )}
-    </div>
-  );
+  const handleSortChange = (option) => {
+    setSortOption(option);
+  };
+
+  const sortedBadges = [...badges].sort((a, b) => {
+    switch (sortOption) {
+      case "A-Z":
+        return a.title.localeCompare(b.title);
+      case "Completed":
+        return b.completed - a.completed; // Completed first
+      case "Rarity":
+        const rarityOrder = { Common: 1, Rare: 2, Epic: 3, Legendary: 4 };
+        return rarityOrder[b.rarity] - rarityOrder[a.rarity];
+      default:
+        return 0;
+    }
+  });
+
+  const toggleCompletion = (id) => {
+    setBadges((prevBadges) =>
+      prevBadges.map((badge) =>
+        badge.id === id ? { ...badge, completed: !badge.completed } : badge
+      )
+    );
+  };
 
   return (
-    <div style={styles.container}>
+    <Container>
+      {/* Navigation Bar */}
+      <NavBar />
+
       {/* Header */}
-      <div style={styles.header}>
-        <img src="avatar.jpg" alt="User Avatar" style={styles.avatar} />
-        <div>
-          <h1 style={styles.userName}>khanhngan1491</h1>
-          <p style={styles.userLevel}>Level 100 | XP 2409</p>
-        </div>
-      </div>
+      <Header>
+        <ProfileSection>
+          <Avatar src="avatar.jpg" alt="User Avatar" />
+          <UserInfo>
+            <Username>khanhngan1491</Username>
+            <UserLevel>Level 100 | XP 2409</UserLevel>
+          </UserInfo>
+        </ProfileSection>
+      </Header>
 
       {/* Filter & Sort Section */}
-      <div style={styles.filterSort}>
-        {/* <button style={styles.filterButton}>Booster Pack Eligibility</button>
-        <button style={styles.filterButton}>Booster Pack Creator</button> */}
-        <div style={styles.sortButtons}>
-          <button style={styles.sortButton}>In Progress</button>
-          <button style={styles.sortButton}>Completed</button>
-          <button style={styles.sortButton}>A - Z</button>
-          <button style={styles.sortButton}>Rarity</button>
-        </div>
-      </div>
+      <FilterSortSection>
+        <SortLabel>Sort By:</SortLabel>
+        <SortSelect
+          value={sortOption}
+          onChange={(e) => handleSortChange(e.target.value)}
+        >
+          <option value="A-Z">A - Z</option>
+          <option value="Completed">Completed</option>
+          <option value="Rarity">Rarity</option>
+        </SortSelect>
+      </FilterSortSection>
 
       {/* Badge List */}
-      <div style={styles.badgeGrid}>
-        {badges.map((badge) => renderBadge(badge))}
-      </div>
-    </div>
+      <BadgeGrid>
+        {sortedBadges.map((badge) => (
+          <BadgeCard key={badge.id}>
+            <BadgeHeader>
+              <BadgeDetails>
+                <BadgeTitle>{badge.title}</BadgeTitle>
+                <BadgeLevel>
+                  Level {badge.level} - {badge.xp} XP
+                </BadgeLevel>
+                <BadgeDescription>{badge.description}</BadgeDescription>
+                <BadgeTasks>{badge.tasksRemaining}</BadgeTasks>
+                <BadgeRarity>Rarity: {badge.rarity}</BadgeRarity>
+              </BadgeDetails>
+              <BadgeIcon>🏆</BadgeIcon>
+            </BadgeHeader>
+            {badge.cards.length > 0 && (
+              <CardContainer>
+                {badge.cards.map((card, index) => (
+                  <CardImage key={index} src={card} alt="Card" />
+                ))}
+              </CardContainer>
+            )}
+            <CompletionToggle>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={badge.completed}
+                  onChange={() => toggleCompletion(badge.id)}
+                />
+                Completed
+              </label>
+            </CompletionToggle>
+          </BadgeCard>
+        ))}
+      </BadgeGrid>
+    </Container>
   );
-};
-
-const styles = {
-  container: {
-    backgroundColor: "#121212",
-    color: "#e0e0e0",
-    minHeight: "100vh",
-    padding: "20px",
-    fontFamily: "Arial, sans-serif",
-  },
-  header: {
-    display: "flex",
-    alignItems: "center",
-    backgroundColor: "#1e3c72",
-    padding: "20px",
-    borderRadius: "10px",
-    marginBottom: "30px",
-    background: "linear-gradient(to right, rgb(24, 40, 68), rgb(27, 63, 124))",
-  },
-  avatar: {
-    width: "80px",
-    height: "80px",
-    borderRadius: "50%",
-    marginRight: "20px",
-  },
-  userName: {
-    fontSize: "24px",
-    margin: "0",
-  },
-  userLevel: {
-    fontSize: "16px",
-    color: "#66c0f4",
-  },
-  filterSort: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: "20px",
-  },
-  filterButton: {
-    backgroundColor: "#2a475e",
-    color: "#c7d5e0",
-    border: "none",
-    padding: "10px 15px",
-    borderRadius: "5px",
-    cursor: "pointer",
-  },
-  sortButtons: {
-    display: "flex",
-    gap: "10px",
-  },
-  sortButton: {
-    backgroundColor: "#2a475e",
-    color: "#c7d5e0",
-    border: "none",
-    padding: "10px 15px",
-    borderRadius: "5px",
-    cursor: "pointer",
-  },
-  badgeGrid: {
-    display: "grid",
-    gap: "20px",
-    gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-  },
-  badgeCard: {
-    backgroundColor: "#1e3c72",
-    padding: "20px",
-    borderRadius: "10px",
-    background: "linear-gradient(to right, rgb(24, 40, 68), rgb(27, 63, 124))",
-    boxShadow: "0 4px 10px rgba(0, 0, 0, 0.3)",
-  },
-  badgeHeader: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: "15px",
-  },
-  badgeTitle: {
-    fontSize: "18px",
-    marginBottom: "5px",
-  },
-  badgeLevel: {
-    fontSize: "14px",
-    color: "#66c0f4",
-    marginBottom: "5px",
-  },
-  badgeDescription: {
-    fontSize: "14px",
-    marginBottom: "5px",
-  },
-  badgeTasks: {
-    fontSize: "14px",
-    color: "#66c0f4",
-  },
-  badgeIcon: {
-    fontSize: "32px",
-  },
-  cardContainer: {
-    display: "flex",
-    gap: "10px",
-    marginTop: "10px",
-  },
-  cardImage: {
-    width: "60px",
-    height: "90px",
-    borderRadius: "5px",
-  },
 };
 
 export default BadgesPage;
+
+// Styled-components
+
+const Container = styled.div`
+  font-family: "Roboto", sans-serif;
+  background-color: #1e1e2e;
+  color: #c7d5e0;
+  min-height: 100vh;
+  padding: 20px;
+`;
+
+const Header = styled.header`
+  display: flex;
+  align-items: center;
+  background: #2a2a3d;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 30px;
+  margin-top: 2rem;
+  justify-content: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+`;
+
+const ProfileSection = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 15px;
+`;
+
+const Avatar = styled.img`
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 2px solid rgb(199, 90, 246);
+  object-fit: cover;
+`;
+
+const UserInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const Username = styled.h1`
+  font-size: 24px;
+  color: #c75af6;
+  margin: 0;
+`;
+
+const UserLevel = styled.p`
+  font-size: 16px;
+  color:rgb(255, 255, 255);
+  margin: 5px 0 0 0;
+`;
+
+const FilterSortSection = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 10px;
+  flex-wrap: wrap;
+`;
+
+const SortLabel = styled.label`
+  font-size: 16px;
+  color: #c7d5e0;
+`;
+
+const SortSelect = styled.select`
+  padding: 10px 15px;
+  border: 2px solid #c75af6;
+  border-radius: 5px;
+  background-color:  #2a2a3d;
+  color:rgb(255, 255, 255);
+  font-size: 14px;
+
+  &:focus {
+    outline: none;
+    border-color: #b850e4;
+  }
+`;
+
+const BadgeGrid = styled.div`
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+`;
+
+const BadgeCard = styled.div`
+  background: #2a2a3d;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgb(199, 90, 246);
+  }
+`;
+
+const BadgeHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+`;
+
+const BadgeDetails = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const BadgeTitle = styled.h3`
+  font-size: 18px;
+  margin: 0;
+  color: #ffffff;
+`;
+
+const BadgeLevel = styled.p`
+  font-size: 14px;
+  color: rgb(199, 90, 246);
+  margin: 5px 0 0 0;
+`;
+
+const BadgeDescription = styled.p`
+  font-size: 14px;
+  color:rgb(255, 255, 255);
+  margin: 5px 0 0 0;
+`;
+
+const BadgeTasks = styled.p`
+  font-size: 14px;
+  color: rgb(199, 90, 246);
+  margin: 5px 0 0 0;
+`;
+
+const BadgeRarity = styled.p`
+  font-size: 14px;
+  color:rgb(255, 255, 255);
+  margin: 5px 0 0 0;
+`;
+
+const BadgeIcon = styled.div`
+  font-size: 45px;
+`;
+
+const CardContainer = styled.div`
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+`;
+
+const CardImage = styled.img`
+  width: 60px;
+  height: 90px;
+  border-radius: 5px;
+  object-fit: cover;
+`;
+
+const CompletionToggle = styled.div`
+  margin-top: 15px;
+
+  label {
+    font-size: 14px;
+    color:rgb(255, 255, 255);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+
+    input {
+      margin-right: 10px;
+      cursor: pointer;
+    }
+  }
+`;

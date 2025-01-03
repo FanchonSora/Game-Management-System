@@ -595,6 +595,128 @@ module.exports = {
       price: "4.00",
       discount: "-100%",
     },
+    {
+      id: 19,
+      title: "Phaser.js",
+      category: "Library",
+      tags: ["JavaScript", "Game Engine"],
+      description:
+        "A fast, robust, and versatile 2D game framework for making HTML5 games with JavaScript.",
+      codeSnippets: {
+        JavaScript: `// Phaser.js Game Setup Example
+const config = {
+  type: Phaser.AUTO,
+  width: 800,
+  height: 600,
+  scene: {
+    preload: preload,
+    create: create,
+    update: update
+  }
+};
+
+function preload() {
+  this.load.image('sky', 'assets/sky.png');
+}
+
+function create() {
+  this.add.image(400, 300, 'sky');
+}
+
+function update() {
+  // Game loop logic
+}
+
+const game = new Phaser.Game(config);`,
+      },
+      howToImplement: `
+1. Cài đặt: \`npm install phaser\`
+2. Tạo một file \`game.js\` và cấu hình game như trong ví dụ.
+3. Tải các tài nguyên (images, sprites) và sử dụng trong game.
+4. Đọc tài liệu của Phaser.js để hiểu thêm về các tính năng.
+`,
+      image: "/code/phaser.jpg",
+      price: "Free",
+    },
+    {
+      id: 20,
+      title: "Three.js",
+      category: "Library",
+      tags: ["JavaScript", "3D", "WebGL"],
+      description:
+        "A 3D JavaScript library that makes WebGL easier, for building 3D games and applications.",
+      codeSnippets: {
+        JavaScript: `// Three.js Basic Example
+import * as THREE from 'three';
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer();
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+
+const geometry = new THREE.BoxGeometry();
+const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+const cube = new THREE.Mesh(geometry, material);
+scene.add(cube);
+
+camera.position.z = 5;
+
+function animate() {
+  requestAnimationFrame(animate);
+  cube.rotation.x += 0.01;
+  cube.rotation.y += 0.01;
+  renderer.render(scene, camera);
+}
+
+animate();`,
+      },
+      howToImplement: `
+1. Cài đặt: \`npm install three\`
+2. Tạo file \`app.js\` và cấu hình như ví dụ.
+3. Sử dụng \`THREE.BoxGeometry\` để tạo các hình khối hoặc mô hình 3D khác.
+4. Khám phá các tính năng như ánh sáng, camera, và vật liệu 3D trong tài liệu Three.js.
+`,
+      image: "/code/threejs.jpg",
+      price: "Free",
+    },
+    {
+      id: 21,
+      title: "Babylon.js",
+      category: "Library",
+      tags: ["JavaScript", "3D", "WebGL", "Game Engine"],
+      description:
+        "A powerful 3D engine for building games and interactive 3D content in the browser.",
+      codeSnippets: {
+        JavaScript: `// Babylon.js Basic Scene Setup
+import * as BABYLON from 'babylonjs';
+
+const canvas = document.getElementById('renderCanvas');
+const engine = new BABYLON.Engine(canvas, true);
+const scene = new BABYLON.Scene(engine);
+
+const camera = new BABYLON.ArcRotateCamera("camera1", Math.PI / 2, Math.PI / 2, 10, BABYLON.Vector3.Zero(), scene);
+camera.attachControl(canvas, true);
+
+const light = new BABYLON.HemisphericLight("light1", BABYLON.Vector3.Up(), scene);
+light.intensity = 0.7;
+
+const sphere = BABYLON.MeshBuilder.CreateSphere("sphere", {diameter: 2}, scene);
+
+engine.runRenderLoop(() => {
+  scene.render();
+});
+`,
+      },
+      howToImplement: `
+1. Cài đặt: \`npm install babylonjs\`
+2. Tạo canvas và render như trong ví dụ.
+3. Khám phá các tính năng như tạo hình học, ánh sáng, camera.
+4. Tìm hiểu về physics và game logic trong Babylon.js.
+`,
+      image: "/code/babylonjs.jpg",
+      price: "Free",
+    },
   ],
 };
 

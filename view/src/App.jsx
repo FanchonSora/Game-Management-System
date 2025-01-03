@@ -18,7 +18,7 @@ import CodeDetailMarket from "./pages/market/CodeDetailMarket";
 import LibraryGameDetailPage from "./pages/library/LibraryGameDetailPage";
 import CartPage from "./pages/CartPage";
 import PaymentPage from "./pages/PaymentPage";
-
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 function App() {
 
   return (
@@ -27,6 +27,7 @@ function App() {
         <Route path="/home" element={<HomePage />} />
         <Route path="/sign-in" element={<LogInPage />} />
         <Route path="/sign-up" element={<SignUpPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/community" element={<CommunityPage />} />
         <Route path="/market-game" element={<MarketGamePage />} />

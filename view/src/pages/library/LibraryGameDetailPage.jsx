@@ -1,370 +1,736 @@
-// src/pages/LibraryGameDetailPage.jsx
+// File: src/pages/LibraryGameDetailPage.jsx
 
-import React, { useState, useEffect } from "react";
-import { useNavigate, useParams, Link } from "react-router-dom";
-import styled, { keyframes } from "styled-components";
-import gameData from "../../data/gameData"; // Dùng để hiển thị Featured Games
-import Card from "../../components/GameCard";
-import Navbar from "../../components/Navbar";
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import styled, { keyframes } from 'styled-components';
+import { FaThumbsUp, FaComment, FaStar, FaHeart, FaPlus } from 'react-icons/fa';
+import Navbar from '../../components/Navbar';
 
-// Keyframes for Animations
+// =============== Styled Components ===============
+
+// Animation Keyframes for Notification
 const fadeIn = keyframes`
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 `;
 
-// Styled Components
+const fadeOut = keyframes`
+  from { opacity: 1; }
+  to { opacity: 0; }
+`;
 
+// Container
 const Container = styled.div`
-  font-family: 'Roboto', sans-serif;
-  background-color: #f6f8fa;
-  color: #24292e;
+  font-family: "Roboto", sans-serif;
+  background-color: #1e1e2e;
+  color: #c7d5e0;
   min-height: 100vh;
-  padding: 120px 20px 20px 20px; 
-  position: relative;
-  overflow: hidden;
 `;
 
-const ContentWrapper = styled.div`
+// Main Content
+const MainContent = styled.div`
   max-width: 1200px;
   margin: 0 auto;
+  padding: 20px;
+`;
+
+// Featured Section
+const FeaturedSection = styled.div`
+  background-color: #2a2a3d;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+`;
+
+const FeaturedHeader = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+`;
+
+const FeaturedLabel = styled.div`
+  background-color: rgb(199, 90, 246);
+  color: white;
+  padding: 5px 15px;
+  border-radius: 4px;
+  font-weight: 500;
+`;
+
+const UpdateInfo = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+`;
+
+const UpdateIcon = styled.div`
+  width: 50px;
+  height: 50px;
+  background-color: #1e1e2e;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+`;
+
+const UpdateText = styled.div`
+  h3 {
+    margin: 0;
+    color: #ffffff;
+  }
+  p {
+    margin: 5px 0 0;
+    font-size: 14px;
+  }
+`;
+
+// Activity Section
+const ActivitySection = styled.div`
+  background-color: #2a2a3d;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+`;
+
+const ActivityInput = styled.textarea`
+  width: 95%;
+  padding: 15px;
+  background-color: #1e1e2e;
+  border: 1px solid #384959;
+  border-radius: 4px;
+  color: #c7d5e0;
+  resize: none;
+  margin-bottom: 10px;
+
+  &::placeholder {
+    color: #8a8a8a;
+  }
+`;
+
+// Friends Section
+const SideSection = styled.div`
+  background-color: #2a2a3d;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
 `;
 
 const SectionTitle = styled.h2`
-  font-size: 24px;
-  margin-bottom: 20px;
-  color: #2c3e50;
-  text-align: center;
+  color: #ffffff;
+  font-size: 18px;
+  margin-bottom: 15px;
 `;
 
-const GameDetailContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-  animation: ${fadeIn} 1s ease-out;
-`;
-
-const GameHeader = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 15px;
-`;
-
-const GameImageWrapper = styled.div`
-  width: 300px;
-  height: 300px;
-  overflow: hidden;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-`;
-
-const GameImage = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-`;
-
-const GameTitle = styled.h1`
-  font-size: 32px;
-  color: #24292e;
-`;
-
-const Buttons = styled.div`
-  display: flex;
-  gap: 20px;
-`;
-
-// Remove from Library Button
-const RemoveButton = styled.button`
-  background-color: #e74c3c;
-  border: none;
-  border-radius: 5px;
-  color: #fff;
-  padding: 12px 25px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background 0.3s ease, box-shadow 0.3s ease;
-
-  &:hover {
-    background-color: #c0392b;
-    box-shadow: 0 4px 12px rgba(192, 57, 43, 0.3);
-  }
-`;
-
-// Back Button
-const BackButton = styled(Link)`
-  background-color: #3498db;
-  border: none;
-  border-radius: 5px;
-  color: #fff;
-  padding: 12px 25px;
-  font-weight: bold;
-  cursor: pointer;
-  text-decoration: none;
-  transition: background 0.3s ease, box-shadow 0.3s ease;
-
-  &:hover {
-    background-color: #2980b9;
-    box-shadow: 0 4px 12px rgba(41, 128, 185, 0.3);
-  }
-`;
-
-const Tags = styled.div`
+const FriendsList = styled.div`
   display: flex;
   gap: 10px;
-  justify-content: center;
   flex-wrap: wrap;
 `;
 
-const Tag = styled.span`
-  background-color: #3498db;
-  color: #fff;
-  padding: 6px 12px;
-  border-radius: 20px;
+const FriendAvatar = styled.img`
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+`;
+
+// Achievements Section
+const AchievementsSection = styled(SideSection)`
+  .progress-bar {
+    width: 100%;
+    height: 8px;
+    background-color: #1e1e2e;
+    border-radius: 4px;
+    margin: 10px 0;
+  }
+
+  .progress {
+    height: 100%;
+    background-color:rgb(199, 90, 246);
+    border-radius: 4px;
+  }
+`;
+
+const Achievement = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+`;
+
+const AchievementIcon = styled.img`
+  width: 64px;
+  height: 64px;
+  border-radius: 4px;
+`;
+
+const AchievementInfo = styled.div`
+  h4 {
+    margin: 0;
+    color: #ffffff;
+  }
+  p {
+    margin: 5px 0 0;
+    font-size: 14px;
+    color: #8a8a8a;
+  }
+`;
+
+// Stats
+const Stats = styled.div`
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+`;
+
+const Stat = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #8a8a8a;
   font-size: 14px;
 `;
 
-const InfoBox = styled.div`
+// =============== Thêm TÍNH NĂNG MỚI ===============
+
+// Rating & Favorite Section
+const RatingFavoriteSection = styled.div`
   display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: center;
-  background-color: #ecf0f1;
-  padding: 20px;
-  border-radius: 10px;
+  align-items: center;
+  gap: 15px;
+  margin-top: 15px;
 `;
 
-const InfoItem = styled.div`
+const Stars = styled.div`
+  display: flex;
+  gap: 5px;
+`;
+
+const StarIcon = styled(FaStar)`
+  cursor: pointer;
+  color: ${(props) => (props.active ? "rgb(223, 124, 236)" : "#fff")};
+  font-size: 20px;
+  transition: color 0.2s ease;
+`;
+
+// Favorite Button
+const FavoriteButton = styled.button`
+  background-color: ${(props) => (props.favorite ? "rgb(223, 124, 236)" : "#2d2d3d")};
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: background 0.3s ease;
+
+  &:hover {
+    background-color: ${(props) => (props.favorite ? "rgb(191, 125, 199)" : "rgb(204, 135, 213)")};
+  }
+`;
+
+// Reviews Section
+const ReviewsSection = styled.div`
+  background-color: #2a2a3d;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+`;
+
+const ReviewForm = styled.form`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  gap: 10px;
 `;
 
-const InfoTitle = styled.span`
-  font-weight: bold;
-  color: #2c3e50;
-  margin-bottom: 5px;
+const ReviewInput = styled.textarea`
+  width: 95%;
+  padding: 12px;
+  background-color: #1e1e2e;
+  border: 1px solid #384959;
+  border-radius: 4px;
+  color: #c7d5e0;
+  resize: vertical;
+
+  &::placeholder {
+    color: #8a8a8a;
+  }
 `;
 
-const InfoText = styled.span`
-  color: #34495e;
+const ReviewButton = styled.button`
+  align-self: flex-end;
+  background-color: rgb(199, 90, 246);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 15px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+
+  &:hover {
+    background-color: rgb(184, 81, 228);
+  }
 `;
 
-const DescriptionBox = styled.div`
-  background-color: #ecf0f1;
+const ReviewList = styled.div`
+  margin-top: 20px;
+`;
+
+const ReviewItem = styled.div`
+  border-bottom: 1px solid #3e3e5c;
+  padding: 10px 0;
+
+  p {
+    margin: 0;
+    font-size: 14px;
+  }
+  small {
+    color: #8a8a8a;
+  }
+`;
+
+// Screenshots Section
+const ScreenshotsSection = styled.div`
+  background-color: #2a2a3d;
+  border-radius: 8px;
   padding: 20px;
-  border-radius: 10px;
-`;
-
-const DescriptionText = styled.p`
-  font-size: 16px;
-  color: #2c3e50;
-`;
-
-const Screenshots = styled.div`
-  display: flex;
-  gap: 20px;
-  overflow-x: auto;
-  padding-bottom: 10px;
-`;
-
-const Screenshot = styled.img`
-  width: 300px;
-  height: 200px;
-  object-fit: cover;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-`;
-
-const FeaturedGamesSection = styled.div`
-  margin-top: 40px;
-`;
-
-const FeaturedGamesTitle = styled.h2`
-  font-size: 24px;
   margin-bottom: 20px;
-  color: #2c3e50;
-  text-align: center;
 `;
 
-const GamesGridStyled = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 20px;
+const ScreenshotsGrid = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+
+  img {
+    width: 150px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 4px;
+  }
 `;
+
+const ScreenshotForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 15px;
+`;
+
+const ScreenshotInput = styled.input`
+  padding: 8px;
+  background-color: #1e1e2e;
+  border: 1px solid #384959;
+  border-radius: 4px;
+  color: #c7d5e0;
+`;
+
+const ScreenshotButton = styled.button`
+  align-self: flex-end;
+  background-color: rgb(199, 90, 246);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: background 0.3s ease;
+
+  &:hover {
+    background-color: rgb(184, 81, 228);
+  }
+`;
+
+// Modal for Notifications
+const Notification = styled.div`
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color:rgb(199, 90, 246); /* màu xanh lá thông báo */
+  color: #fff;
+  padding: 15px 25px;
+  border-radius: 6px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  animation: ${fadeIn} 0.3s ease-out, ${fadeOut} 0.3s ease-out 2.5s forwards;
+  opacity: 1;
+  z-index: 1000;
+
+  @media (max-width: 600px) {
+    width: 90%;
+    right: 5%;
+  }
+`;
+
+// ==================================================
 
 const LibraryGameDetailPage = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
   const [game, setGame] = useState(null);
 
+  // State cho Rating, Favorite
+  const [rating, setRating] = useState(0);
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  // State cho Reviews
+  const [reviews, setReviews] = useState([]);
+  const [reviewInput, setReviewInput] = useState("");
+
+  // State cho Screenshots
+  const [screenshots, setScreenshots] = useState([]);
+  const [screenshotInput, setScreenshotInput] = useState("");
+
+  // State cho Notifications
+  const [notification, setNotification] = useState("");
+
   useEffect(() => {
-    const numericId = Number(id);
-    if (isNaN(numericId)) {
-      alert("ID game không hợp lệ.");
-      navigate("/library");
-      return;
+    // Lấy dữ liệu game từ localStorage
+    const games = JSON.parse(localStorage.getItem('libraryGames')) || [];
+    const gameData = games.find(g => g.id === parseInt(id));
+    if (!gameData) return;
+
+    // Nếu game chưa có các thuộc tính mới, thêm vào để tránh lỗi
+    if (gameData.rating === undefined) gameData.rating = 0;
+    if (gameData.isFavorite === undefined) gameData.isFavorite = false;
+    if (!Array.isArray(gameData.reviews)) gameData.reviews = [];
+    if (!Array.isArray(gameData.screenshots)) gameData.screenshots = [];
+
+    setGame(gameData);
+    setRating(gameData.rating);
+    setIsFavorite(gameData.isFavorite);
+    setReviews(gameData.reviews);
+    setScreenshots(gameData.screenshots);
+  }, [id]);
+
+  if (!game) {
+    return <Container><Navbar /><MainContent>Loading...</MainContent></Container>;
+  }
+
+  // Lưu các thay đổi vào localStorage
+  const saveGameData = (updatedData) => {
+    const games = JSON.parse(localStorage.getItem("libraryGames")) || [];
+    const index = games.findIndex(g => g.id === parseInt(id));
+    if (index >= 0) {
+      games[index] = updatedData;
+      localStorage.setItem("libraryGames", JSON.stringify(games));
     }
+  };
 
-    // Lấy danh sách game từ localStorage
-    const storedGames = JSON.parse(localStorage.getItem("libraryGames")) || [];
+  // Xử lý đánh giá (rating)
+  const handleSetRating = (star) => {
+    setRating(star);
+    const updatedGame = { ...game, rating: star };
+    setGame(updatedGame);
+    saveGameData(updatedGame);
+  };
 
-    // Tìm game trùng ID trong library (để hiển thị chính xác game user đang có)
-    const foundGame = storedGames.find((item) => item.id === numericId);
+  // Xử lý toggle favorite
+  const handleToggleFavorite = () => {
+    const updatedGame = { ...game, isFavorite: !isFavorite };
+    setIsFavorite(!isFavorite);
+    setGame(updatedGame);
+    saveGameData(updatedGame);
+    setNotification(isFavorite ? "Removed from favorites!" : "Added to favorites!");
+    setTimeout(() => setNotification(""), 3000);
+  };
 
-    if (!foundGame) {
-      alert("Game không tồn tại trong Thư viện. Đang chuyển hướng tới Thư viện.");
-      navigate("/library-game");
+  // Xử lý thêm review
+  const handleAddReview = (e) => {
+    e.preventDefault();
+    if (!reviewInput.trim()) return;
+    const newReview = {
+      id: Date.now(),
+      content: reviewInput.trim(),
+      date: new Date().toLocaleString(),
+    };
+    const updatedReviews = [...reviews, newReview];
+    setReviews(updatedReviews);
+    setReviewInput("");
+
+    const updatedGame = { ...game, reviews: updatedReviews };
+    setGame(updatedGame);
+    saveGameData(updatedGame);
+    setNotification("Review added successfully!");
+    setTimeout(() => setNotification(""), 3000);
+  };
+
+  // Xử lý thêm screenshot từ URL hoặc upload
+  const handleAddScreenshot = (e) => {
+    e.preventDefault();
+    if (!screenshotInput.trim()) return;
+
+    // Kiểm tra xem đây là URL hay không
+    const isURL = /^(ftp|http|https):\/\/[^ "]+$/.test(screenshotInput.trim());
+
+    if (isURL) {
+      // Nếu là URL, thêm trực tiếp
+      const updatedScreenshots = [...screenshots, screenshotInput.trim()];
+      setScreenshots(updatedScreenshots);
+      setScreenshotInput("");
+
+      const updatedGame = { ...game, screenshots: updatedScreenshots };
+      setGame(updatedGame);
+      saveGameData(updatedGame);
+      setNotification("Screenshot added successfully!");
+      setTimeout(() => setNotification(""), 3000);
     } else {
-      setGame(foundGame);
+      // Nếu không phải URL, thông báo lỗi
+      setNotification("Please enter a valid image URL.");
+      setTimeout(() => setNotification(""), 3000);
     }
-  }, [id, navigate]);
+  };
 
-  // Remove from library function
-  const handleRemoveFromLibrary = () => {
-    if (!game) return;
-    const storedGames = JSON.parse(localStorage.getItem("libraryGames")) || [];
-    const updatedGames = storedGames.filter((g) => g.id !== game.id);
-    localStorage.setItem("libraryGames", JSON.stringify(updatedGames));
-    alert(`${game.title} đã được loại bỏ khỏi Thư viện của bạn.`);
-    navigate("/home");
+  // Xử lý upload ảnh từ máy tính
+  const handleUploadScreenshots = (e) => {
+    const files = e.target.files;
+    if (files.length === 0) return;
+
+    const fileArray = Array.from(files);
+    const promises = fileArray.map(file => {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result); // Base64 string
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    });
+
+    Promise.all(promises)
+      .then(results => {
+        const updatedScreenshots = [...screenshots, ...results];
+        setScreenshots(updatedScreenshots);
+
+        const updatedGame = { ...game, screenshots: updatedScreenshots };
+        setGame(updatedGame);
+        saveGameData(updatedGame);
+        setNotification("Screenshots uploaded successfully!");
+        setTimeout(() => setNotification(""), 3000);
+      })
+      .catch(err => {
+        console.error(err);
+        setNotification("Failed to upload screenshots.");
+        setTimeout(() => setNotification(""), 3000);
+      });
+  };
+
+  // Xử lý xóa screenshot
+  const handleRemoveScreenshot = (index) => {
+    const updatedScreenshots = screenshots.filter((_, idx) => idx !== index);
+    setScreenshots(updatedScreenshots);
+
+    const updatedGame = { ...game, screenshots: updatedScreenshots };
+    setGame(updatedGame);
+    saveGameData(updatedGame);
+    setNotification("Screenshot removed successfully!");
+    setTimeout(() => setNotification(""), 3000);
   };
 
   return (
     <Container>
       <Navbar />
+      <MainContent>
 
-      <ContentWrapper>
-        {game ? (
-          <GameDetailContainer>
-            <GameHeader>
-              <GameImageWrapper>
-                <GameImage src={game.image} alt={game.title} />
-              </GameImageWrapper>
-              <GameTitle>{game.title}</GameTitle>
-              <Buttons>
-                <RemoveButton onClick={handleRemoveFromLibrary}>
-                  Remove from Library
-                </RemoveButton>
-                <BackButton to="/library-game">Back to Library</BackButton>
-              </Buttons>
-            </GameHeader>
+        {/* FEATURED SECTION */}
+        <FeaturedSection>
+          <FeaturedHeader>
+            <FeaturedLabel>FEATURED</FeaturedLabel>
+          </FeaturedHeader>
+          <UpdateInfo>
+            <UpdateIcon>🎮</UpdateIcon>
+            <UpdateText>
+              <h3>{game.title}</h3>
+              <p>Last played: Recently</p>
+            </UpdateText>
+          </UpdateInfo>
 
-            {/* Tags */}
-            <Tags>
-              {Array.isArray(game.tags) && game.tags.length > 0 ? (
-                game.tags.map((tag) => <Tag key={tag}>{tag}</Tag>)
-              ) : (
-                <Tag>No tags</Tag>
-              )}
-            </Tags>
+          {/* Rating & Favorite */}
+          <RatingFavoriteSection>
+            <Stars>
+              {[1,2,3,4,5].map(star => (
+                <StarIcon
+                  key={star}
+                  active={star <= rating}
+                  onClick={() => handleSetRating(star)}
+                />
+              ))}
+            </Stars>
+            <FavoriteButton
+              favorite={isFavorite}
+              onClick={handleToggleFavorite}
+            >
+              <FaHeart />
+              {isFavorite ? "Favorite" : "Add Favorite"}
+            </FavoriteButton>
+          </RatingFavoriteSection>
+        </FeaturedSection>
 
-            {/* Game Information */}
-            <InfoBox>
-              <InfoItem>
-                <InfoTitle>Genre</InfoTitle>
-                <InfoText>{game.genre || "N/A"}</InfoText>
-              </InfoItem>
-              <InfoItem>
-                <InfoTitle>Developer</InfoTitle>
-                <InfoText>{game.developer || "N/A"}</InfoText>
-              </InfoItem>
-              <InfoItem>
-                <InfoTitle>Release Date</InfoTitle>
-                <InfoText>{game.releaseDate || "N/A"}</InfoText>
-              </InfoItem>
-              <InfoItem>
-                <InfoTitle>Rating</InfoTitle>
-                <InfoText>{game.rating || "N/A"}</InfoText>
-              </InfoItem>
-            </InfoBox>
+        {/* ACTIVITY SECTION (mô tả game, post status) */}
+        <ActivitySection>
+          <ActivityInput
+            placeholder="Say something about this game to your friends..."
+            rows={3}
+          />
+          <Stats>
+            <Stat>
+              <FaThumbsUp /> 946
+            </Stat>
+            <Stat>
+              <FaComment /> 7
+            </Stat>
+          </Stats>
+        </ActivitySection>
 
-            {/* Description */}
-            <DescriptionBox>
-              <SectionTitle>About This Game</SectionTitle>
-              <DescriptionText>{game.description || "No description available."}</DescriptionText>
-            </DescriptionBox>
+        {/* FRIENDS WHO PLAY */}
+        <SideSection>
+          <SectionTitle>FRIENDS WHO PLAY</SectionTitle>
+          <FriendsList>
+            <FriendAvatar src="/api/placeholder/32/32" alt="Friend" />
+            <FriendAvatar src="/api/placeholder/32/32" alt="Friend" />
+            <FriendAvatar src="/api/placeholder/32/32" alt="Friend" />
+          </FriendsList>
+        </SideSection>
 
-            {/* Screenshots */}
-            {Array.isArray(game.screenshots) && game.screenshots.length > 0 && (
-              <div>
-                <SectionTitle>Screenshots</SectionTitle>
-                <Screenshots>
-                  {game.screenshots.map((shot, index) => (
-                    <Screenshot
-                      key={index}
-                      src={shot}
-                      alt={`${game.title} Screenshot ${index + 1}`}
-                    />
-                  ))}
-                </Screenshots>
-              </div>
+        {/* ACHIEVEMENTS */}
+        <AchievementsSection>
+          <SectionTitle>ACHIEVEMENTS</SectionTitle>
+          <div>You've unlocked 6/38 (15%)</div>
+          <div className="progress-bar">
+            <div className="progress" style={{ width: '15%' }} />
+          </div>
+          <Achievement>
+            <AchievementIcon src="/api/placeholder/64/64" alt="Achievement" />
+            <AchievementInfo>
+              <h4>Novice Player</h4>
+              <p>Complete your first game</p>
+            </AchievementInfo>
+          </Achievement>
+        </AchievementsSection>
+
+        {/* REVIEWS SECTION */}
+        <ReviewsSection>
+          <SectionTitle>Reviews</SectionTitle>
+          <ReviewForm onSubmit={handleAddReview}>
+            <ReviewInput
+              rows={3}
+              placeholder="Write your review here..."
+              value={reviewInput}
+              onChange={(e) => setReviewInput(e.target.value)}
+            />
+            <ReviewButton type="submit">Add Review</ReviewButton>
+          </ReviewForm>
+
+          <ReviewList>
+            {reviews.map(review => (
+              <ReviewItem key={review.id}>
+                <p>{review.content}</p>
+                <small>{review.date}</small>
+              </ReviewItem>
+            ))}
+            {reviews.length === 0 && (
+              <p style={{ color: "#a9a9a9" }}>No reviews yet.</p>
             )}
+          </ReviewList>
+        </ReviewsSection>
 
-            {/* Featured Games Section */}
-            <FeaturedGamesSection>
-              <FeaturedGamesTitle>Featured Games</FeaturedGamesTitle>
-              <GamesGridStyled>
-                {gameData
-                  .filter(
-                    (featuredGame) =>
-                      featuredGame.tags.includes("Featured") &&
-                      featuredGame.id !== game.id
-                  )
-                  .map((featuredGame) => (
-                    <Card
-                      key={featuredGame.id}
-                      image={featuredGame.image}
-                      title={featuredGame.title}
-                      description={`Price: ${featuredGame.price}`}
-                      tags={featuredGame.tags}
-                      buttonText="View Detail"
-                      buttonLink={`/market-game/${featuredGame.id}`}
-                      isFree={featuredGame.price === "Free"}
-                      onAddToLibrary={() => {
-                        if (featuredGame.price === "Free") {
-                          const storedGames =
-                            JSON.parse(localStorage.getItem("libraryGames")) || [];
-                          const alreadyInLib = storedGames.find(
-                            (g) => g.id === featuredGame.id
-                          );
-                          if (!alreadyInLib) {
-                            // Clone đủ thông tin
-                            const newGame = {
-                              ...featuredGame,
-                              progress: { levelPercentage: 0, expPercentage: 0, achievementsPercentage: 0 },
-                              achievements: []
-                            };
-                            storedGames.push(newGame);
-                            localStorage.setItem(
-                              "libraryGames",
-                              JSON.stringify(storedGames)
-                            );
-                            alert(`${featuredGame.title} đã được thêm vào Thư viện của bạn!`);
-                          } else {
-                            alert(`${featuredGame.title} đã có trong Thư viện của bạn.`);
-                          }
-                        } else {
-                          alert(`Không thể thêm ${featuredGame.title} vào Thư viện. Trò chơi này không miễn phí.`);
-                        }
-                      }}
-                      maxWidth="300px"
-                      height="150px"
-                    />
-                  ))}
-              </GamesGridStyled>
-            </FeaturedGamesSection>
+        {/* SCREENSHOTS SECTION */}
+        <ScreenshotsSection>
+          <SectionTitle>Screenshots</SectionTitle>
+          <ScreenshotsGrid>
+            {screenshots.map((shot, idx) => (
+              <div key={idx} style={{ position: 'relative' }}>
+                <img src={shot} alt={`Screenshot ${idx}`} />
+                <RemoveButton onClick={() => handleRemoveScreenshot(idx)}>✕</RemoveButton>
+              </div>
+            ))}
+          </ScreenshotsGrid>
 
-            {/* Categorized Games Sections (MMO, Casual, etc.) */}
-            {/* Tuỳ bạn bổ sung nếu muốn */}
-          </GameDetailContainer>
-        ) : (
-          <div>Loading game details...</div>
-        )}
-      </ContentWrapper>
+          {/* Form thêm screenshot từ URL */}
+          <ScreenshotForm onSubmit={handleAddScreenshot}>
+            <ScreenshotInput
+              type="text"
+              placeholder="Paste screenshot URL here..."
+              value={screenshotInput}
+              onChange={(e) => setScreenshotInput(e.target.value)}
+            />
+            <ScreenshotButton type="submit"><FaPlus /> Add Screenshot</ScreenshotButton>
+          </ScreenshotForm>
+
+          {/* Upload ảnh từ máy tính */}
+          <UploadForm>
+            <UploadLabel htmlFor="upload-screenshot">Upload Screenshots from Computer:</UploadLabel>
+            <UploadInput
+              type="file"
+              id="upload-screenshot"
+              multiple
+              accept="image/*"
+              onChange={handleUploadScreenshots}
+            />
+          </UploadForm>
+        </ScreenshotsSection>
+
+      </MainContent>
+
+      {/* Notification */}
+      {notification && <Notification>{notification}</Notification>}
     </Container>
   );
 };
+
+// Additional Styled Components
+
+const RemoveButton = styled.button`
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: rgba(255, 255, 255, 0.7);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  &:hover {
+    background-color: rgb(230, 230, 230);
+  }
+`;
+
+const UploadForm = styled.div`
+  margin-top: 20px;
+`;
+
+const UploadLabel = styled.label`
+  display: block;
+  margin-bottom: 8px;
+  color: #c7d5e0;
+  font-size: 14px;
+`;
+
+const UploadInput = styled.input`
+  padding: 8px;
+  background-color: #1e1e2e;
+  border: 1px solid #384959;
+  border-radius: 4px;
+  color: #c7d5e0;
+  width: 100%;
+  cursor: pointer;
+
+  &:hover {
+    border-color: #66c0f4;
+  }
+`;
 
 export default LibraryGameDetailPage;

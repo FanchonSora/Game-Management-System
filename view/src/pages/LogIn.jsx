@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { Lock, User } from "lucide-react"; // Assuming you have lucide-react installed
+import { Lock, User } from "lucide-react"; // Assuming lucide-react is installed
 
 const LogInPage = () => {
   const navigate = useNavigate();
@@ -42,7 +42,7 @@ const LogInPage = () => {
   return (
     <Body>
       <Form onSubmit={handleLogIn}>
-        <Heading>Log In</Heading>
+        <Heading>Sign In</Heading>
 
         <InputContainer>
           <Input
@@ -52,7 +52,7 @@ const LogInPage = () => {
             name="username"
             required
           />
-          <Icon className="fa fa-user" />
+          <UserIcon />
         </InputContainer>
 
         <InputContainer>
@@ -63,25 +63,25 @@ const LogInPage = () => {
             name="password"
             required
           />
-          <Icon className="fa fa-lock" />
+          <LockIcon />
         </InputContainer>
 
         <CheckBoxContainer>
           <label>
             <input type="checkbox" id="remember" /> Remember me
           </label>
-          <a href="/forgot-password" style={{ color: "#66c0f4" }}>
+          <ForgotPasswordLink href="/forgot-password">
             Forgot password?
-          </a>
+          </ForgotPasswordLink>
         </CheckBoxContainer>
 
         <Button type="submit">Sign In</Button>
 
         <Paragraph>
           Need an account?{" "}
-          <a onClick={() => navigate("/sign-up")} style={{ cursor: "pointer" }}>
+          <SignUpLink onClick={() => navigate("/sign-up")}>
             Sign Up
-          </a>
+          </SignUpLink>
         </Paragraph>
       </Form>
     </Body>
@@ -90,30 +90,30 @@ const LogInPage = () => {
 
 export default LogInPage;
 
-// Styled-components for consistency with SignUpPage
+// Styled-components
 const Body = styled.div`
   width: 100%;
   height: 100vh;
-  background: linear-gradient(to bottom, #1b2838, #0f171e);
+  background: linear-gradient(to bottom, #2a2a3d, #0f171e);
   display: flex;
   justify-content: center;
   align-items: center;
   color: #c7d5e0;
-  font-family: "Arial", sans-serif;
+  font-family: "Roboto", sans-serif;
 `;
 
 const Form = styled.form`
   width: 400px;
   padding: 40px;
-  background: rgba(27, 40, 56, 0.9);
+  background:  #2a2a3d;
   border-radius: 15px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   text-align: center;
 `;
 
 const Heading = styled.h1`
   font-size: 24px;
-  color: #66c0f4;
+  color: rgb(199, 90, 246);
   margin-bottom: 20px;
 `;
 
@@ -127,29 +127,38 @@ const Input = styled.input`
   width: 100%;
   padding: 10px 15px;
   margin: 10px 0;
-  border: 1px solid #66c0f4;
+  border: 1px solid rgb(199, 90, 246);
   border-radius: 5px;
-  background-color: #1b2838;
-  color: #c7d5e0;
+  background-color: #1e1e2e;
+  color:rgb(255, 255, 255);
   font-size: 14px;
   box-sizing: border-box;
 
   ::placeholder {
-    color: #a9a9a9;
+    color:rgb(255, 255, 255);
   }
 
   &:focus {
     outline: none;
-    border-color: #4a90e2;
+    border-color: rgb(199, 90, 246);
   }
 `;
 
-const Icon = styled.i`
+const UserIcon = styled(User)`
   position: absolute;
   top: 50%;
   right: 15px;
   transform: translateY(-50%);
-  color: #ffffffb9;
+  color:rgb(255, 255, 255);
+  font-size: 1rem;
+`;
+
+const LockIcon = styled(Lock)`
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+  color:rgb(255, 255, 255);
   font-size: 1rem;
 `;
 
@@ -162,13 +171,24 @@ const CheckBoxContainer = styled.div`
   color: #c7d5e0;
 `;
 
+const ForgotPasswordLink = styled.a`
+  color: rgb(255, 255, 255);
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+`;
+
 const Button = styled.button`
   width: 100%;
   padding: 12px;
   margin-top: 20px;
   border: none;
   border-radius: 8px;
-  background-color: #4a90e2;
+  background-color:rgb(199, 90, 246);
   color: #fff;
   font-size: 1rem;
   font-weight: bold;
@@ -176,7 +196,9 @@ const Button = styled.button`
   transition: background-color 0.3s;
 
   &:hover {
-    background-color: #357ab8;
+    background-color:rgb(184, 81, 228);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgb(162, 68, 202);
   }
 `;
 
@@ -184,15 +206,16 @@ const Paragraph = styled.p`
   font-size: 14px;
   margin-top: 20px;
   color: #a9a9a9;
+`;
 
-  a {
-    color: #66c0f4;
-    text-decoration: none;
-    font-weight: bold;
-    transition: color 0.3s;
+const SignUpLink = styled.a`
+  color: rgb(255, 255, 255);
+  text-decoration: none;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.3s;
 
-    &:hover {
-      color: #4a90e2;
-    }
+  &:hover {
+    transform: translateY(-4px);
   }
 `;

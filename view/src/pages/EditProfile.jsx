@@ -1,7 +1,10 @@
+// File: src/pages/EditProfile.jsx
+
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Camera } from "lucide-react"; // Assuming you have lucide-react installed
+import NavBar from "../components/Navbar";
 
 const EditProfile = () => {
   const navigate = useNavigate();
@@ -118,6 +121,7 @@ const EditProfile = () => {
 
   return (
     <Body>
+      <NavBar />
       <PathLabel>
         <span onClick={() => navigate("/profile")} style={{ cursor: "pointer" }}>
           {formData.name}
@@ -154,7 +158,7 @@ const EditProfile = () => {
                   value={formData.username}
                   onChange={(e) => setFormData({ ...formData, username: e.target.value })}
                   style={{
-                    borderColor: errors.username ? "#ff4d4f" : "#66c0f4",
+                    borderColor: errors.username ? "#ff4d4f" : "#c759f6", // Updated border color
                   }}
                 />
               </InputContainer>
@@ -177,7 +181,7 @@ const EditProfile = () => {
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   style={{
-                    borderColor: errors.email ? "#ff4d4f" : "#66c0f4",
+                    borderColor: errors.email ? "#ff4d4f" : "#c759f6", // Updated border color
                   }}
                 />
               </InputContainer>
@@ -299,82 +303,97 @@ const Form = styled.form`
   flex-direction: column;
   gap: 15px;
   padding: 20px;
-  background: rgba(27, 40, 56, 0.9);
+  background: #1e1e2e; /* Updated to match HomePage's rgba overlay */
   border-radius: 10px;
 `;
 
 const Body = styled.div`
   width: 100%;
-  height: 100vh;
-  background: linear-gradient(to bottom, #1b2838, #0f171e);
-  color: #ffffff;
-  font-family: "Arial", sans-serif;
+  min-height: 100vh;
+  background: #2a2a3d; /* Updated gradient to match HomePage's dark theme */
+  color: #c7d5e0; /* Updated text color to match HomePage */
+  font-family: "Roboto", sans-serif; /* Changed to match HomePage's font */
+  position: relative;
+  overflow: hidden;
+
+  /* Overlay similar to HomePage for consistency */
+  &:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6); /* Consistent overlay */
+    z-index: 0;
+  }
+
+  /* Ensure content is above the overlay */
+  > * {
+    position: relative;
+    z-index: 1;
+  }
 `;
 
 const Container = styled.div`
   display: flex;
   justify-content: space-between;
   padding: 20px;
-  flex-direction: row; /* Added this to make the sidebar and content appear in a row */
+  flex-direction: row; /* Ensures sidebar and content are side by side */
+  max-width: 1200px;
+  margin: 0 auto; /* Centers the container */
 `;
 
 const PathLabel = styled.div`
   font-size: 16px;
-  color: #66c0f4;
-  margin-top: 20px;
-  margin-bottom: 10px;
+  color: #c759f6; /* Updated to match HomePage's button color */
+  margin: 20px auto 10px auto;
   font-weight: bold;
-  display: inline-block;
-  margin-left: 20px;
+  display: block;
+  text-align: center;
 `;
 
 const Sidebar = styled.div`
   width: 200px;
-  background-color: #2c3e50;
+  background-color: #2a2a3d; /* Updated to match HomePage's card background */
   border-radius: 10px;
-  padding: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Added shadow for depth */
 `;
 
 const SidebarItem = styled.div`
-  color: #ffffff;
+  color:rgb(255, 255, 255); /* Updated text color */
   font-size: 18px;
-  font-weight: bold;
+  font-weight: 500;
   margin-bottom: 20px;
   cursor: pointer;
   padding: 10px;
   border-radius: 5px;
-  background-color: ${(props) => (props.active ? "#1b2838" : "transparent")};
+  background-color: ${(props) => (props.active ? "rgb(199, 90, 246)" : "transparent")}; /* Updated active background */
 
   &:hover {
-    background-color: #1b2838;
+    background-color:rgb(199, 90, 246); /* Consistent hover effect */
   }
 `;
 
 const Content = styled.div`
-  width: 70%; /* Adjusted width for content */
+  width: 75%; /* Adjusted width for better responsiveness */
   padding: 20px;
-  background: rgba(27, 40, 56, 0.9);
+  background: #2a2a3d; /* Updated to match HomePage's form background */
   border-radius: 15px;
-`;
-
-const Heading = styled.h1`
-  font-size: 24px;
-  color: #66c0f4;
-  margin-bottom: 20px;
-  text-align: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Added shadow for consistency */
 `;
 
 const SectionTitle = styled.h2`
-  font-size: 25px;
-  color: #66c0f4;
-  margin-bottom: 10px;
-  margin-top: 30px;
+  font-size: 1.8rem;
+  color: #c759f6; /* Updated to match HomePage's button color */
+  margin-bottom: 20px;
   text-align: center;
 `;
 
 const Label = styled.label`
   font-size: 14px;
-  color: #ffffff;
+  color: #c7d5e0; /* Updated label color */
   margin-bottom: 8px;
   display: block;
 `;
@@ -386,10 +405,10 @@ const InputContainer = styled.div`
 const Input = styled.input`
   width: 100%;
   padding: 10px 15px;
-  border: 1px solid #66c0f4;
+  border: 1px solid #c759f6; /* Updated border color */
   border-radius: 5px;
-  background-color: #1b2838;
-  color: #ffffff;
+  background-color: #1e1e2e; /* Updated input background */
+  color: #c7d5e0; /* Updated text color */
   font-size: 14px;
   box-sizing: border-box;
 
@@ -399,7 +418,7 @@ const Input = styled.input`
 
   &:focus {
     outline: none;
-    border-color: #4a90e2;
+    border-color: #c759f6; /* Consistent focus color */
   }
 `;
 
@@ -413,16 +432,24 @@ const AvatarPreview = styled.div`
     width: 150px;
     height: 150px;
     border-radius: 50%;
+    border: 2px solid #c759f6; /* Added border to match theme */
   }
 `;
 
 const UploadButton = styled.div`
   display: inline-block;
-  background-color: #4a90e2;
+  background-color: #c759f6; /* Updated to match HomePage's button color */
   color: #fff;
   padding: 10px 20px;
   border-radius: 8px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-weight: bold;
+
+  &:hover {
+    background-color: #b850e4; /* Slightly darker on hover */
+  }
+
   label {
     cursor: pointer;
   }
@@ -434,31 +461,33 @@ const Button = styled.button`
   margin-top: 20px;
   border: none;
   border-radius: 8px;
-  background-color: #4a90e2;
+  background-color: #c759f6; /* Updated to match HomePage's button color */
   color: #fff;
   font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s ease, transform 0.2s;
 
   &:hover {
-    background-color: #357ab8;
+    background-color: #b850e4; /* Slightly darker on hover */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgb(162, 68, 202);
   }
 `;
 
 const Select = styled.select`
   width: 100%;
   padding: 10px 15px;
-  border: 1px solid #66c0f4;
+  border: 1px solid #c759f6; /* Updated border color */
   border-radius: 5px;
-  background-color: #1b2838;
-  color: #ffffff;
+  background-color: #1e1e2e; /* Updated select background */
+  color: #c7d5e0; /* Updated text color */
   font-size: 14px;
   box-sizing: border-box;
 
   &:focus {
     outline: none;
-    border-color: #4a90e2;
+    border-color: #c759f6; /* Consistent focus color */
   }
 `;
 
@@ -472,7 +501,8 @@ const BackgroundPreview = styled.div`
   img {
     width: 100%;
     height: 400px;
-    object-fit: cover; // Ensures the image covers the container without distortion
+    object-fit: cover; /* Ensures the image covers the container without distortion */
     border-radius: 10px;
+    border: 2px solid #c759f6; /* Added border to match theme */
   }
 `;

@@ -5,11 +5,11 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
 const CardContainer = styled.div`
-  background-color: rgba(42, 71, 94, 0.8);
+  background-color: #2a2a3d;
   border-radius: 10px;
   padding: 15px;
   text-align: center;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   display: flex;
   flex-direction: column;
@@ -17,7 +17,7 @@ const CardContainer = styled.div`
 
   &:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
   }
 `;
 

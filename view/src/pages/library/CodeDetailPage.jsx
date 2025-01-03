@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 import { Light as SyntaxHighlighter } from "react-syntax-highlighter";
-import { github } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import { monokai } from "react-syntax-highlighter/dist/esm/styles/hljs"; // Use a dark theme
 import python from "react-syntax-highlighter/dist/esm/languages/hljs/python";
 import cpp from "react-syntax-highlighter/dist/esm/languages/hljs/cpp";
 import CodeCard from "../../components/CodeCard"; // Import CodeCard component
@@ -27,18 +27,18 @@ const fadeIn = keyframes`
 // Styled Components
 const Container = styled.div`
   font-family: "Roboto", sans-serif;
-  background-color: #f6f8fa;
-  color: #24292e;
+  background-color: #2a2a3d;
+  color:rgb(255, 255, 255);
   min-height: 100vh;
   padding: 20px;
   animation: ${fadeIn} 0.5s ease-out;
 `;
 
 const CodeDetailContainer = styled.div`
-  background-color: #fff;
+  background-color: #1e1e2e;
   border-radius: 12px;
   padding: 30px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
   animation: ${fadeIn} 1s ease-out;
   max-width: 1000px;
   margin: 0 auto;
@@ -53,9 +53,9 @@ const CodeHeader = styled.div`
 
 const CodeTitle = styled.h2`
   font-size: 28px;
-  color: #0366d6;
+  color: rgb(199, 90, 246);
   margin: 0;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
 `;
 
 const Buttons = styled.div`
@@ -66,40 +66,43 @@ const Buttons = styled.div`
 // Download Button
 const DownloadButton = styled.button`
   padding: 10px 20px;
-  background-color: #28a745;
+  background-color: rgb(199, 90, 246);
   color: #fff;
   border: none;
   border-radius: 6px;
   cursor: pointer;
   font-size: 14px;
   transition: background 0.3s ease, transform 0.2s;
-  box-shadow: 0 2px 5px rgba(40, 167, 69, 0.5);
+  box-shadow: 0 2px 5px rgba(199, 90, 246, 0.5);
 
   &:hover {
-    background-color: #218838;
+    background-color: rgb(184, 81, 228);
     transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(184, 81, 228, 0.5);
   }
 `;
 
 // Back Button
 const BackButton = styled(Link)`
   padding: 10px 20px;
-  background-color: #6c757d;
+  background-color: rgb(199, 90, 246);
   color: #fff;
   border-radius: 6px;
   text-decoration: none;
   font-size: 14px;
   transition: background 0.3s ease, transform 0.2s;
-  box-shadow: 0 2px 5px rgba(108, 117, 125, 0.5);
+  box-shadow: 0 2px 5px rgb(199, 90, 246);
 
   &:hover {
-    background-color: #5a6268;
+    background-color:rgb(184, 81, 228);
     transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgb(162, 68, 202);
   }
 `;
 
 // Tags
 const Tags = styled.div`
+  margin-top: 4rem;
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
@@ -107,31 +110,31 @@ const Tags = styled.div`
 `;
 
 const Tag = styled.span`
-  background-color: #f1f8ff;
-  color: #0366d6;
-  padding: 5px 10px;
+  background-color: rgb(199, 90, 246);
+  color: #fff;
+  padding: 10px 15px;
   border-radius: 20px;
   font-size: 14px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 `;
 
 // Description
 const Description = styled.p`
   font-size: 16px;
-  color: #586069;
+  color:rgb(255, 255, 255);
   line-height: 1.6;
   margin-bottom: 20px;
 `;
 
 // Code Block
 const CodeBlock = styled.div`
-  background-color: #f6f8fa;
+  background-color: #2a2a3d;
   padding: 20px;
   border-radius: 8px;
   overflow-x: auto;
   font-size: 14px;
   line-height: 1.5;
-  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
 `;
 
 // Language Tabs
@@ -140,12 +143,13 @@ const LanguageTabs = styled.div`
   gap: 20px;
   margin-bottom: 30px;
   flex-wrap: wrap;
+  margin-top: 2rem;
 `;
 
 const LanguageTab = styled.button`
   padding: 8px 16px;
-  background-color: ${(props) => (props.active ? "#0366d6" : "#e1e4e8")};
-  color: ${(props) => (props.active ? "#fff" : "#24292e")};
+  background-color: ${(props) => (props.active ? "rgb(199, 90, 246)" : "#3a3a4d")};
+  color: ${(props) => (props.active ? "#fff" : "#c7d5e0")};
   border: none;
   border-radius: 6px;
   cursor: pointer;
@@ -153,7 +157,8 @@ const LanguageTab = styled.button`
   transition: background 0.3s ease, transform 0.2s;
 
   &:hover {
-    background-color: ${(props) => (props.active ? "#0356b6" : "#d1d5da")};
+    background-color: ${(props) =>
+      props.active ? "rgb(184, 81, 228)" : "#4a4a5c"};
     transform: translateY(-2px);
   }
 `;
@@ -163,11 +168,11 @@ const Notification = styled.div`
   position: fixed;
   top: 20px;
   right: 20px;
-  background-color: #28a745;
+  background-color: rgb(199, 90, 246);
   color: #fff;
   padding: 12px 20px;
   border-radius: 6px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   animation: ${fadeIn} 0.3s ease-out, fadeOut 0.3s ease-out 2.5s forwards;
   opacity: 0;
 
@@ -189,9 +194,10 @@ const RelatedCodesSection = styled.div`
 
 const RelatedCodesTitle = styled.h3`
   font-size: 24px;
-  color: #0366d6;
+  color: rgb(199, 90, 246);
   margin-bottom: 20px;
   text-align: center;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
 `;
 
 const CardsGrid = styled.div`
@@ -199,30 +205,35 @@ const CardsGrid = styled.div`
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 20px;
 `;
+
 const ImplementButton = styled.button`
   padding: 10px 20px;
-  background-color: #ff9800;
+  background-color: rgb(199, 90, 246);
   color: #fff;
   border: none;
   border-radius: 6px;
   cursor: pointer;
   font-size: 14px;
   transition: background 0.3s ease, transform 0.2s;
-  box-shadow: 0 2px 5px rgba(255, 152, 0, 0.5);
   margin-right: 20px; 
+  margin-top: 10px;
+
   &:hover {
-    background-color: #e38c00;
+    background-color:rgb(184, 81, 228);
     transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgb(162, 68, 202);
   }
 `;
 
 const ImplementationContainer = styled.div`
-  background-color: #fff5e6;
+  background-color: #2a2a3d;
   padding: 20px;
   border-radius: 6px;
   margin-bottom: 20px;
-  line-height: 1.6;
-  white-space: pre-line; /* Giữ nguyên định dạng xuống dòng */
+  margin-top: 2rem;
+  line-height: 1.4;
+  white-space: pre-line; /* Preserve line breaks */
+  color: #fff;
 `;
 
 // CodeDetailPage Component
@@ -242,7 +253,6 @@ const CodeDetailPage = () => {
     if (isNaN(numericId)) {
       alert("ID code không hợp lệ.");
       navigate("/library-code");
-      return;
     }
     const foundCode = libraryCodes.find((item) => item.id === numericId);
     if (foundCode) {
@@ -255,22 +265,24 @@ const CodeDetailPage = () => {
       alert("Không tìm thấy code. Đang chuyển hướng đến Thư viện.");
       navigate("/library-code");
     }
-  }, [id, navigate]);
+  }, [id, navigate, libraryCodes]);
 
   const handleDownload = () => {
     // Implement download functionality here
-    // Ví dụ: Tạo file Blob và tải về
+    // Example: Create a Blob and trigger download
     if (code) {
+      const language = activeLanguage.toLowerCase();
+      const extension = language === "python" ? "py" : language === "cpp" ? "cpp" : "txt";
       const element = document.createElement("a");
       const file = new Blob([code.codeSnippets[activeLanguage]], {
         type: "text/plain",
       });
       element.href = URL.createObjectURL(file);
-      element.download = `${code.title}.${activeLanguage === "Python" ? "py" : "cpp"}`;
-      document.body.appendChild(element); // Required for this to work in FireFox
+      element.download = `${code.title}.${extension}`;
+      document.body.appendChild(element); // Required for Firefox
       element.click();
       alert("Code đã được tải xuống!");
-      // Sau khi download, loại bỏ phần tử a
+      // Remove the element after download
       document.body.removeChild(element);
     }
   };
@@ -297,7 +309,7 @@ const CodeDetailPage = () => {
           {/* Description */}
           <Description>{code.description}</Description>
 
-          {/* Nút "Implement" và nội dung howToImplement */}
+          {/* "Implement" Button and howToImplement Content */}
           {code.howToImplement && (
             <>
               <ImplementButton
@@ -332,16 +344,18 @@ const CodeDetailPage = () => {
           <CodeBlock>
             <SyntaxHighlighter
               language={
-                activeLanguage.includes("C++") ? "cpp" : activeLanguage.toLowerCase()
+                activeLanguage.toLowerCase() === "cpp"
+                  ? "cpp"
+                  : activeLanguage.toLowerCase()
               }
-              style={github}
+              style={monokai} // Use a dark theme
               showLineNumbers
             >
               {code.codeSnippets[activeLanguage]}
             </SyntaxHighlighter>
           </CodeBlock>
 
-          {/* Related Codes Section (giữ nguyên như cũ) */}
+          {/* Related Codes Section */}
           <RelatedCodesSection>
             <RelatedCodesTitle>Related Code Snippets</RelatedCodesTitle>
             <CardsGrid>

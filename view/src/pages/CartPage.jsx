@@ -23,7 +23,7 @@ const Breadcrumbs = styled.div`
 
 const BreadcrumbLink = styled.span`
   cursor: pointer;
-  color: #66c0f4;
+  color: rgb(199, 90, 246);
   font-weight: bold;
 
   &:hover {
@@ -59,9 +59,9 @@ const CartItemsSection = styled.div`
 
 // Right Section for Total and Checkout Button
 const CheckoutSection = styled.div`
-  flex: 0.5; 
+  flex: 0.5;
   background-color: #292e49;
-  padding: 1rem; 
+  padding: 1rem;
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   display: flex;
@@ -80,6 +80,12 @@ const CartItem = styled.div`
   padding: 1rem;
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+  }
 `;
 
 // Cart Item Image
@@ -99,7 +105,7 @@ const CartItemDetails = styled.div`
 // Cart Item Title
 const CartItemTitle = styled.h3`
   font-size: 1.2rem;
-  color: #fff;
+  color: #ffffff;
   margin: 0;
 `;
 
@@ -126,22 +132,21 @@ const RemoveButton = styled.button`
 
 // Continue Shopping Button
 const ContinueShoppingButton = styled.button`
-  background-color: #696969;
+  background-color: rgb(199, 90, 246);
   border: none;
   border-radius: 5px;
-  color: #000;
+  color: #fff;
   padding: 12px 24px;
   font-weight: bold;
   cursor: pointer;
   transition: background 0.3s ease, transform 0.2s;
-  width: 20%; 
+  width: 20%;
   align-self: flex-start;
-  color: #FFFAFA;
-  
+
   &:hover {
-    background-color: #5aa8e6;
+    background-color: rgb(184, 81, 228);
     transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(102, 192, 244, 0.5);
+    box-shadow: 0 4px 10px rgba(162, 68, 202, 0.5);
   }
 `;
 
@@ -156,19 +161,19 @@ const TotalSection = styled.div`
 
 // Checkout Button
 const CheckoutButton = styled.button`
-  background-color: #66c0f4;
+  background-color: rgb(199, 90, 246);
   border: none;
   border-radius: 5px;
-  color: #000;
+  color: #fff;
   padding: 12px 24px;
   font-weight: bold;
   cursor: pointer;
   transition: background 0.3s ease, transform 0.2s;
 
   &:hover {
-    background-color: #5aa8e6;
+    background-color: rgb(184, 81, 228);
     transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(102, 192, 244, 0.5);
+    box-shadow: 0 4px 10px rgba(162, 68, 202, 0.5);
   }
 `;
 
@@ -219,7 +224,7 @@ const CartPage = () => {
 
   // Navigate to Home Page
   const handleGoHome = () => {
-    navigate("/");
+    navigate("/home");
   };
 
   return (
@@ -241,9 +246,7 @@ const CartPage = () => {
                 <CartItemImage src={item.image} alt={item.title} />
                 <CartItemDetails>
                   <CartItemTitle>{item.title}</CartItemTitle>
-                  <CartItemPrice>
-                    {getDisplayPrice(item.price)}
-                  </CartItemPrice>
+                  <CartItemPrice>{getDisplayPrice(item.price)}</CartItemPrice>
                 </CartItemDetails>
                 <RemoveButton onClick={() => removeItem(item.id)}>
                   <FaTrashAlt />
@@ -253,7 +256,7 @@ const CartPage = () => {
           )}
 
           {cartItems.length > 0 && (
-            <ContinueShoppingButton onClick={() => navigate("/home")}>
+            <ContinueShoppingButton onClick={() => navigate("/market")}>
               Continue Shopping
             </ContinueShoppingButton>
           )}
