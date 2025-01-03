@@ -1,8 +1,5 @@
-// File: src/components/CodeCard.jsx
-
-import React from 'react';
-import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import React from "react";
+import styled from "styled-components";
 
 const CardContainer = styled.div`
   background: #2a2a3d;
@@ -14,11 +11,14 @@ const CardContainer = styled.div`
   max-width: 300px;
   display: flex;
   flex-direction: column;
-  cursor: pointer;
   position: relative;
+
+  /* Bỏ cursor pointer nếu không muốn click toàn container */
+  /* cursor: pointer; */
+
   &:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
   }
 `;
 
@@ -64,7 +64,6 @@ const CardButtons = styled.div`
   justify-content: center;
 `;
 
-// Buttons
 const PrimaryButton = styled.button`
   background-color: rgb(199, 90, 246);
   border: none;
@@ -77,7 +76,7 @@ const PrimaryButton = styled.button`
   transition: background 0.3s ease;
 
   &:hover {
-    background-color:rgb(184, 81, 228);
+    background-color: rgb(184, 81, 228);
     transform: translateY(-2px);
     box-shadow: 0 4px 10px rgb(162, 68, 202);
   }
@@ -95,49 +94,54 @@ const DangerButton = styled.button`
   transition: background 0.3s ease;
 
   &:hover {
-    background-color:rgb(184, 81, 228);
+    background-color: rgb(184, 81, 228);
     transform: translateY(-2px);
     box-shadow: 0 4px 10px rgb(162, 68, 202);
   }
 `;
 
-const ViewLink = styled(Link)`
+const ViewButton = styled.button`
   background-color: rgb(199, 90, 246);
   border: none;
   border-radius: 5px;
   color: #fff;
   padding: 8px 10px;
   font-weight: bold;
-  font-size: 0.8rem;
   cursor: pointer;
-  text-decoration: none;
-  display: flex; 
-  align-items: center;
-  justify-content: center;
+  font-size: 0.8rem;
   transition: background 0.3s ease;
 
   &:hover {
-    background-color:rgb(184, 81, 228);
+    background-color: rgb(184, 81, 228);
     transform: translateY(-2px);
     box-shadow: 0 4px 10px rgb(162, 68, 202);
   }
 `;
 
+/**
+ * Props:
+ *  image, title, description, tags
+ *  isAdded (bool)
+ *  onAddToLibrary() 
+ *  onRemoveFromLibrary()
+ *  onView()   // thay cho onClick
+ */
 const CodeCard = ({
   image,
   title,
   description,
   tags = [],
-  buttonLink = "#",
   isAdded,
   onAddToLibrary,
   onRemoveFromLibrary,
+  onView,
 }) => {
   return (
     <CardContainer>
       {image && <CardImage src={image} alt={title} />}
       <CardTitle>{title}</CardTitle>
       <CardDescription>{description}</CardDescription>
+
       {tags.length > 0 && (
         <CardTags>
           {tags.map((tag, i) => (
@@ -145,13 +149,14 @@ const CodeCard = ({
           ))}
         </CardTags>
       )}
+
       <CardButtons>
         {isAdded ? (
           <DangerButton onClick={onRemoveFromLibrary}>Remove</DangerButton>
         ) : (
           <PrimaryButton onClick={onAddToLibrary}>Add</PrimaryButton>
         )}
-        <ViewLink to={buttonLink}>View</ViewLink>
+        <ViewButton onClick={onView}>View</ViewButton>
       </CardButtons>
     </CardContainer>
   );
