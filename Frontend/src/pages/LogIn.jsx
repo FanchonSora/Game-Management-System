@@ -30,7 +30,7 @@ const LogInPage = () => {
 
       if (response.ok) {
         localStorage.setItem("username", username);
-        navigate("/dashboard");
+        navigate("/home");
       } else {
         const errorData = await response.json();
         alert(`Login failed: ${errorData.detail}`);
