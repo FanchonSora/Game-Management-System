@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 import marketCodes from "../../data/marketCodes"; // data code
 import Navbar from "../../components/Navbar";
+import { FaSearch, FaTags } from "react-icons/fa"; // Import thêm icon
 
 // Keyframes
 const fadeIn = keyframes`
@@ -10,7 +11,9 @@ const fadeIn = keyframes`
   to { opacity: 1; transform: translateY(0); }
 `;
 
-// Styled Components
+// ===== Styled Components =====
+
+// Layout
 const Container = styled.div`
   font-family: "Roboto", sans-serif;
   background-color: #1e1e2e;
@@ -42,81 +45,7 @@ const ContentWrapper = styled.div`
   margin: 0 auto;
 `;
 
-// Search
-const SearchBarContainer = styled.div`
-  position: relative;
-  margin-bottom: 30px;
-  display: flex;
-  align-items: center;
-`;
-
-const SearchInput = styled.input`
-  width: 100%;
-  margin-top: 3rem;
-  max-width: 500px;
-  padding: 10px 15px;
-  border-radius: 25px;
-  border: none;
-  outline: none;
-  font-size: 16px;
-  background-color: #2a2a3d; /* Đổi màu nền sang màu tối */
-  color: #c7d5e0;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-
-  &::placeholder {
-    color: #a9a9a9;
-  }
-
-  &:focus {
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-  }
-`;
-
-// Dropdown Search
-const SearchDropdown = styled.ul`
-  position: absolute;
-  top: 84%; /* Điều chỉnh để dropdown hiển thị bên phải thanh tìm kiếm */
-  left: 45%; /* Hiển thị dropdown ngay bên phải của thanh tìm kiếm */
-  width: 300px;
-  background-color: #2a2a3d; /* Đổi màu nền sang màu tối */
-  list-style: none;
-  margin: 0;
-  padding: 0.5rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  max-height: 250px;
-  overflow-y: auto;
-  z-index: 999;
-  transform: translateY(-50%); /* Để dropdown căn giữa dọc với thanh tìm kiếm */
-`;
-
-const SearchDropdownItem = styled.li`
-  padding: 0.5rem;
-  color: #c7d5e0;
-  border-bottom: 1px solid #3e3e5a;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  
-  &:hover {
-    background-color: rgb(148, 64, 133);
-  }
-
-  &:last-child {
-    border-bottom: none;
-  }
-`;
-
-const DropdownItemImage = styled.img`
-  width: 30px;
-  height: 30px;
-  object-fit: cover;
-  border-radius: 4px;
-  margin-right: 10px;
-`;
-
-
-
+// Featured
 const FeaturedCodeSection = styled.section`
   background: #2a2a3d;
   border-radius: 16px;
@@ -163,29 +92,6 @@ const FeaturedSubtitle = styled.p`
   margin-bottom: 2rem;
 `;
 
-const FeaturedButtonGroup = styled.div`
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-`;
-
-const FeaturedButton = styled.button`
-  background-color: rgb(199, 90, 246);
-  border: none;
-  border-radius: 5px;
-  color: #000;
-  padding: 10px 20px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s;
-
-  &:hover {
-    background-color: rgb(184, 81, 228);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgb(162, 68, 202);
-  }
-`;
-
 const FeaturedImage = styled.img`
   width: 45%;
   max-width: 350px;
@@ -199,6 +105,147 @@ const FeaturedImage = styled.img`
   }
 `;
 
+// Search + Tag Filter
+const SearchBarWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  max-width: 1500px;
+  margin-bottom: 2rem;
+  gap: 1rem;
+`;
+
+const SearchBarContainer = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 500px;
+`;
+
+const SearchIconWrapper = styled.div`
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgb(255, 255, 255);
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+`;
+
+const SearchInput = styled.input`
+  width: 100%;
+  padding: 10px 15px 10px 40px; /* chừa chỗ cho icon Search */
+  border-radius: 25px;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  background-color: #2a2a3d;
+  color: #c7d5e0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+
+  &::placeholder {
+    color: #a9a9a9;
+  }
+
+  &:focus {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  }
+`;
+
+const SearchDropdown = styled.ul`
+  position: absolute;
+  top: 110%;
+  left: 0;
+  width: 100%;
+  background-color: #2a2a3d;
+  list-style: none;
+  margin: 0;
+  padding: 0.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  max-height: 250px;
+  overflow-y: auto;
+  z-index: 999;
+`;
+
+const SearchDropdownItem = styled.li`
+  padding: 0.5rem;
+  color: #c7d5e0;
+  border-bottom: 1px solid #3e3e5a;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+
+  &:hover {
+    background-color: rgb(148, 64, 133);
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
+`;
+
+const DropdownItemImage = styled.img`
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-right: 10px;
+`;
+
+const TagFilterIconWrapper = styled.div`
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #2a2a3d;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+
+  &:hover {
+    background-color: rgb(148, 64, 133);
+  }
+`;
+
+const TagsFilterContainer = styled.div`
+  background-color: #2a2a3d;
+  border-radius: 25px;
+  padding: 5px 10px;
+  display: ${({ show }) => (show ? "flex" : "none")}; /* Toggle hiển thị */
+  flex-wrap: wrap;
+  gap: 5px;
+  max-width: 500px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+`;
+
+const TagButton = styled.button`
+  background-color: #2a2a3d;
+  border: 1px solid #3e3e5a;
+  color: #c7d5e0;
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: rgb(148, 64, 133);
+  }
+
+  &.active {
+    background-color: rgb(199, 90, 246);
+  }
+`;
+
+// Code Grid
 const SectionTitle = styled.h2`
   font-size: 24px;
   margin-bottom: 10px;
@@ -280,16 +327,30 @@ const ActionButton = styled.button`
   }
 `;
 
+// ===== Main Component =====
 const MarketCodePage = () => {
   const navigate = useNavigate();
+
+  // State
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
-  const searchBarRef = useRef(null);
-  const [currentCodeIndex, setCurrentCodeIndex] = useState(0);
   const [isPlaceholderVisible, setIsPlaceholderVisible] = useState(true);
+  const [currentCodeIndex, setCurrentCodeIndex] = useState(0);
 
+  // Toggle hiển thị Tag Filter
+  const [showTagsFilter, setShowTagsFilter] = useState(false);
+  // State để nhớ tag đang được chọn
+  const [tagFilter, setTagFilter] = useState(null);
+
+  const searchBarRef = useRef(null);
+
+  // Lấy data
   const { featuredCodes } = marketCodes;
 
+  // Lấy tất cả tag (unique)
+  const allTags = [...new Set(featuredCodes.flatMap((code) => code.tags))];
+
+  // Xử lý auto-slide cho featured code
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentCodeIndex((prevIndex) => (prevIndex + 1) % featuredCodes.length);
@@ -297,12 +358,18 @@ const MarketCodePage = () => {
     return () => clearInterval(interval);
   }, [featuredCodes.length]);
 
-  // Lọc theo search
-  const filteredCodes = featuredCodes.filter((code) =>
-    code.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    code.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()))
-  );
+  // Lọc code theo searchQuery & tagFilter
+  const filteredCodes = featuredCodes.filter((code) => {
+    const matchesQuery =
+      code.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      code.tags.some((tag) =>
+        tag.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    const matchesTag = tagFilter ? code.tags.includes(tagFilter) : true;
+    return matchesQuery && matchesTag;
+  });
 
+  // Thêm vào library
   const handleAddToLibrary = (code) => {
     const libraryCodes = JSON.parse(localStorage.getItem("libraryCodes")) || [];
     if (!libraryCodes.some((c) => c.id === code.id)) {
@@ -314,6 +381,7 @@ const MarketCodePage = () => {
     }
   };
 
+  // View details
   const handleViewDetails = (code) => {
     navigate(`/market-code/${code.id}`);
   };
@@ -322,40 +390,7 @@ const MarketCodePage = () => {
     <Container>
       <Navbar />
       <ContentWrapper>
-        {/* Search */}
-        <SearchBarContainer ref={searchBarRef}>
-        <SearchInput
-            type="search..."
-            placeholder={isPlaceholderVisible ? "search..." : ""}
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            onFocus={() => {
-              setIsPlaceholderVisible(false);
-              setIsSearchFocused(true);
-            }}
-            onBlur={() => setIsPlaceholderVisible(true)}
-          />
-          {isSearchFocused && searchQuery.trim().length > 0 && filteredCodes.length > 0 && (
-            <SearchDropdown>
-              {filteredCodes.slice(0, 8).map((code) => (
-                <SearchDropdownItem
-                  key={code.id}
-                  onClick={() => {
-                    setSearchQuery("");
-                    setIsSearchFocused(false);
-                    navigate(`/market-code/${code.id}`);
-                  }}
-                >
-                  {/* Display Image */}
-                  <DropdownItemImage src={code.image || "placeholder.jpg"} alt={code.title} />
-                  {code.title}
-                </SearchDropdownItem>
-              ))}
-            </SearchDropdown>
-          )}
-        </SearchBarContainer>
-
-        {/* Featured Codes Section */}
+        {/* ===== Featured Codes Section ===== */}
         {featuredCodes.length > 0 && (
           <FeaturedCodeSection>
             <FeaturedContent>
@@ -374,19 +409,84 @@ const MarketCodePage = () => {
           </FeaturedCodeSection>
         )}
 
-        {/* All Codes Section */}
+        {/* ===== Search + Tag Filter ===== */}
+        <SearchBarWrapper>
+          {/* Search Bar */}
+          <SearchBarContainer ref={searchBarRef}>
+            <SearchIconWrapper>
+              <FaSearch size={20} />
+            </SearchIconWrapper>
+            <SearchInput
+              type="search"
+              placeholder={isPlaceholderVisible ? "search..." : ""}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onFocus={() => {
+                setIsPlaceholderVisible(false);
+                setIsSearchFocused(true);
+              }}
+              onBlur={() => setIsPlaceholderVisible(true)}
+            />
+            {/* Search Dropdown */}
+            {isSearchFocused && searchQuery.trim().length > 0 && filteredCodes.length > 0 && (
+              <SearchDropdown>
+                {filteredCodes.slice(0, 8).map((code) => (
+                  <SearchDropdownItem
+                    key={code.id}
+                    onClick={() => {
+                      setSearchQuery("");
+                      setIsSearchFocused(false);
+                      navigate(`/market-code/${code.id}`);
+                    }}
+                  >
+                    <DropdownItemImage src={code.image || "placeholder.jpg"} alt={code.title} />
+                    {code.title}
+                  </SearchDropdownItem>
+                ))}
+              </SearchDropdown>
+            )}
+          </SearchBarContainer>
+
+          {/* Icon mở/đóng tag filter */}
+          <TagFilterIconWrapper onClick={() => setShowTagsFilter(!showTagsFilter)}>
+            <FaTags />
+          </TagFilterIconWrapper>
+
+          {/* Tag Filter Container */}
+          <TagsFilterContainer show={showTagsFilter}>
+            {allTags.map((tag) => (
+              <TagButton
+                key={tag}
+                className={tag === tagFilter ? "active" : ""}
+                onClick={() => setTagFilter(tag === tagFilter ? null : tag)}
+              >
+                {tag}
+              </TagButton>
+            ))}
+          </TagsFilterContainer>
+        </SearchBarWrapper>
+
+        {/* ===== All Codes Section ===== */}
         <SectionTitle>All Codes</SectionTitle>
         <Grid>
-          {featuredCodes.map((code) => (
+          {filteredCodes.map((code) => (
             <Card key={code.id}>
               <CodeImage src={code.image} alt={code.title} />
               <CodeTitle>{code.title}</CodeTitle>
-              <CodePrice>{code.price === 0 || isNaN(parseFloat(code.price)) ? "Free" : `$${parseFloat(code.price).toFixed(2)}`}</CodePrice>
+              <CodePrice>
+                {code.price === 0 || isNaN(parseFloat(code.price))
+                  ? "Free"
+                  : `$${parseFloat(code.price).toFixed(2)}`}
+              </CodePrice>
               <ButtonGroup>
                 {code.price === "Free" && (
-                  <ActionButton onClick={() => handleAddToLibrary(code)}>Add</ActionButton>
+                  <ActionButton onClick={() => handleAddToLibrary(code)}>
+                    Add
+                  </ActionButton>
                 )}
-                <ActionButton onClick={() => handleViewDetails(code)}>Details</ActionButton>
+                <ActionButton onClick={() => handleViewDetails(code)}>
+                  Details
+                </ActionButton>
               </ButtonGroup>
             </Card>
           ))}

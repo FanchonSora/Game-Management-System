@@ -1,18 +1,16 @@
-// src/pages/CodeDetailPage.jsx
-
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 import { Light as SyntaxHighlighter } from "react-syntax-highlighter";
-import { monokai } from "react-syntax-highlighter/dist/esm/styles/hljs"; // Use a dark theme
+import { monokai } from "react-syntax-highlighter/dist/esm/styles/hljs"; 
 import python from "react-syntax-highlighter/dist/esm/languages/hljs/python";
 import cpp from "react-syntax-highlighter/dist/esm/languages/hljs/cpp";
-import CodeCard from "../../components/CodeCard"; // Import CodeCard component
+import CodeCard from "../../components/CodeCard";
 
 SyntaxHighlighter.registerLanguage("python", python);
 SyntaxHighlighter.registerLanguage("cpp", cpp);
 
-// Keyframes for animations
+// ========== Keyframes ==========
 const fadeIn = keyframes`
   from {
     opacity: 0;
@@ -24,11 +22,17 @@ const fadeIn = keyframes`
   }
 `;
 
-// Styled Components
+const fadeOut = keyframes`
+  from { opacity: 1; }
+  to { opacity: 0; }
+`;
+
+// ========== Styled Components ==========
+
 const Container = styled.div`
   font-family: "Roboto", sans-serif;
   background-color: #2a2a3d;
-  color:rgb(255, 255, 255);
+  color: #fff;
   min-height: 100vh;
   padding: 20px;
   animation: ${fadeIn} 0.5s ease-out;
@@ -63,7 +67,6 @@ const Buttons = styled.div`
   gap: 10px;
 `;
 
-// Download Button
 const DownloadButton = styled.button`
   padding: 10px 20px;
   background-color: rgb(199, 90, 246);
@@ -82,7 +85,7 @@ const DownloadButton = styled.button`
   }
 `;
 
-// Back Button
+// Thay vì <BackButton> là Link, ta có thể dùng <Link> hoặc 1 button navigate
 const BackButton = styled(Link)`
   padding: 10px 20px;
   background-color: rgb(199, 90, 246);
@@ -94,13 +97,12 @@ const BackButton = styled(Link)`
   box-shadow: 0 2px 5px rgb(199, 90, 246);
 
   &:hover {
-    background-color:rgb(184, 81, 228);
+    background-color: rgb(184, 81, 228);
     transform: translateY(-2px);
     box-shadow: 0 4px 10px rgb(162, 68, 202);
   }
 `;
 
-// Tags
 const Tags = styled.div`
   margin-top: 4rem;
   display: flex;
@@ -118,15 +120,12 @@ const Tag = styled.span`
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 `;
 
-// Description
 const Description = styled.p`
   font-size: 16px;
-  color:rgb(255, 255, 255);
   line-height: 1.6;
   margin-bottom: 20px;
 `;
 
-// Code Block
 const CodeBlock = styled.div`
   background-color: #2a2a3d;
   padding: 20px;
@@ -137,7 +136,6 @@ const CodeBlock = styled.div`
   box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
 `;
 
-// Language Tabs
 const LanguageTabs = styled.div`
   display: flex;
   gap: 20px;
@@ -163,7 +161,6 @@ const LanguageTab = styled.button`
   }
 `;
 
-// Notification (Optional)
 const Notification = styled.div`
   position: fixed;
   top: 20px;
@@ -173,7 +170,7 @@ const Notification = styled.div`
   padding: 12px 20px;
   border-radius: 6px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  animation: ${fadeIn} 0.3s ease-out, fadeOut 0.3s ease-out 2.5s forwards;
+  animation: ${fadeIn} 0.3s ease-out, ${fadeOut} 0.3s ease-out 2.5s forwards;
   opacity: 0;
 
   @keyframes fadeIn {
@@ -187,7 +184,6 @@ const Notification = styled.div`
   }
 `;
 
-// Related Codes Section
 const RelatedCodesSection = styled.div`
   margin-top: 40px;
 `;
@@ -215,11 +211,11 @@ const ImplementButton = styled.button`
   cursor: pointer;
   font-size: 14px;
   transition: background 0.3s ease, transform 0.2s;
-  margin-right: 20px; 
+  margin-right: 20px;
   margin-top: 10px;
 
   &:hover {
-    background-color:rgb(184, 81, 228);
+    background-color: rgb(184, 81, 228);
     transform: translateY(-2px);
     box-shadow: 0 4px 10px rgb(162, 68, 202);
   }
@@ -232,11 +228,12 @@ const ImplementationContainer = styled.div`
   margin-bottom: 20px;
   margin-top: 2rem;
   line-height: 1.4;
-  white-space: pre-line; /* Preserve line breaks */
+  white-space: pre-line;
   color: #fff;
 `;
 
-// CodeDetailPage Component
+// ========== Component chính: CodeDetailPage ==========
+
 const CodeDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -262,29 +259,29 @@ const CodeDetailPage = () => {
         setActiveLanguage(languages[0]);
       }
     } else {
-      alert("Không tìm thấy code. Đang chuyển hướng đến Thư viện.");
+      alert("Không tìm thấy code. Đang chuyển hướng về Library.");
       navigate("/library-code");
     }
   }, [id, navigate, libraryCodes]);
 
+  // Hàm Download
   const handleDownload = () => {
-    // Implement download functionality here
-    // Example: Create a Blob and trigger download
-    if (code) {
-      const language = activeLanguage.toLowerCase();
-      const extension = language === "python" ? "py" : language === "cpp" ? "cpp" : "txt";
-      const element = document.createElement("a");
-      const file = new Blob([code.codeSnippets[activeLanguage]], {
-        type: "text/plain",
-      });
-      element.href = URL.createObjectURL(file);
-      element.download = `${code.title}.${extension}`;
-      document.body.appendChild(element); // Required for Firefox
-      element.click();
-      alert("Code đã được tải xuống!");
-      // Remove the element after download
-      document.body.removeChild(element);
-    }
+    if (!code) return;
+    const language = activeLanguage.toLowerCase();
+    const extension =
+      language === "python" ? "py" : language === "cpp" ? "cpp" : "txt";
+
+    const element = document.createElement("a");
+    const file = new Blob([code.codeSnippets[activeLanguage]], {
+      type: "text/plain",
+    });
+    element.href = URL.createObjectURL(file);
+    element.download = `${code.title}.${extension}`;
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+
+    alert("Code đã được tải xuống!");
   };
 
   return (
@@ -295,6 +292,7 @@ const CodeDetailPage = () => {
             <CodeTitle>{code.title}</CodeTitle>
             <Buttons>
               <DownloadButton onClick={handleDownload}>Download</DownloadButton>
+              {/* Dùng Link để quay về /library-code */}
               <BackButton to="/library-code">Back to Library</BackButton>
             </Buttons>
           </CodeHeader>
@@ -309,7 +307,7 @@ const CodeDetailPage = () => {
           {/* Description */}
           <Description>{code.description}</Description>
 
-          {/* "Implement" Button and howToImplement Content */}
+          {/* Hướng dẫn implement */}
           {code.howToImplement && (
             <>
               <ImplementButton
@@ -327,7 +325,7 @@ const CodeDetailPage = () => {
             </>
           )}
 
-          {/* Language Tabs */}
+          {/* Tabs ngôn ngữ */}
           <LanguageTabs>
             {Object.keys(code.codeSnippets).map((language) => (
               <LanguageTab
@@ -348,14 +346,14 @@ const CodeDetailPage = () => {
                   ? "cpp"
                   : activeLanguage.toLowerCase()
               }
-              style={monokai} // Use a dark theme
+              style={monokai}
               showLineNumbers
             >
               {code.codeSnippets[activeLanguage]}
             </SyntaxHighlighter>
           </CodeBlock>
 
-          {/* Related Codes Section */}
+          {/* Related Codes */}
           <RelatedCodesSection>
             <RelatedCodesTitle>Related Code Snippets</RelatedCodesTitle>
             <CardsGrid>
@@ -372,12 +370,11 @@ const CodeDetailPage = () => {
                     title={relatedCode.title}
                     description={relatedCode.description}
                     tags={relatedCode.tags}
-                    buttonText="View Code"
-                    buttonLink={`/library-code/${relatedCode.id}`}
+                    // Bỏ onClick, buttonText, buttonLink ... ta chỉ hiển thị
                     isAdded={false}
                     onAddToLibrary={() => {}}
-                    maxWidth="300px"
-                    height="auto"
+                    // Muốn sang detail => ta gọi navigate
+                    onView={() => navigate(`/library-code/${relatedCode.id}`)}
                   />
                 ))}
             </CardsGrid>
